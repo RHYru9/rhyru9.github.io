@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Embed Video YouTube</title>
+    <title>a</title></title>
 </head>
 <body>
-
-<h2>Contoh Embed Video YouTube</h2>
-
-<!-- Ganti 'your_youtube_video_id_here' dengan ID video YouTube yang ingin Anda sematkan -->
+<h2>a</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LkcIK520ta4" frameborder="0" allowfullscreen></iframe>
 
-<!-- Payload XSS -->
+
 <script>
-var videoId = "your_youtube_video_id_here"; // Ganti dengan ID video YouTube yang ingin Anda sematkan
-var maliciousCode = '<img src=x onerror="alert(\'document.cookie\')">';
+var videoId = "your_youtube_video_id_here"; 
+//var maliciousCode = '<img src=x onerror="alert(\'1\')">';
 var iframe = document.createElement('iframe');
 iframe.setAttribute('width', '560');
 iframe.setAttribute('height', '315');
