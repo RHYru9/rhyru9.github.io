@@ -13,7 +13,7 @@
 <!-- Payload XSS -->
 <script>
 var videoId = "your_youtube_video_id_here"; // Ganti dengan ID video YouTube yang ingin Anda sematkan
-var maliciousCode = '<img src=x onerror="alert(\'XSS Attack!\')">';
+var maliciousCode = '<img src=x onerror="alert(\'document.cookie\')">';
 var iframe = document.createElement('iframe');
 iframe.setAttribute('width', '560');
 iframe.setAttribute('height', '315');
