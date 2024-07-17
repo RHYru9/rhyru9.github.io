@@ -3,5 +3,15 @@
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
   <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
-  <image xlink:href="https://buffer.com/favicon.ico" width="50" height="50" onerror="alert(1)" />
+  
+  <!-- JavaScript untuk memuat gambar dari URL dan menampilkan alert jika error -->
+  <script type="text/javascript">
+    <![CDATA[
+      var img = new Image();
+      img.src = '1';
+      img.onerror = function() {
+        alert(1);
+      };
+    ]]>
+  </script>
 </svg>
