@@ -1,9 +1,12 @@
 <svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
   <rect width="100%" height="100%" fill="white"/>
-  <text x="50%" y="45%" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="black">
-    This page is under maintenance, please visit this website first
+  <text x="50%" y="40%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="black">
+    This page is under maintenance
   </text>
-  <text x="50%" y="65%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="red">
+  <text x="50%" y="55%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="black">
+    please visit this website first
+  </text>
+  <text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="red">
     www.evil.com
   </text>
 </svg>
