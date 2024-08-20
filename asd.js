@@ -1,1 +1,1 @@
-hi there im evil
+Hello, I'm a ghost.
