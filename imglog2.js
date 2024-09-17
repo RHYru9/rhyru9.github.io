@@ -3,8 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (img) {
     const script = document.createElement('script');
     script.textContent = `
-      console.log('Injected script executed');
-      // Menambahkan payload lainnya jika perlu
+      console.log('affected');
     `;
     document.head.appendChild(script);
   }
