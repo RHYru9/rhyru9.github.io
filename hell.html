@@ -202,157 +202,154 @@
                 <button class="fsbutton" onclick="googleSearch(53)">SQL File</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(54)">Web application Testing</button>
+                <button class="fsbutton" onclick="googleSearch(56)">Sensitive File</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(56)">RDP Credentials</button>
+                <button class="fsbutton" onclick="googleSearch(58)">php.ini</button>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(57)">Apache Config</button>
+                <button class="fsbutton" onclick="googleSearch(59)">phpmyadmin</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(58)">IP Blocked</button>
+                <button class="fsbutton" onclick="googleSearch(60)">WebService API</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(59)">Find RDP Exposed</button>
+                <button class="fsbutton" onclick="googleSearch(61)">Joomla File</button>
             </div>
-        </div>
-        <div class="author">
-            <p>Created by Your Name</p>
         </div>
     </div>
-
+    <div class="author">
+        <p>R</p>
+    </div>
     <script>
-        function googleSearch(type) {
-            const target = document.getElementById('target').value;
-            let query = "";
-
-            switch(type) {
+        function googleSearch(option) {
+            var target = document.getElementById('target').value;
+            if (target.trim() === '') {
+                alert('Please enter a target domain.');
+                return;
+            }
+            var searchQuery;
+            switch(option) {
                 case 1:
-                    query = `site:*.${target} inurl:/.git/`;
+                    searchQuery = 'site:"*.' + target + '" intitle:index.of';
                     break;
                 case 2:
-                    query = `site:*.${target} ext:conf OR ext:ini OR ext:env`;
+                    searchQuery = 'site:"*.' + target + '" ext:env OR ext:yaml OR ext:ini OR ext:log OR ext:txt';
                     break;
                 case 3:
-                    query = `site:*.${target} ext:sql`;
+                    searchQuery = 'site:"*.' + target + '" ext:sql OR ext:dbf OR ext:mdb';
                     break;
                 case 5:
-                    query = `site:*.${target} ext:bak OR ext:old OR ext:backup`;
+                    searchQuery = 'site:"*.' + target + '" ext:bkf OR ext:bkp OR ext:bak OR ext:old OR ext:backup';
                     break;
                 case 6:
-                    query = `site:*.${target} inurl:login`;
-                    break;
-                case 7:
-                    query = `site:*.${target} intext:"SQL syntax" OR intext:"sql error"`;
+                    searchQuery = 'site:"*.' + target + '" inurl:login';
                     break;
                 case 8:
-                    query = `site:*.${target} ext:pdf OR ext:docx OR ext:xlsx`;
+                    searchQuery = 'site:"*.' + target + '" ext:pdf OR ext:doc OR ext:xls';
                     break;
                 case 9:
-                    query = `site:*.${target} "phpinfo()"`;
+                    searchQuery = 'site:"*.' + target + '" phpinfo()';
                     break;
                 case 10:
-                    query = `site:*.${target} inurl:wp-content`;
+                    searchQuery = 'site:"*.' + target + '" inurl:wp-admin';
                     break;
                 case 11:
-                    query = `site:*.${target} "backdoor" OR "cmd.php"`;
+                    searchQuery = 'site:"*.' + target + '" inurl:backdoor';
                     break;
                 case 12:
-                    query = `site:*.${target} inurl:"install.php" OR inurl:"setup.php"`;
+                    searchQuery = 'site:"*.' + target + '" ext:zip OR ext:tar OR ext:gz';
                     break;
                 case 17:
-                    query = `site:*.${target} inurl:.htaccess`;
+                    searchQuery = 'site:"*.' + target + '" ext:htaccess';
                     break;
                 case 18:
-                    query = `site:*.${target} inurl:subdomain`;
+                    searchQuery = 'site:"*.' + target + '" -www';
                     break;
                 case 19:
-                    query = `site:*.${target} inurl:*.${target}`;
+                    searchQuery = 'site:"*.' + target + '" -subdomain';
                     break;
                 case 21:
-                    query = `site:*.${target} inurl:github.com`;
+                    searchQuery = 'site:"*.' + target + '" ext:git OR ext:gpg';
                     break;
                 case 22:
-                    query = `site:*.${target} "cross-domain"`;
+                    searchQuery = 'site:"*.' + target + '" crossdomain.xml';
                     break;
                 case 28:
-                    query = `site:*.${target} inurl:web.archive.org`;
+                    searchQuery = 'site:"*.' + target + '" file:archive.org';
                     break;
                 case 29:
-                    query = `site:*.${target} inurl:wayback`;
+                    searchQuery = 'site:"*.' + target + '" file:waybackmachine';
                     break;
                 case 31:
-                    query = `site:*.${target} "openbugbounty"`;
+                    searchQuery = 'site:"*.' + target + '" openbugbounty.org';
                     break;
                 case 33:
-                    query = `site:*.${target} "wp-config.php"`;
+                    searchQuery = 'site:"*.' + target + '" wp-config.php';
                     break;
                 case 34:
-                    query = `site:*.${target} "censys.io"`;
+                    searchQuery = 'site:"*.' + target + '" Censys.io';
                     break;
                 case 35:
-                    query = `site:*.${target} "censys"`;
+                    searchQuery = 'site:"*.' + target + '" Censys.io -ipv4';
                     break;
                 case 37:
-                    query = `site:*.${target} "shodan"`;
+                    searchQuery = 'site:"*.' + target + '" SHODAN.io';
                     break;
                 case 41:
-                    query = `site:*.${target} "main.yml"`;
+                    searchQuery = 'site:"*.' + target + '" main.yml';
                     break;
                 case 42:
-                    query = `site:*.${target} "admin"`;
+                    searchQuery = 'site:"*.' + target + '" admin';
                     break;
                 case 43:
-                    query = `site:*.${target} "wp-content/plugins"`;
+                    searchQuery = 'site:"*.' + target + '" juicy.php';
                     break;
                 case 44:
-                    query = `site:*.${target} inurl:"upload.php"`;
+                    searchQuery = 'site:"*.' + target + '" ext:php ext:upload';
                     break;
                 case 45:
-                    query = `site:*.${target} "plugin"`;
+                    searchQuery = 'site:"*.' + target + '" ext:zip ext:plugin';
                     break;
                 case 46:
-                    query = `site:*.${target} "sensitive"`;
+                    searchQuery = 'site:"*.' + target + '" sensitive.file';
                     break;
                 case 47:
-                    query = `site:*.${target} "api"`;
+                    searchQuery = 'site:"*.' + target + '" api';
                     break;
                 case 48:
-                    query = `site:*.${target} "backup"`;
+                    searchQuery = 'site:"*.' + target + '" backup';
                     break;
                 case 49:
-                    query = `site:*.${target} "github"`;
+                    searchQuery = 'site:"*.' + target + '" github api';
                     break;
                 case 52:
-                    query = `site:*.${target} "joomla"`;
+                    searchQuery = 'site:"*.' + target + '" joomla database';
                     break;
                 case 53:
-                    query = `site:*.${target} "sql"`;
-                    break;
-                case 54:
-                    query = `site:*.${target} "testing"`;
+                    searchQuery = 'site:"*.' + target + '" ext:sql';
                     break;
                 case 56:
-                    query = `site:*.${target} "RDP"`;
-                    break;
-                case 57:
-                    query = `site:*.${target} "apache"`;
+                    searchQuery = 'site:"*.' + target + '" sensitive file';
                     break;
                 case 58:
-                    query = `site:*.${target} "blocked"`;
+                    searchQuery = 'site:"*.' + target + '" php.ini';
                     break;
                 case 59:
-                    query = `site:*.${target} "exposed"`;
+                    searchQuery = 'site:"*.' + target + '" phpmyadmin';
+                    break;
+                case 60:
+                    searchQuery = 'site:"*.' + target + '" webservice api';
+                    break;
+                case 61:
+                    searchQuery = 'site:"*.' + target + '" joomla file';
                     break;
                 default:
-                    break;
+                    searchQuery = '';
             }
-
-            const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-            window.open(url, '_blank');
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery));
         }
     </script>
 </body>
