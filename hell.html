@@ -7,25 +7,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         body {
-            background-color: #2a2a2a;
-            color: #f5f5f5;
+            background-color: #1c1c1c;
+            color: #e0e0e0;
             font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
             margin-top: 50px;
             background-color: #333;
-            padding: 30px;
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s;
         }
-        .header {
-            background-color: #d32f2f;
-            padding: 20px;
-            border-radius: 10px;
+        .container:hover {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+        }
+        h2 {
             text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h2 {
+            margin-bottom: 20px;
             color: #fff;
         }
         input[type="text"] {
@@ -35,45 +35,46 @@
             border: none;
             border-radius: 5px;
             font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        input[type="text"]:focus {
+            background-color: #444;
+            color: #fff;
+            outline: none;
         }
         .fsbutton {
-            padding: 15px 20px;
+            padding: 15px;
             font-size: 16px;
-            background-color: #009688;
+            background-color: #007bff;
             border: none;
             color: #FFFFFF;
             transition: all 0.3s ease;
-            margin: 10px;
             border-radius: 5px;
             width: 100%;
+            margin-bottom: 10px;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            opacity: 0.9;
         }
         .fsbutton:hover {
-            background-color: #005B96;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-        .text-center {
-            margin-top: 40px;
+            background-color: #0056b3;
+            opacity: 1;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         .author {
             margin-top: 40px;
-            padding: 20px;
+            text-align: center;
+            padding: 15px;
             background-color: #4caf50;
             color: white;
-            text-align: center;
             border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h2>DorkSearch</h2>
-            <h4>Your Search Engine for Bug Bounty Hunting</h4>
-        </div>
-        <h3 class="text-center">Enter Target Domain:</h3>
+        <h2>DorkSearch</h2>
+        <h4 class="text-center">Enter Target Domain:</h4>
         <input type="text" id="target" placeholder="e.g., example.com">
         
         <div class="row">
@@ -199,10 +200,10 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(53)">SQL File</button>
+                <button class="fsbutton" onclick="googleSearch(53)">Search SQL Files</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(56)">Sensitive File</button>
+                <button class="fsbutton" onclick="googleSearch(56)">Sensitive Files</button>
             </div>
             <div class="col-md-4">
                 <button class="fsbutton" onclick="googleSearch(58)">php.ini</button>
@@ -221,7 +222,7 @@
         </div>
     </div>
     <div class="author">
-        <p>R</p>
+        <p>Copyright by all bug hunters.</p>
     </div>
     <script>
         function googleSearch(option) {
