@@ -206,7 +206,7 @@
                 <button class="fsbutton" onclick="googleSearch(56)">Sensitive Files</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(58)">php.ini</button>
+                <button class="fsbutton" onclick="googleSearch(58)">all extension</button>
             </div>
         </div>
         <div class="row">
@@ -243,13 +243,13 @@
                     searchQuery = 'site:"*.' + target + '" ext:sql OR ext:dbf OR ext:mdb';
                     break;
                 case 5:
-                    searchQuery = 'site:"*.' + target + '" ext:bkf OR ext:bkp OR ext:bak OR ext:old OR ext:backup';
+                    searchQuery = 'site:"*.' + target + '" ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql';
                     break;
                 case 6:
                     searchQuery = 'site:"*.' + target + '" inurl:login';
                     break;
                 case 8:
-                    searchQuery = 'site:"*.' + target + '" ext:pdf OR ext:doc OR ext:xls';
+                    searchQuery = 'site:"*.' + target + '"  ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive';
                     break;
                 case 9:
                     searchQuery = 'site:"*.' + target + '" phpinfo()';
@@ -315,7 +315,7 @@
                     searchQuery = 'site:"*.' + target + '" ext:zip ext:plugin';
                     break;
                 case 46:
-                    searchQuery = 'site:"*.' + target + '" sensitive.file';
+                    searchQuery = 'site:"*.' + target + '"ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb';
                     break;
                 case 47:
                     searchQuery = 'site:"*.' + target + '" api';
@@ -336,7 +336,7 @@
                     searchQuery = 'site:"*.' + target + '" sensitive file';
                     break;
                 case 58:
-                    searchQuery = 'site:"*.' + target + '" php.ini';
+                    searchQuery = 'site:"*.' + target + '" ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js';
                     break;
                 case 59:
                     searchQuery = 'site:"*.' + target + '" phpmyadmin';
