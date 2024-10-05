@@ -202,151 +202,157 @@
                 <button class="fsbutton" onclick="googleSearch(53)">SQL File</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(56)">Sensitive File</button>
+                <button class="fsbutton" onclick="googleSearch(54)">Web application Testing</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(57)">Database Backup</button>
+                <button class="fsbutton" onclick="googleSearch(56)">RDP Credentials</button>
             </div>
         </div>
-         <div class="row">
+        <div class="row">
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(58)">cmd page #1</button>
+                <button class="fsbutton" onclick="googleSearch(57)">Apache Config</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(59)">cmd page #2</button>
+                <button class="fsbutton" onclick="googleSearch(58)">IP Blocked</button>
+            </div>
+            <div class="col-md-4">
+                <button class="fsbutton" onclick="googleSearch(59)">Find RDP Exposed</button>
             </div>
         </div>
         <div class="author">
-            <h5>Developed by Parth Pawar</h5>
+            <p>Created by Your Name</p>
         </div>
     </div>
+
     <script>
-        function googleSearch(option) {
-            var target = document.getElementById('target').value;
-            if (target.trim() === '') {
-                alert('Please enter a target domain.');
-                return;
-            }
-            var searchQuery;
-            switch(option) {
+        function googleSearch(type) {
+            const target = document.getElementById('target').value;
+            let query = "";
+
+            switch(type) {
                 case 1:
-                    searchQuery = 'site:'"*.+ target +"' intitle:index.of';
+                    query = `site:*.${target} inurl:/.git/`;
                     break;
                 case 2:
-                    searchQuery = 'site:'"*.+ target +"' ext:env | ext:yaml | ext:ini | ext:log | ext:txt';
+                    query = `site:*.${target} ext:conf OR ext:ini OR ext:env`;
                     break;
                 case 3:
-                    searchQuery = 'site:'"*.+ target +"' ext:sql | ext:dbf | ext:mdb';
+                    query = `site:*.${target} ext:sql`;
                     break;
                 case 5:
-                    searchQuery = 'site:'"*.+ target +"' ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup';
+                    query = `site:*.${target} ext:bak OR ext:old OR ext:backup`;
                     break;
                 case 6:
-                    searchQuery = 'site:'"*.+ target +"' inurl:login';
+                    query = `site:*.${target} inurl:login`;
                     break;
                 case 7:
-                    searchQuery = 'site:'"*.+ target +"' "sql syntax near" | "syntax error has occurred" | "incorrect syntax near" | "unexpected end of SQL command"';
+                    query = `site:*.${target} intext:"SQL syntax" OR intext:"sql error"`;
                     break;
                 case 8:
-                    searchQuery = 'site:'"*.+ target +"' ext:doc | ext:docx | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv';
+                    query = `site:*.${target} ext:pdf OR ext:docx OR ext:xlsx`;
                     break;
                 case 9:
-                    searchQuery = 'site:'"*.+ target +"' ext:php intitle:phpinfo "published by the PHP Group"';
+                    query = `site:*.${target} "phpinfo()"`;
                     break;
                 case 10:
-                    searchQuery = 'site:'"*.+ target +"' inurl:wp- | inurl:wp-content | inurl:plugins | inurl:uploads | inurl:themes | inurl:download';
+                    query = `site:*.${target} inurl:wp-content`;
                     break;
                 case 11:
-                    searchQuery = 'site:'"*.+ target +"' inurl:shell | inurl:backdoor | inurl:cmd | inurl:upload';
+                    query = `site:*.${target} "backdoor" OR "cmd.php"`;
                     break;
                 case 12:
-                    searchQuery = 'site:'"*.+ target +"' inurl:install | inurl:setup | inurl:config';
+                    query = `site:*.${target} inurl:"install.php" OR inurl:"setup.php"`;
                     break;
                 case 17:
-                    searchQuery = 'site:'"*.+ target +"' inurl:htaccess | inurl:htpasswd';
+                    query = `site:*.${target} inurl:.htaccess`;
                     break;
                 case 18:
-                    searchQuery = 'site:'"*.+ target +"' -www';
+                    query = `site:*.${target} inurl:subdomain`;
                     break;
                 case 19:
-                    searchQuery = 'site:*.'"*.+ target +"' -www';
+                    query = `site:*.${target} inurl:*.${target}`;
                     break;
                 case 21:
-                    searchQuery = 'site:github.com ' + target;
+                    query = `site:*.${target} inurl:github.com`;
                     break;
                 case 22:
-                    searchQuery = 'site:'"*.+ target +"' ext:xml inurl:crossdomain.xml';
+                    query = `site:*.${target} "cross-domain"`;
                     break;
                 case 28:
-                    searchQuery = 'site:archive.org ' + target;
+                    query = `site:*.${target} inurl:web.archive.org`;
                     break;
                 case 29:
-                    searchQuery = 'site:wayback.archive.org ' + target;
+                    query = `site:*.${target} inurl:wayback`;
                     break;
                 case 31:
-                    searchQuery = 'site:openbugbounty.org ' + target;
+                    query = `site:*.${target} "openbugbounty"`;
                     break;
                 case 33:
-                    searchQuery = 'site:'"*.+ target +"' wp-config.php.bak';
+                    query = `site:*.${target} "wp-config.php"`;
                     break;
                 case 34:
-                    searchQuery = 'site:censys.io ' + target;
+                    query = `site:*.${target} "censys.io"`;
                     break;
                 case 35:
-                    searchQuery = 'site:censys.io/ipv4 ' + target;
+                    query = `site:*.${target} "censys"`;
                     break;
                 case 37:
-                    searchQuery = 'site:shodan.io ' + target;
+                    query = `site:*.${target} "shodan"`;
                     break;
                 case 41:
-                    searchQuery = 'site:'"*.+ target +"' main.yml';
+                    query = `site:*.${target} "main.yml"`;
                     break;
                 case 42:
-                    searchQuery = 'site:'"*.+ target +"' inurl:admin';
+                    query = `site:*.${target} "admin"`;
                     break;
                 case 43:
-                    searchQuery = 'site:'"*.+ target +"' inurl:wp-';
+                    query = `site:*.${target} "wp-content/plugins"`;
                     break;
                 case 44:
-                    searchQuery = 'site:'"*.+ target +"' inurl:upload';
+                    query = `site:*.${target} inurl:"upload.php"`;
                     break;
                 case 45:
-                    searchQuery = 'site:'"*.+ target +"' inurl:plugins';
+                    query = `site:*.${target} "plugin"`;
                     break;
                 case 46:
-                    searchQuery = 'site:'"*.+ target +"' inurl:config';
+                    query = `site:*.${target} "sensitive"`;
                     break;
                 case 47:
-                    searchQuery = 'site:'"*.+ target +"' inurl:api';
+                    query = `site:*.${target} "api"`;
                     break;
                 case 48:
-                    searchQuery = 'site:'"*.+ target +"' inurl:backup';
+                    query = `site:*.${target} "backup"`;
                     break;
                 case 49:
-                    searchQuery = 'site:'"*.+ target +"' inurl:github';
+                    query = `site:*.${target} "github"`;
                     break;
                 case 52:
-                    searchQuery = 'site:'"*.+ target +"' inurl:joomla';
+                    query = `site:*.${target} "joomla"`;
                     break;
                 case 53:
-                    searchQuery = 'site:'"*.+ target +"' ext:sql';
+                    query = `site:*.${target} "sql"`;
+                    break;
+                case 54:
+                    query = `site:*.${target} "testing"`;
                     break;
                 case 56:
-                    searchQuery = 'site:'"*.+ target +"' inurl:sensitive';
+                    query = `site:*.${target} "RDP"`;
                     break;
                 case 57:
-                    searchQuery = 'site:'"*.+ target +"' inurl:backup';
+                    query = `site:*.${target} "apache"`;
                     break;
-                 case 58:
-                    searchQuery = 'site:'"*.+ target +"' inurl:index.php?command=';
+                case 58:
+                    query = `site:*.${target} "blocked"`;
                     break;
-                 case 59:
-                    searchQuery = 'site:'"*.+ target +"' inurl:index.php?cmd=';
+                case 59:
+                    query = `site:*.${target} "exposed"`;
                     break;
                 default:
-                    searchQuery = '';
+                    break;
             }
-            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery), '_blank');
+
+            const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            window.open(url, '_blank');
         }
     </script>
 </body>
