@@ -123,7 +123,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(18)">Find Subdomains</button>
+                <button class="fsbutton" onclick="googleSearch(18)">demo and api dir</button>
             </div>
             <div class="col-md-4">
                 <button class="fsbutton" onclick="googleSearch(19)">Find Sub-Subdomains</button>
@@ -195,7 +195,7 @@
                 <button class="fsbutton" onclick="googleSearch(49)">Github API</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(52)">Joomla Database</button>
+                <button class="fsbutton" onclick="googleSearch(52)">Joomla Installer</button>
             </div>
         </div>
         <div class="row">
@@ -203,7 +203,7 @@
                 <button class="fsbutton" onclick="googleSearch(53)">Search SQL Files</button>
             </div>
             <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(56)">Sensitive Files</button>
+                <button class="fsbutton" onclick="googleSearch(56)">Blind XSS Form</button>
             </div>
             <div class="col-md-4">
                 <button class="fsbutton" onclick="googleSearch(58)">all extension</button>
@@ -222,7 +222,7 @@
         </div>
     </div>
     <div class="author">
-        <p>Copyright by all bug hunters.</p>
+        <p> Rhyru9.</p>
     </div>
     <script>
         function googleSearch(option) {
@@ -240,7 +240,7 @@
                     searchQuery = 'site:"*.' + target + '" ext:env OR ext:yaml OR ext:ini OR ext:log OR ext:txt';
                     break;
                 case 3:
-                    searchQuery = 'site:"*.' + target + '" ext:sql OR ext:dbf OR ext:mdb';
+                    searchQuery = 'site:"*.' + target + '" ext:sql | ext:sql.gz | ext:sql.rar | ext:sql.zip | ext:bkp | ext:bkp.gz | ext:bkp.rar | ext:bkp.zip | ext:zip | ext:7z | ext:rar | ext:gz';
                     break;
                 case 5:
                     searchQuery = 'site:"*.' + target + '" ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql';
@@ -267,10 +267,10 @@
                     searchQuery = 'site:"*.' + target + '" ext:htaccess';
                     break;
                 case 18:
-                    searchQuery = 'site:"*.' + target + '" -www';
+                    searchQuery = 'site:"*.' + target + '" inurl:test | inurl:env | inurl:dev | inurl:staging | inurl:sandbox | inurl:debug | inurl:temp | inurl:internal | inurl:demo';
                     break;
                 case 19:
-                    searchQuery = 'site:"*.' + target + '" -subdomain';
+                    searchQuery = 'site:"*.' + target + '" -subdomain -www';
                     break;
                 case 21:
                     searchQuery = 'site:"*.' + target + '" ext:git OR ext:gpg';
@@ -288,7 +288,7 @@
                     searchQuery = 'site:"*.' + target + '" openbugbounty.org';
                     break;
                 case 33:
-                    searchQuery = 'site:"*.' + target + '" wp-config.php';
+                    searchQuery = 'site:"*.' + target + '" intitle:"Index of" .env | .git | wc.db | .svn | .hg | .ovpn | config.php | database.sql';
                     break;
                 case 34:
                     searchQuery = 'site:"*.' + target + '" Censys.io';
@@ -327,13 +327,13 @@
                     searchQuery = 'site:"*.' + target + '" github api';
                     break;
                 case 52:
-                    searchQuery = 'site:"*.' + target + '" joomla database';
+                    searchQuery = 'site:"*.' + target + '" intitle:Joomla - Web Installer';
                     break;
                 case 53:
                     searchQuery = 'site:"*.' + target + '" ext:sql';
                     break;
                 case 56:
-                    searchQuery = 'site:"*.' + target + '" sensitive file';
+                    searchQuery = 'site:"*.' + target + '" intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls';
                     break;
                 case 58:
                     searchQuery = 'site:"*.' + target + '" ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js';
@@ -342,10 +342,10 @@
                     searchQuery = 'site:"*.' + target + '" phpmyadmin';
                     break;
                 case 60:
-                    searchQuery = 'site:"*.' + target + '" webservice api';
+                    searchQuery = 'site:"*.' + target + '" inurl:api | inurl:/rest | inurl:/v1 | inurl:/v2 | inurl:/v3 | inurl:swagger | inurl:graphql | inurl:graphiql';
                     break;
                 case 61:
-                    searchQuery = 'site:"*.' + target + '" joomla file';
+                    searchQuery = 'site:"*.' + target + '" "index.php?option=com_news_portal" or "Powered by iJoomla News Portal"';
                     break;
                 default:
                     searchQuery = '';
