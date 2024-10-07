@@ -175,4 +175,6 @@ https://victim.com/?payload="><script>alert(1)</script>
 </script>
 ```
 
+**blocked by csp?**
+[https://github.com/RHYru9/rhyru9.github.io/blob/main/xss-cheatsheet/csp.txt](https://github.com/RHYru9/rhyru9.github.io/blob/main/xss-cheatsheet/csp.txt)
 ---
