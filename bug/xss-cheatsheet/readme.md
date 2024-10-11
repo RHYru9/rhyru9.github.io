@@ -176,7 +176,7 @@ https://victim.com/?payload="><script>alert(1)</script>
 ```
 
 **blocked by csp?**
-- [https://github.com/RHYru9/rhyru9.github.io/blob/main/xss-cheatsheet/csp.txt](https://github.com/RHYru9/rhyru9.github.io/blob/main/xss-cheatsheet/csp.txt)
+- [https://raw.githubusercontent.com/RHYru9/rhyru9.github.io/refs/heads/main/bug/xss-cheatsheet/csp.txt](https://raw.githubusercontent.com/RHYru9/rhyru9.github.io/refs/heads/main/bug/xss-cheatsheet/csp.txt)
 
 **xss without Prentheses**
 - [https://github.com/RenwaX23/XSS-Payloads/blob/master/Without-Parentheses.md](https://github.com/RenwaX23/XSS-Payloads/blob/master/Without-Parentheses.md)
