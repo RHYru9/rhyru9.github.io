@@ -1,3 +1,3 @@
-const xssPayload = "<img src=x onerror=alert(1)>";
+const xssPayload = "<svg/src=x onerror=alert(1)>";
 document.body.innerHTML = xssPayload;
 
