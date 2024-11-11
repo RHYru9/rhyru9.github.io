@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Cleaner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+
+    <script>
+        const url = "https://raw.githubusercontent.com/RHYru9/Url-Cleaner/refs/heads/main/index.html";
+
+        $.get(url, function(data) {
+            $('#content').html(data);
+        }).fail(function() {
+            $('#content').html('<p>Failed to load content.</p>');
+        });
+    </script>
+</body>
+</html>
