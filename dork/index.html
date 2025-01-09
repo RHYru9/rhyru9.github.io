@@ -81,7 +81,7 @@
 
 <script>
 const dorks = {
-    'XSS prone parameters': 'inurl:lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
+    'XSS prone parameters': 'inurl:"lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
     'Open Redirect prone parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
     'LFI': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
     'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
