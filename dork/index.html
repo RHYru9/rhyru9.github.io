@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DorkSearch</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Dork Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #1c1c1c;
             color: #e0e0e0;
             font-family: 'Arial', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
         }
         .container {
             margin-top: 50px;
@@ -18,340 +17,98 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s;
-        }
-        .container:hover {
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        input[type="text"]:focus {
-            background-color: #444;
-            color: #fff;
-            outline: none;
         }
         .fsbutton {
-            padding: 15px;
-            font-size: 16px;
-            background-color: #007bff;
+            padding: 10px;
+            font-size: 14px;
             border: none;
             color: #FFFFFF;
-            transition: all 0.3s ease;
             border-radius: 5px;
-            width: 100%;
-            margin-bottom: 10px;
+            width: 120px;
+            margin: 5px;
             text-align: center;
-            opacity: 0.9;
+            display: inline-block;
+            transition: 0.3s;
         }
         .fsbutton:hover {
-            background-color: #0056b3;
-            opacity: 1;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
         }
-        .author {
-            margin-top: 40px;
-            text-align: center;
-            padding: 15px;
-            background-color: #4caf50;
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        .green { background-color: rgba(0, 128, 0, 0.8); }
+        .lightgreen { background-color: rgba(144, 238, 144, 0.8); }
+        .blue { background-color: rgba(0, 0, 255, 0.8); }
+        .lightblue { background-color: rgba(173, 216, 230, 0.8); }
+        .purple { background-color: rgba(128, 0, 128, 0.8); }
+        .lightpurple { background-color: rgba(216, 191, 216, 0.8); }
+        .yellowgreen { background-color: rgba(154, 205, 50, 0.8); }
+        .footer {
+                margin-top: 30px;
+                text-align: center;
+                color: #e0e0e0;
+                font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>DorkSearch</h2>
-        <h4 class="text-center">Enter Target Domain:</h4>
-        <input type="text" id="target" placeholder="e.g., example.com">
-        
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(1)">Directory listing vulnerabilities</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(2)">Exposed Configuration files</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(3)">Exposed Database files</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(5)">Backup and old files</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(6)">Login pages</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(7)">SQL errors</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(8)">Publicly exposed documents</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(9)">phpinfo()</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(10)">Find WordPress</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(11)">Finding Backdoors</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(12)">Install / Setup files</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(17)">.htaccess sensitive files</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(18)">demo and api dir</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(19)">Find Sub-Subdomains</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(21)">Search in GITHUB</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(22)">Test CrossDomain</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(28)">Search in Web Archive #1</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(29)">Search in Web Archive #2</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(31)">Search OpenBugBounty</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(33)">Search WP Config Backup</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(34)">Search in Censys (IPv4)</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(35)">Search in Censys (Domain)</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(37)">Search in SHODAN</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(41)">main.yml file</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(42)">Admin Portal</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(43)">Wordpress Juicy file 1</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(44)">File Upload</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(45)">Vulnerable Wordpress Plugin</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(46)">Sensitive File</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(47)">Sharing API Info</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(48)">Sensitive Admin Backup</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(49)">Github API</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(52)">Joomla Installer</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(53)">Search SQL Files</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(56)">Blind XSS Form</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(58)">all extension</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(59)">phpmyadmin</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(60)">WebService API</button>
-            </div>
-            <div class="col-md-4">
-                <button class="fsbutton" onclick="googleSearch(61)">Joomla File</button>
-            </div>
-        </div>
+<div class="container">
+    <h2 class="text-center">Dork Search</h2>
+    <h4 class="text-center">Enter Target Domain:</h4>
+    <input type="text" id="target" class="form-control" placeholder="e.g., example.com">
+
+    <div class="mt-4 text-center">
+        <button class="fsbutton green" onclick="searchDork('XSS prone parameters')">XSS Prone</button>
+        <button class="fsbutton lightgreen" onclick="searchDork('Open Redirect prone parameters')">Open Redirect</button>
+        <button class="fsbutton blue" onclick="searchDork('LFI')">LFI</button>
+        <button class="fsbutton lightblue" onclick="searchDork('SQLi Prone Parameters')">SQLi</button>
+        <button class="fsbutton purple" onclick="searchDork('SSRF Prone Parameters')">SSRF</button>
+        <button class="fsbutton lightpurple" onclick="searchDork('RCE Prone Parameters')">RCE</button>
+        <button class="fsbutton green" onclick="searchDork('SSTI Prone Parameters')">SSTI</button>
+        <button class="fsbutton yellowgreen" onclick="searchDork('Sensitive Parameters')">Sensitive</button>
+        <button class="fsbutton green" onclick="searchDork('Juicy Info')">Juicy Info</button>
+        <button class="fsbutton lightgreen" onclick="searchDork('Login Pages')">Login Pages</button>
+        <button class="fsbutton blue" onclick="searchDork('Register Pages')">Register Pages</button>
+        <button class="fsbutton lightblue" onclick="searchDork('PHP, Java, .NET, Perl Extensions 1')">Ext 1</button>
+        <button class="fsbutton purple" onclick="searchDork('PHP, Java, .NET, Perl Extensions 2')">Ext 2</button>
+        <button class="fsbutton lightpurple" onclick="searchDork('Blind XSS Forms 1')">XSS Form 1</button>
+        <button class="fsbutton yellowgreen" onclick="searchDork('Blind XSS Forms 2')">XSS Form 2</button>
+        <button class="fsbutton green" onclick="searchDork('Sensitive Documents')">Documents</button>
     </div>
-    <div class="author">
-        <p> Rhyru9.</p>
+</div>
+<div class="footer">
+    <p>Rhyru9</p>
+    <p>Feel free to contribute!</p>
     </div>
-    <script>
-        function googleSearch(option) {
-            var target = document.getElementById('target').value;
-            if (target.trim() === '') {
-                alert('Please enter a target domain.');
-                return;
-            }
-            var searchQuery;
-            switch(option) {
-                case 1:
-                    searchQuery = 'site:"*.' + target + '" intitle:index.of';
-                    break;
-                case 2:
-                    searchQuery = 'site:"*.' + target + '" ext:env OR ext:yaml OR ext:ini OR ext:log OR ext:txt';
-                    break;
-                case 3:
-                    searchQuery = 'site:"*.' + target + '" ext:sql | ext:sql.gz | ext:sql.rar | ext:sql.zip | ext:bkp | ext:bkp.gz | ext:bkp.rar | ext:bkp.zip | ext:zip | ext:7z | ext:rar | ext:gz';
-                    break;
-                case 5:
-                    searchQuery = 'site:"*.' + target + '" ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql';
-                    break;
-                case 6:
-                    searchQuery = 'site:"*.' + target + '" inurl:login';
-                    break;
-                case 8:
-                    searchQuery = 'site:"*.' + target + '"  ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive';
-                    break;
-                case 9:
-                    searchQuery = 'site:"*.' + target + '" phpinfo()';
-                    break;
-                case 10:
-                    searchQuery = 'site:"*.' + target + '" inurl:wp-admin';
-                    break;
-                case 11:
-                    searchQuery = 'site:"*.' + target + '" inurl:backdoor';
-                    break;
-                case 12:
-                    searchQuery = 'site:"*.' + target + '" ext:zip OR ext:tar OR ext:gz';
-                    break;
-                case 17:
-                    searchQuery = 'site:"*.' + target + '" ext:htaccess';
-                    break;
-                case 18:
-                    searchQuery = 'site:"*.' + target + '" inurl:test | inurl:env | inurl:dev | inurl:staging | inurl:sandbox | inurl:debug | inurl:temp | inurl:internal | inurl:demo';
-                    break;
-                case 19:
-                    searchQuery = 'site:"*.' + target + '" -subdomain -www';
-                    break;
-                case 21:
-                    searchQuery = 'site:"*.' + target + '" ext:git OR ext:gpg';
-                    break;
-                case 22:
-                    searchQuery = 'site:"*.' + target + '" crossdomain.xml';
-                    break;
-                case 28:
-                    searchQuery = 'site:"*.' + target + '" file:archive.org';
-                    break;
-                case 29:
-                    searchQuery = 'site:"*.' + target + '" file:waybackmachine';
-                    break;
-                case 31:
-                    searchQuery = 'site:"*.' + target + '" openbugbounty.org';
-                    break;
-                case 33:
-                    searchQuery = 'site:"*.' + target + '" intitle:"Index of" .env | .git | wc.db | .svn | .hg | .ovpn | config.php | database.sql';
-                    break;
-                case 34:
-                    searchQuery = 'site:"*.' + target + '" Censys.io';
-                    break;
-                case 35:
-                    searchQuery = 'site:"*.' + target + '" Censys.io -ipv4';
-                    break;
-                case 37:
-                    searchQuery = 'site:"*.' + target + '" SHODAN.io';
-                    break;
-                case 41:
-                    searchQuery = 'site:"*.' + target + '" main.yml';
-                    break;
-                case 42:
-                    searchQuery = 'site:"*.' + target + '" admin';
-                    break;
-                case 43:
-                    searchQuery = 'site:"*.' + target + '" juicy.php';
-                    break;
-                case 44:
-                    searchQuery = 'site:"*.' + target + '" ext:php ext:upload';
-                    break;
-                case 45:
-                    searchQuery = 'site:"*.' + target + '" ext:zip ext:plugin';
-                    break;
-                case 46:
-                    searchQuery = 'site:"*.' + target + '" ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb';
-                    break;
-                case 47:
-                    searchQuery = 'site:"*.' + target + '" api';
-                    break;
-                case 48:
-                    searchQuery = 'site:"*.' + target + '" backup';
-                    break;
-                case 49:
-                    searchQuery = 'site:"*.' + target + '" github api';
-                    break;
-                case 52:
-                    searchQuery = 'site:"*.' + target + '" intitle:Joomla - Web Installer';
-                    break;
-                case 53:
-                    searchQuery = 'site:"*.' + target + '" ext:sql';
-                    break;
-                case 56:
-                    searchQuery = 'site:"*.' + target + '" intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls';
-                    break;
-                case 58:
-                    searchQuery = 'site:"*.' + target + '" ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js';
-                    break;
-                case 59:
-                    searchQuery = 'site:"*.' + target + '" phpmyadmin';
-                    break;
-                case 60:
-                    searchQuery = 'site:"*.' + target + '" inurl:api | inurl:/rest | inurl:/v1 | inurl:/v2 | inurl:/v3 | inurl:swagger | inurl:graphql | inurl:graphiql';
-                    break;
-                case 61:
-                    searchQuery = 'site:"*.' + target + '" "index.php?option=com_news_portal" or "Powered by iJoomla News Portal"';
-                    break;
-                default:
-                    searchQuery = '';
-            }
-            window.open('https://www.google.com/search?q=' + encodeURIComponent(searchQuery));
-        }
-    </script>
+
+<script>
+const dorks = {
+    'XSS prone parameters': 'inurl:lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
+    'Open Redirect prone parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
+    'LFI': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
+    'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
+    'SSTI Prone Parameters': 'inurl:"module=" | inurl:"template=" | inurl:"load=" | inurl:"run=" | inurl:"preview=" | inurl:"view=" | inurl:"content=" | inurl:"activity=" | inurl:"name=" inurl:& site:*.{domain}',
+    'SSRF Prone Parameters': 'inurl:"http=" | inurl:"load=" | inurl:"exec=" | inurl:"resource=" | inurl:"resources=" | inurl:"url=" | inurl:"path=" | inurl:"host=" | inurl:"proxy=" | inurl:"html=" | inurl:"data=" | inurl:"domain=" | inurl:"uri=" inurl:& site:*.{domain}',
+    'RCE Prone Parameters': 'inurl:"cmd=" | inurl:"ip=" | inurl:"cli=" | inurl:"load=" | inurl:"module=" | inurl:"run=" | inurl:"print=" | inurl:"exec=" | inurl:"query=" | inurl:"code=" | inurl:"do=" | inurl:"run=" | inurl:"read=" | inurl:"ping=" inurl:& site:*.{domain}',
+    'Sensitive Parameters': 'inurl:"email=" | inurl:"phone=" | inurl:"password=" | inurl:"secret=" | inurl:"token=" inurl:& site:*.{domain}',
+    'Juicy Info': 'site:*.{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
+    'Login Pages': 'site:"*.{domain}" inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl: weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
+    'Register Pages': 'site:"*.{domain}" inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account | inurl:feedback | inurl:contact | inurl:contact-us | inurl:contact-form | inurl:get-in-touch | inurl:reach-out',
+    'PHP, Java, .NET, Perl Extensions 1': 'site:*.{domain} ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js',
+    'PHP, Java, .NET, Perl Extensions 2': 'site:*.{domain} inurl:conf | inurl:env | inurl:cgi | inurl:bin | inurl:etc | inurl:root | inurl:sql | inurl:backup | inurl:admin | inurl:php',
+    'Blind XSS Forms 1': 'site:*.{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls',
+    'Blind XSS Forms 2': 'site:*.{domain} inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
+    'Sensitive Documents': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive'
+};
+
+function searchDork(type) {
+    const target = document.getElementById('target').value.trim();
+    if (!target) {
+        alert('Please enter a target domain.');
+        return;
+    }
+    const query = dorks[type].replace(/{domain}/g, target);
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    window.open(url, '_blank');
+}
+</script>
 </body>
 </html>
