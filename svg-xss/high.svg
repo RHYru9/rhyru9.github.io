@@ -1,15 +1,15 @@
 <svg width="100%" height="100%" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="white" />
     
-    <text x="50%" y="30%" font-family="Arial" font-size="5vw" fill="red" text-anchor="middle" dominant-baseline="middle">
+    <text x="50%" y="30%" font-family="Arial" font-size="5vw" fill="red" text-anchor="middle" dominant-baseline="middle" textLength="100%">
         this site is under maintenance
     </text>
     
-    <text x="50%" y="50%" font-family="Arial" font-size="5vw" fill="red" text-anchor="middle" dominant-baseline="middle">
+    <text x="50%" y="50%" font-family="Arial" font-size="5vw" fill="red" text-anchor="middle" dominant-baseline="middle" textLength="100%">
         please visit the following site
     </text>
     
-    <text x="50%" y="70%" font-family="Arial" font-size="6vw" fill="green" text-anchor="middle" dominant-baseline="middle">
+    <text x="50%" y="70%" font-family="Arial" font-size="6vw" fill="green" text-anchor="middle" dominant-baseline="middle" textLength="100%">
         http://evil.com
     </text>
 </svg>
