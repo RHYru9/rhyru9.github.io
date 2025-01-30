@@ -1,47 +1,58 @@
+/* General Styling */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
+/* Container */
 .login-container {
   text-align: center;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
 }
 
+/* Login Box */
 .login-box {
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 25px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  text-align: left;
 }
 
+/* Logo */
 .logo {
-  width: 100px;
-  margin-bottom: 20px;
+  width: 120px;
+  display: block;
+  margin-bottom: 15px;
 }
 
+/* Title */
 .title {
   font-size: 24px;
+  font-weight: 600;
   margin-bottom: 20px;
   color: #333;
 }
 
+/* Input Field */
 .input-field {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 16px;
 }
 
+/* Links */
 .no-account, .cant-access {
   font-size: 14px;
   margin: 10px 0;
@@ -56,6 +67,7 @@ body {
   text-decoration: underline;
 }
 
+/* Buttons */
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -67,6 +79,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .button.back {
@@ -83,22 +96,38 @@ body {
   background: #0056a4;
 }
 
+/* Sign-in Options */
 .sign-in-options {
-  background: none;
-  border: none;
-  color: #0067c5;
-  margin-top: 20px;
+  margin-top: 15px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 12px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 6px;
+  font-size: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-in-options .icon {
+  margin-right: 8px;
 }
 
 .sign-in-options:hover {
-  text-decoration: underline;
+  background: #f3f4f6;
 }
 
+/* Footer */
 .footer {
   margin-top: 20px;
   font-size: 14px;
   color: #666;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .footer a {
@@ -110,17 +139,23 @@ body {
   text-decoration: underline;
 }
 
+.more-options {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Responsiveness */
 @media (max-width: 480px) {
   .login-box {
-    padding: 15px;
+    padding: 20px;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 22px;
   }
 
-  .button-group .button {
-    flex: 1;
-    margin: 0 5px;
+  .button-group {
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
