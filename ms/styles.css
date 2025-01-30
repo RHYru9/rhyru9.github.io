@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  text-align: center;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.no-account, .cant-access {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.no-account a, .cant-access a {
+  color: #0067c5;
+  text-decoration: none;
+}
+
+.no-account a:hover, .cant-access a:hover {
+  text-decoration: underline;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button.back {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.button.next {
+  background: #0067c5;
+  color: white;
+}
+
+.button.next:hover {
+  background: #0056a4;
+}
+
+.sign-in-options {
+  background: none;
+  border: none;
+  color: #0067c5;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.sign-in-options:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #0067c5;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .button-group .button {
+    flex: 1;
+    margin: 0 5px;
+  }
+}
