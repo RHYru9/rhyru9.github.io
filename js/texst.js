@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+//const puppeteer = require('puppeteer');
 
 async function extractEmail() {
   const browser = await puppeteer.launch();
