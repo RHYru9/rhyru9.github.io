@@ -3,112 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dork Search</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Auto Dorking | Pentester Tools</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #1c1c1c;
-            color: #e0e0e0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Courier New', 'Monaco', monospace;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            color: #00ff88;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        .container {
-            margin-top: 50px;
-            background-color: #333;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 136, 0.3);
         }
-        .fsbutton {
-            padding: 10px;
-            font-size: 14px;
-            border: none;
-            color: #FFFFFF;
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
-            width: 120px;
-            margin: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00ff88;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 5px #00ff88;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
             text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px #00ff88;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        /* Tool Container */
+        .tool-container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            transition: left 0.5s;
+        }
+
+        .tool-container:hover {
+            border-color: #00ff88;
+            box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
+        }
+
+        .tool-container:hover::before {
+            left: 100%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #00ff88;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+        }
+
+        .dork-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .dork-btn {
+            padding: 0.8rem 1rem;
+            background: transparent;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .dork-btn:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .status-bar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            margin-top: 2rem;
+            border-radius: 10px;
+            border: 1px solid #333;
+            font-family: 'Courier New', monospace;
+            color: #888;
+        }
+
+        .status-indicator {
             display: inline-block;
-            transition: 0.3s;
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 1s infinite;
         }
-        .fsbutton:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            opacity: 0.9;
-        }
-        .green { background-color: rgba(0, 128, 0, 0.8); }
-        .lightgreen { background-color: rgba(144, 238, 144, 0.8); }
-        .blue { background-color: rgba(0, 0, 255, 0.8); }
-        .lightblue { background-color: rgba(173, 216, 230, 0.8); }
-        .purple { background-color: rgba(128, 0, 128, 0.8); }
-        .lightpurple { background-color: rgba(216, 191, 216, 0.8); }
-        .yellowgreen { background-color: rgba(154, 205, 50, 0.8); }
+
         .footer {
-                margin-top: 30px;
-                text-align: center;
-                color: #e0e0e0;
-                font-size: 14px;
+            margin-top: 40px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ff88; }
+            to { text-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .dork-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2 class="text-center">Dork Search</h2>
-    <h4 class="text-center">Enter Target Domain:</h4>
-    <input type="text" id="target" class="form-control" placeholder="e.g., example.com">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🔒 PENTESTER TOOLS</div>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link" data-section="home">Home</a></li>
+                <li><a href="/uri" class="nav-link" data-section="uri">URI Manager</a></li>
+                <li><a href="/dork" class="nav-link active" data-section="dork">Auto Dorking</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="mt-4 text-center">
-        <button class="fsbutton green" onclick="searchDork('XSS prone parameters')">XSS Prone</button>
-        <button class="fsbutton lightgreen" onclick="searchDork('Open Redirect prone parameters')">Open Redirect</button>
-        <button class="fsbutton blue" onclick="searchDork('LFI')">LFI</button>
-        <button class="fsbutton lightblue" onclick="searchDork('SQLi Prone Parameters')">SQLi</button>
-        <button class="fsbutton purple" onclick="searchDork('SSRF Prone Parameters')">SSRF</button>
-        <button class="fsbutton lightpurple" onclick="searchDork('RCE Prone Parameters')">RCE</button>
-        <button class="fsbutton green" onclick="searchDork('SSTI Prone Parameters')">SSTI</button>
-        <button class="fsbutton yellowgreen" onclick="searchDork('Sensitive Parameters')">Sensitive</button>
-        <button class="fsbutton green" onclick="searchDork('Juicy Info')">Juicy Info</button>
-        <button class="fsbutton lightgreen" onclick="searchDork('Login Pages')">Login Pages</button>
-        <button class="fsbutton blue" onclick="searchDork('Register Pages')">Register Pages</button>
-        <button class="fsbutton lightblue" onclick="searchDork('PHP, Java, .NET, Perl Extensions 1')">Ext 1</button>
-        <button class="fsbutton purple" onclick="searchDork('PHP, Java, .NET, Perl Extensions 2')">Ext 2</button>
-        <button class="fsbutton lightpurple" onclick="searchDork('Blind XSS Forms 1')">XSS Form 1</button>
-        <button class="fsbutton yellowgreen" onclick="searchDork('Blind XSS Forms 2')">XSS Form 2</button>
-        <button class="fsbutton green" onclick="searchDork('Sensitive Documents')">Documents</button>
-    </div>
-</div>
-<div class="footer">
-    <p>Rhyru9</p>
-    <p>Feel free to contribute!</p>
-    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">AUTO DORKING</h1>
+            <p class="hero-subtitle">Automated Google dorking tool for efficient information gathering</p>
+        </section>
 
-<script>
-const dorks = {
-    'XSS prone parameters': 'inurl:"lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
-    'Open Redirect prone parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
-    'LFI': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
-    'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
-    'SSTI Prone Parameters': 'inurl:"module=" | inurl:"template=" | inurl:"load=" | inurl:"run=" | inurl:"preview=" | inurl:"view=" | inurl:"content=" | inurl:"activity=" | inurl:"name=" inurl:& site:*.{domain}',
-    'SSRF Prone Parameters': 'inurl:"http=" | inurl:"load=" | inurl:"exec=" | inurl:"resource=" | inurl:"resources=" | inurl:"url=" | inurl:"path=" | inurl:"host=" | inurl:"proxy=" | inurl:"html=" | inurl:"data=" | inurl:"domain=" | inurl:"uri=" inurl:& site:*.{domain}',
-    'RCE Prone Parameters': 'inurl:"cmd=" | inurl:"ip=" | inurl:"cli=" | inurl:"load=" | inurl:"module=" | inurl:"run=" | inurl:"print=" | inurl:"exec=" | inurl:"query=" | inurl:"code=" | inurl:"do=" | inurl:"run=" | inurl:"read=" | inurl:"ping=" inurl:& site:*.{domain}',
-    'Sensitive Parameters': 'inurl:"email=" | inurl:"phone=" | inurl:"password=" | inurl:"secret=" | inurl:"token=" inurl:& site:*.{domain}',
-    'Juicy Info': 'site:*.{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
-    'Login Pages': 'site:"*.{domain}" inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl: weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
-    'Register Pages': 'site:"*.{domain}" inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account | inurl:feedback | inurl:contact | inurl:contact-us | inurl:contact-form | inurl:get-in-touch | inurl:reach-out',
-    'PHP, Java, .NET, Perl Extensions 1': 'site:*.{domain} ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js',
-    'PHP, Java, .NET, Perl Extensions 2': 'site:*.{domain} inurl:conf | inurl:env | inurl:cgi | inurl:bin | inurl:etc | inurl:root | inurl:sql | inurl:backup | inurl:admin | inurl:php',
-    'Blind XSS Forms 1': 'site:*.{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls',
-    'Blind XSS Forms 2': 'site:*.{domain} inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
-    'Sensitive Documents': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive'
-};
+        <!-- Tool Container -->
+        <div class="tool-container">
+            <div class="section-title">🔍 Enter Target Domain</div>
+            <input type="text" id="target" placeholder="e.g., example.com">
+        </div>
 
-function searchDork(type) {
-    const target = document.getElementById('target').value.trim();
-    if (!target) {
-        alert('Please enter a target domain.');
-        return;
-    }
-    const query = dorks[type].replace(/{domain}/g, target);
-    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-    window.open(url, '_blank');
-}
-</script>
+        <!-- Dork Grid -->
+        <div class="tool-container">
+            <div class="dork-grid">
+                <button class="dork-btn" onclick="searchDork('XSS prone parameters')">XSS Prone</button>
+                <button class="dork-btn" onclick="searchDork('Open Redirect prone parameters')">Open Redirect</button>
+                <button class="dork-btn" onclick="searchDork('LFI')">LFI</button>
+                <button class="dork-btn" onclick="searchDork('SQLi Prone Parameters')">SQLi</button>
+                <button class="dork-btn" onclick="searchDork('SSRF Prone Parameters')">SSRF</button>
+                <button class="dork-btn" onclick="searchDork('RCE Prone Parameters')">RCE</button>
+                <button class="dork-btn" onclick="searchDork('SSTI Prone Parameters')">SSTI</button>
+                <button class="dork-btn" onclick="searchDork('Sensitive Parameters')">Sensitive</button>
+                <button class="dork-btn" onclick="searchDork('Juicy Info')">Juicy Info</button>
+                <button class="dork-btn" onclick="searchDork('Login Pages')">Login Pages</button>
+                <button class="dork-btn" onclick="searchDork('Register Pages')">Register Pages</button>
+                <button class="dork-btn" onclick="searchDork('PHP, Java, .NET, Perl Extensions 1')">Ext 1</button>
+                <button class="dork-btn" onclick="searchDork('PHP, Java, .NET, Perl Extensions 2')">Ext 2</button>
+                <button class="dork-btn" onclick="searchDork('Blind XSS Forms 1')">XSS Form 1</button>
+                <button class="dork-btn" onclick="searchDork('Blind XSS Forms 2')">XSS Form 2</button>
+                <button class="dork-btn" onclick="searchDork('Sensitive Documents')">Documents</button>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-indicator"></span>
+            <strong>System Status:</strong> Operational | 
+            <strong>Last Update:</strong> <span id="currentDate"></span> | 
+            <strong>Security Level:</strong> Encrypted
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Rhyru9</p>
+            <p>Feel free to contribute!</p>
+        </div>
+    </main>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const dorks = {
+            'XSS prone parameters': 'inurl:"lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
+            'Open Redirect prone parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
+            'LFI': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
+            'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
+            'SSTI Prone Parameters': 'inurl:"module=" | inurl:"template=" | inurl:"load=" | inurl:"run=" | inurl:"preview=" | inurl:"view=" | inurl:"content=" | inurl:"activity=" | inurl:"name=" inurl:& site:*.{domain}',
+            'SSRF Prone Parameters': 'inurl:"http=" | inurl:"load=" | inurl:"exec=" | inurl:"resource=" | inurl:"resources=" | inurl:"url=" | inurl:"path=" | inurl:"host=" | inurl:"proxy=" | inurl:"html=" | inurl:"data=" | inurl:"domain=" | inurl:"uri=" inurl:& site:*.{domain}',
+            'RCE Prone Parameters': 'inurl:"cmd=" | inurl:"ip=" | inurl:"cli=" | inurl:"load=" | inurl:"module=" | inurl:"run=" | inurl:"print=" | inurl:"exec=" | inurl:"query=" | inurl:"code=" | inurl:"do=" | inurl:"run=" | inurl:"read=" | inurl:"ping=" inurl:& site:*.{domain}',
+            'Sensitive Parameters': 'inurl:"email=" | inurl:"phone=" | inurl:"password=" | inurl:"secret=" | inurl:"token=" inurl:& site:*.{domain}',
+            'Juicy Info': 'site:*.{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
+            'Login Pages': 'site:"*.{domain}" inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl: weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
+            'Register Pages': 'site:"*.{domain}" inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account | inurl:feedback | inurl:contact | inurl:contact-us | inurl:contact-form | inurl:get-in-touch | inurl:reach-out',
+            'PHP, Java, .NET, Perl Extensions 1': 'site:*.{domain} ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js',
+            'PHP, Java, .NET, Perl Extensions 2': 'site:*.{domain} inurl:conf | inurl:env | inurl:cgi | inurl:bin | inurl:etc | inurl:root | inurl:sql | inurl:backup | inurl:admin | inurl:php',
+            'Blind XSS Forms 1': 'site:*.{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls',
+            'Blind XSS Forms 2': 'site:*.{domain} inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
+            'Sensitive Documents': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive'
+        };
+
+        function searchDork(type) {
+            const target = document.getElementById('target').value.trim();
+            if (!target) {
+                alert('Please enter a target domain.');
+                return;
+            }
+            const query = dorks[type].replace(/{domain}/g, target);
+            const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            window.open(url, '_blank');
+        }
+    </script>
 </body>
 </html>
