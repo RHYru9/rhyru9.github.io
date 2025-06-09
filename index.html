@@ -3,10 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Images</title>
+    <title>Pentester Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Monaco', monospace;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            color: #00ff88;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00ff88;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 5px #00ff88;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px #00ff88;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tool-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            transition: left 0.5s;
+        }
+
+        .tool-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .tool-card:hover::before {
+            left: 100%;
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .tool-description {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .tool-features li {
+            color: #888;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .tool-features li::before {
+            content: '▶';
+            color: #00ff88;
+            position: absolute;
+            left: 0;
+        }
+
+        .tool-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tool-btn:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .status-bar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            margin-top: 3rem;
+            border-radius: 10px;
+            border: 1px solid #333;
+            font-family: 'Courier New', monospace;
+            color: #888;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ff88; }
+            to { text-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Hello there</h2>
-    <p><strong>rhyru9/testing purposes</strong></p>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🔒 PENTESTER TOOLS</div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="/uri" class="nav-link" data-section="uri">URI Manager</a></li>
+                <li><a href="/dork" class="nav-link" data-section="dork">Auto Dorking</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">PENTESTER TOOLKIT</h1>
+            <p class="hero-subtitle">Advanced tools for security professionals and ethical hackers</p>
+            <p style="color: #666; font-size: 0.9rem;">Streamline your penetration testing workflow with powerful automation tools</p>
+        </section>
+
+        <!-- Tools Grid -->
+        <div class="tools-grid">
+            <!-- URI Manager Tool -->
+            <div class="tool-card">
+                <span class="tool-icon">🔗</span>
+                <h2 class="tool-title">URI Manager</h2>
+                <p class="tool-description">
+                    Powerful tool to clean, format, and manage your URL lists efficiently. 
+                    Perfect for organizing target URLs during reconnaissance phase.
+                </p>
+                <ul class="tool-features">
+                    <li>Bulk URL validation and cleaning</li>
+                    <li>Duplicate removal and sorting</li>
+                    <li>Format conversion (CSV, TXT, JSON)</li>
+                    <li>Domain extraction and filtering</li>
+                    <li>Port and protocol management</li>
+                </ul>
+                <a href="/uri" class="tool-btn">Launch URI Manager</a>
+            </div>
+
+            <!-- Auto Dorking Tool -->
+            <div class="tool-card">
+                <span class="tool-icon">🔍</span>
+                <h2 class="tool-title">Auto Dorking</h2>
+                <p class="tool-description">
+                    Automated Google dorking tool for efficient information gathering. 
+                    Discover exposed files, directories, and sensitive information systematically.
+                </p>
+                <ul class="tool-features">
+                    <li>Automated dork query execution</li>
+                    <li>Custom dork pattern builder</li>
+                    <li>Result filtering and categorization</li>
+                    <li>Rate limiting and stealth mode</li>
+                    <li>Export results in multiple formats</li>
+                </ul>
+                <a href="/dork" class="tool-btn">Launch Auto Dorking</a>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-indicator"></span>
+            <strong>System Status:</strong> All tools operational | 
+            <strong>Last Updated:</strong> June 10, 2025 | 
+            <strong>Security Level:</strong> Encrypted
+        </div>
+    </main>
+
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // If it's not an external link, prevent default
+                    if (this.getAttribute('data-section') === 'home') {
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            // Typing effect for hero title
+            const heroTitle = document.querySelector('.hero-title');
+            const text = heroTitle.textContent;
+            heroTitle.textContent = '';
+            
+            let i = 0;
+            const typeWriter = () => {
+                if (i < text.length) {
+                    heroTitle.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+            
+            setTimeout(typeWriter, 500);
+
+            // Tool card hover effects
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.borderColor = '#00ff88';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.borderColor = '#333';
+                });
+            });
+        });
+
+        // Matrix rain effect (optional)
+        function createMatrixRain() {
+            const chars = '01';
+            const drops = [];
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.1';
+            document.body.appendChild(canvas);
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            resize();
+            window.addEventListener('resize', resize);
+            
+            const columns = canvas.width / 20;
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff88';
+                ctx.font = '15px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * 20, drops[i] * 20);
+                    
+                    if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(draw, 100);
+        }
+        
+        // Uncomment to enable matrix effect
+        // createMatrixRain();
+    </script>
 </body>
 </html>
