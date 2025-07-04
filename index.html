@@ -286,6 +286,24 @@
                 <a href="/uri" class="tool-btn">Launch URI Manager</a>
             </div>
 
+            <!-- Path Extractor Tool -->
+            <div class="tool-card">
+                <span class="tool-icon">📂</span>
+                <h2 class="tool-title">Path Extractor</h2>
+                <p class="tool-description">
+                    Advanced URL path extraction and analysis tool. Extract meaningful path segments 
+                    from URLs while filtering out noise and irrelevant data.
+                </p>
+                <ul class="tool-features">
+                    <li>Smart path segment extraction</li>
+                    <li>Query parameter filtering</li>
+                    <li>File extension exclusion</li>
+                    <li>Article path detection</li>
+                    <li>Domain and full path extraction</li>
+                </ul>
+                <a href="/path-extracts" class="tool-btn">Launch Path Extractor</a>
+            </div>
+
             <!-- Auto Dorking Tool -->
             <div class="tool-card">
                 <span class="tool-icon">🔍</span>
@@ -309,7 +327,7 @@
         <div class="status-bar">
             <span class="status-indicator"></span>
             <strong>System Status:</strong> All tools operational | 
-            <strong>Last Updated:</strong> June 10, 2025 | 
+            <strong>Last Updated:</strong> July 05, 2025 | 
             <strong>Security Level:</strong> Encrypted
         </div>
     </main>
@@ -321,20 +339,16 @@
             
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Remove active class from all links
                     navLinks.forEach(l => l.classList.remove('active'));
                     
-                    // Add active class to clicked link
                     this.classList.add('active');
                     
-                    // If it's not an external link, prevent default
                     if (this.getAttribute('data-section') === 'home') {
                         e.preventDefault();
                     }
                 });
             });
 
-            // Typing effect for hero title
             const heroTitle = document.querySelector('.hero-title');
             const text = heroTitle.textContent;
             heroTitle.textContent = '';
@@ -350,7 +364,6 @@
             
             setTimeout(typeWriter, 500);
 
-            // Tool card hover effects
             const toolCards = document.querySelectorAll('.tool-card');
             toolCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
@@ -363,7 +376,6 @@
             });
         });
 
-        // Matrix rain effect (optional)
         function createMatrixRain() {
             const chars = '01';
             const drops = [];
@@ -412,7 +424,7 @@
         }
         
         // Uncomment to enable matrix effect
-        // createMatrixRain();
+        createMatrixRain();
     </script>
 </body>
 </html>
