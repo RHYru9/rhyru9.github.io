@@ -157,9 +157,24 @@
             box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
         }
 
+        .dork-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .dork-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
@@ -175,6 +190,8 @@
             font-family: inherit;
             text-align: center;
             font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .dork-btn:hover {
@@ -182,6 +199,10 @@
             color: #000;
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
             transform: translateY(-2px);
+        }
+
+        .dork-btn:active {
+            transform: translateY(0);
         }
 
         .status-bar {
@@ -279,25 +300,64 @@
             <input type="text" id="target" placeholder="e.g., example.com">
         </div>
 
-        <!-- Dork Grid -->
+        <!-- Vulnerability Categories -->
         <div class="tool-container">
-            <div class="dork-grid">
-                <button class="dork-btn" onclick="searchDork('XSS prone parameters')">XSS Prone</button>
-                <button class="dork-btn" onclick="searchDork('Open Redirect prone parameters')">Open Redirect</button>
-                <button class="dork-btn" onclick="searchDork('LFI')">LFI</button>
-                <button class="dork-btn" onclick="searchDork('SQLi Prone Parameters')">SQLi</button>
-                <button class="dork-btn" onclick="searchDork('SSRF Prone Parameters')">SSRF</button>
-                <button class="dork-btn" onclick="searchDork('RCE Prone Parameters')">RCE</button>
-                <button class="dork-btn" onclick="searchDork('SSTI Prone Parameters')">SSTI</button>
-                <button class="dork-btn" onclick="searchDork('Sensitive Parameters')">Sensitive</button>
-                <button class="dork-btn" onclick="searchDork('Juicy Info')">Juicy Info</button>
-                <button class="dork-btn" onclick="searchDork('Login Pages')">Login Pages</button>
-                <button class="dork-btn" onclick="searchDork('Register Pages')">Register Pages</button>
-                <button class="dork-btn" onclick="searchDork('PHP, Java, .NET, Perl Extensions 1')">Ext 1</button>
-                <button class="dork-btn" onclick="searchDork('PHP, Java, .NET, Perl Extensions 2')">Ext 2</button>
-                <button class="dork-btn" onclick="searchDork('Blind XSS Forms 1')">XSS Form 1</button>
-                <button class="dork-btn" onclick="searchDork('Blind XSS Forms 2')">XSS Form 2</button>
-                <button class="dork-btn" onclick="searchDork('Sensitive Documents')">Documents</button>
+            <div class="dork-category">
+                <div class="category-title">🔐 Authentication & Access</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('Login Pages User')">Login Pages</button>
+                    <button class="dork-btn" onclick="searchDork('Login Pages Admin')">Admin Login</button>
+                    <button class="dork-btn" onclick="searchDork('Register Pages')">Register Pages</button>
+                </div>
+            </div>
+
+            <div class="dork-category">
+                <div class="category-title">🚨 Vulnerability Parameters</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('XSS Prone Parameters')">XSS Prone</button>
+                    <button class="dork-btn" onclick="searchDork('Open Redirect Prone Parameters')">Open Redirect</button>
+                    <button class="dork-btn" onclick="searchDork('SQLi Prone Parameters')">SQLi Prone</button>
+                    <button class="dork-btn" onclick="searchDork('SSRF Prone Parameters')">SSRF Prone</button>
+                    <button class="dork-btn" onclick="searchDork('LFI Prone Parameters')">LFI Prone</button>
+                    <button class="dork-btn" onclick="searchDork('SSTI Prone Parameters')">SSTI Prone</button>
+                    <button class="dork-btn" onclick="searchDork('RCE Prone Parameters')">RCE Prone</button>
+                    <button class="dork-btn" onclick="searchDork('Sensitive Parameters')">Sensitive Params</button>
+                </div>
+            </div>
+
+            <div class="dork-category">
+                <div class="category-title">📄 Files & Extensions</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('Backup Files')">Backup Files</button>
+                    <button class="dork-btn" onclick="searchDork('Juicy Info')">Juicy Files</button>
+                    <button class="dork-btn" onclick="searchDork('PHP Extensions')">PHP Extensions</button>
+                    <button class="dork-btn" onclick="searchDork('Java Extensions')">Java Extensions</button>
+                    <button class="dork-btn" onclick="searchDork('NET Extensions')">NET Extensions</button>
+                    <button class="dork-btn" onclick="searchDork('Perl Extensions')">Perl Extensions</button>
+                    <button class="dork-btn" onclick="searchDork('Other Extensions')">Other Extensions</button>
+                </div>
+            </div>
+
+            <div class="dork-category">
+                <div class="category-title">🌐 Web Applications</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('API Docs')">API Docs</button>
+                    <button class="dork-btn" onclick="searchDork('Server Errors')">Server Errors</button>
+                    <button class="dork-btn" onclick="searchDork('File Upload')">File Upload</button>
+                    <button class="dork-btn" onclick="searchDork('Blind XSS Forms')">XSS Forms</button>
+                    <button class="dork-btn" onclick="searchDork('App Frameworks')">App Frameworks</button>
+                </div>
+            </div>
+
+            <div class="dork-category">
+                <div class="category-title">☁️ Cloud & Code Repositories</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('Cloud Storage')">Cloud Storage</button>
+                    <button class="dork-btn" onclick="searchDork('GitHub Leaks')">GitHub Leaks</button>
+                    <button class="dork-btn" onclick="searchDork('GitLab Leaks')">GitLab Leaks</button>
+                    <button class="dork-btn" onclick="searchDork('Pastebin Leaks')">Pastebin Leaks</button>
+                    <button class="dork-btn" onclick="searchDork('Code Sharing Sites')">Code Sharing</button>
+                </div>
             </div>
         </div>
 
@@ -317,7 +377,6 @@
     </main>
 
     <script>
-        // Set current date
         document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
@@ -325,22 +384,43 @@
         });
 
         const dorks = {
-            'XSS prone parameters': 'inurl:"lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" inurl:& site:*.{domain}',
-            'Open Redirect prone parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
-            'LFI': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
-            'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
-            'SSTI Prone Parameters': 'inurl:"module=" | inurl:"template=" | inurl:"load=" | inurl:"run=" | inurl:"preview=" | inurl:"view=" | inurl:"content=" | inurl:"activity=" | inurl:"name=" inurl:& site:*.{domain}',
-            'SSRF Prone Parameters': 'inurl:"http=" | inurl:"load=" | inurl:"exec=" | inurl:"resource=" | inurl:"resources=" | inurl:"url=" | inurl:"path=" | inurl:"host=" | inurl:"proxy=" | inurl:"html=" | inurl:"data=" | inurl:"domain=" | inurl:"uri=" inurl:& site:*.{domain}',
-            'RCE Prone Parameters': 'inurl:"cmd=" | inurl:"ip=" | inurl:"cli=" | inurl:"load=" | inurl:"module=" | inurl:"run=" | inurl:"print=" | inurl:"exec=" | inurl:"query=" | inurl:"code=" | inurl:"do=" | inurl:"run=" | inurl:"read=" | inurl:"ping=" inurl:& site:*.{domain}',
-            'Sensitive Parameters': 'inurl:"email=" | inurl:"phone=" | inurl:"password=" | inurl:"secret=" | inurl:"token=" inurl:& site:*.{domain}',
-            'Juicy Info': 'site:*.{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
-            'Login Pages': 'site:"*.{domain}" inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl: weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
-            'Register Pages': 'site:"*.{domain}" inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account | inurl:feedback | inurl:contact | inurl:contact-us | inurl:contact-form | inurl:get-in-touch | inurl:reach-out',
-            'PHP, Java, .NET, Perl Extensions 1': 'site:*.{domain} ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js',
-            'PHP, Java, .NET, Perl Extensions 2': 'site:*.{domain} inurl:conf | inurl:env | inurl:cgi | inurl:bin | inurl:etc | inurl:root | inurl:sql | inurl:backup | inurl:admin | inurl:php',
-            'Blind XSS Forms 1': 'site:*.{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" -pdf -doc -docx -xls',
-            'Blind XSS Forms 2': 'site:*.{domain} inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
-            'Sensitive Documents': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive'
+            // Authentication & Access
+            'Login Pages User': 'site:{domain} inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl:weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
+            'Login Pages Admin': 'site:{domain} inurl:admin | inurl:administrator | inurl:adm | inurl:wp-admin | inurl:adminlogin | inurl:admin-login',
+            'Register Pages': 'site:{domain} inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account',
+
+            // Vulnerability Parameters
+            'XSS Prone Parameters': 'inurl:lang= | inurl:name= | inurl:view= | inurl:callback= | inurl:id= | inurl:q= | inurl:s= | inurl:keyword= | inurl:search= | inurl:page= | inurl:query= inurl:& site:{domain}',
+            'Open Redirect Prone Parameters': 'inurl:page= | inurl:next= | inurl:host= | inurl:go= | inurl:goto= | inurl:file= | inurl:redirect_to= | inurl:url= | inurl:redirect | inurl:src=http | inurl:r=http | inurl:return= | inurl:redir= | inurl:http inurl:& site:{domain}',
+            'SQLi Prone Parameters': 'inurl:id= | inurl:query= | inurl:q= | inurl:name= | inurl:from= | inurl:s= | inurl:search= | inurl:page= | inurl:filter= | inurl:action= | inurl:sort= | inurl:dir= | inurl:reg= | inurl:order= | inurl:update= | inurl:delete= | inurl:create= inurl:& site:{domain}',
+            'SSRF Prone Parameters': 'inurl:http= | inurl:load= | inurl:exec= | inurl:resource= | inurl:resources= | inurl:url= | inurl:path= | inurl:host= | inurl:proxy= | inurl:html= | inurl:data= | inurl:domain= | inurl:uri= inurl:& site:{domain}',
+            'LFI Prone Parameters': 'inurl:include= | inurl:page= | inurl:http= | inurl:path= | inurl:template= | inurl:show= | inurl:locate= | inurl:site= | inurl:dir= | inurl:detail= | inurl:file= | inurl:folder= | inurl:doc= | inurl:filename= inurl:& site:{domain}',
+            'SSTI Prone Parameters': 'inurl:module= | inurl:template= | inurl:load= | inurl:run= | inurl:preview= | inurl:view= | inurl:content= | inurl:activity= | inurl:name= inurl:& site:{domain}',
+            'RCE Prone Parameters': 'inurl:cmd= | inurl:ip= | inurl:cli= | inurl:load= | inurl:module= | inurl:run= | inurl:print= | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:read= | inurl:ping= inurl:& site:{domain}',
+            'Sensitive Parameters': 'inurl:email= | inurl:phone= | inurl:password= | inurl:secret= | inurl:token= inurl:& site:{domain}',
+
+            // Files & Extensions
+            'Backup Files': 'site:{domain} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql',
+            'Juicy Info': 'site:{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
+            'PHP Extensions': 'site:{domain} ext:php | ext:phtm | ext:phtml',
+            'Java Extensions': 'site:{domain} ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear',
+            'NET Extensions': 'site:{domain} ext:aspx | ext:asa | ext:asp | ext:asax',
+            'Perl Extensions': 'site:{domain} ext:pl',
+            'Other Extensions': 'site:{domain} ext:cfm | ext:py | ext:rb | ext:js',
+
+            // Web Applications
+            'API Docs': 'site:{domain} inurl:api | inurl:/rest | inurl:/v1 | inurl:/v2 | inurl:/v3 | inurl:swagger | inurl:graphql | inurl:graphiql',
+            'Server Errors': 'site:{domain} intext:"error" | intext:"exception" | intext:"failure" | intext:"server at" | intext:"database error" | intext:"SQL syntax" | intext:"undefined index" | intext:"unhandled exception" | intext:"stack trace"',
+            'File Upload': 'site:{domain} intext:"choose file" | intext:"file upload" | inurl:upload.php | inurl:upload.asp | inurl:upload.aspx | inurl:upload.jsp | inurl:upload.do | inurl:upload.action',
+            'Blind XSS Forms': 'site:{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" | inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
+            'App Frameworks': 'site:{domain} inurl:/content/usergenerated | inurl:/content/dam | inurl:/jcr:content | inurl:/libs/granite | inurl:/etc/clientlibs | inurl:/content/geometrixx | inurl:/bin/wcm | inurl:/crx/de',
+
+            // Cloud & Code Repositories
+            'Cloud Storage': 'site:s3.amazonaws.com "{domain}" | site:blob.core.windows.net "{domain}" | site:googleapis.com "{domain}" | site:drive.google.com "{domain}" | site:digitaloceanspaces.com "{domain}" | site:amazonaws.com "{domain}"',
+            'GitHub Leaks': 'site:github.com "{domain}" | site:gist.github.com "{domain}"',
+            'GitLab Leaks': 'site:gitlab.com "{domain}"',
+            'Pastebin Leaks': 'site:pastebin.com "{domain}" | site:paste.org "{domain}" | site:codepad.co "{domain}"',
+            'Code Sharing Sites': 'site:codepen.io "{domain}" | site:jsfiddle.net "{domain}" | site:repl.it "{domain}" | site:codeshare.io "{domain}" | site:trello.com "{domain}" | site:atlassian.net "{domain}"'
         };
 
         function searchDork(type) {
@@ -349,10 +429,25 @@
                 alert('Please enter a target domain.');
                 return;
             }
-            const query = dorks[type].replace(/{domain}/g, target);
+            
+            const cleanDomain = target.replace(/^https?:\/\//, '').replace(/^www\./, '');
+            
+            const query = dorks[type].replace(/{domain}/g, cleanDomain);
             const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
             window.open(url, '_blank');
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.dork-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                });
+            });
+        });
     </script>
 </body>
 </html>
