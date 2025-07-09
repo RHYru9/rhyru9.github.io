@@ -416,7 +416,7 @@
             'App Frameworks': 'site:{domain} inurl:/content/usergenerated | inurl:/content/dam | inurl:/jcr:content | inurl:/libs/granite | inurl:/etc/clientlibs | inurl:/content/geometrixx | inurl:/bin/wcm | inurl:/crx/de',
 
             // Cloud & Code Repositories
-            'Cloud Storage': 'site:s3.amazonaws.com "{domain}" | site:blob.core.windows.net "{domain}" | site:googleapis.com "{domain}" | site:drive.google.com "{domain}" | site:digitaloceanspaces.com "{domain}" | site:amazonaws.com "{domain}"',
+            'Cloud Storage': 'site:s3.amazonaws.com | site:blob.core.windows.net | site:storage.googleapis.com | site:digitaloceanspaces.com ("{domain}" OR "{domain}") ("@gmail" OR "account" OR "employee" OR "username" OR "confidential" OR "password" OR "internal")',
             'GitHub Leaks': 'site:github.com "{domain}" | site:gist.github.com "{domain}"',
             'GitLab Leaks': 'site:gitlab.com "{domain}"',
             'Pastebin Leaks': 'site:pastebin.com "{domain}" | site:paste.org "{domain}" | site:codepad.co "{domain}"',
