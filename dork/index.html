@@ -308,6 +308,8 @@
                     <button class="dork-btn" onclick="searchDork('Login Pages User')">Login Pages</button>
                     <button class="dork-btn" onclick="searchDork('Login Pages Admin')">Admin Login</button>
                     <button class="dork-btn" onclick="searchDork('Register Pages')">Register Pages</button>
+                    <button class="dork-btn" onclick="searchDork('Dashboard Pages')">Dashboard</button>
+                    <button class="dork-btn" onclick="searchDork('Logout Pages')">Logout Pages</button>
                 </div>
             </div>
 
@@ -335,6 +337,7 @@
                     <button class="dork-btn" onclick="searchDork('NET Extensions')">NET Extensions</button>
                     <button class="dork-btn" onclick="searchDork('Perl Extensions')">Perl Extensions</button>
                     <button class="dork-btn" onclick="searchDork('Other Extensions')">Other Extensions</button>
+                    <button class="dork-btn" onclick="searchDork('Document Files')">Document Files</button>
                 </div>
             </div>
 
@@ -346,6 +349,9 @@
                     <button class="dork-btn" onclick="searchDork('File Upload')">File Upload</button>
                     <button class="dork-btn" onclick="searchDork('Blind XSS Forms')">XSS Forms</button>
                     <button class="dork-btn" onclick="searchDork('App Frameworks')">App Frameworks</button>
+                    <button class="dork-btn" onclick="searchDork('Directory Listing')">Directory Listing</button>
+                    <button class="dork-btn" onclick="searchDork('Test Environment')">Test Environment</button>
+                    <button class="dork-btn" onclick="searchDork('Error Messages')">Error Messages</button>
                 </div>
             </div>
 
@@ -357,6 +363,23 @@
                     <button class="dork-btn" onclick="searchDork('GitLab Leaks')">GitLab Leaks</button>
                     <button class="dork-btn" onclick="searchDork('Pastebin Leaks')">Pastebin Leaks</button>
                     <button class="dork-btn" onclick="searchDork('Code Sharing Sites')">Code Sharing</button>
+                    <button class="dork-btn" onclick="searchDork('Trello Boards')">Trello Boards</button>
+                    <button class="dork-btn" onclick="searchDork('Atlassian')">Atlassian</button>
+                    <button class="dork-btn" onclick="searchDork('Firebase')">Firebase</button>
+                </div>
+            </div>
+
+            <div class="dork-category">
+                <div class="category-title">🔍 Advanced Search</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('Confidential Documents')">Confidential Docs</button>
+                    <button class="dork-btn" onclick="searchDork('Database Files')">Database Files</button>
+                    <button class="dork-btn" onclick="searchDork('WordPress Files')">WordPress Files</button>
+                    <button class="dork-btn" onclick="searchDork('Shell Files')">Shell Files</button>
+                    <button class="dork-btn" onclick="searchDork('JDBC Connections')">JDBC</button>
+                    <button class="dork-btn" onclick="searchDork('Download Parameters')">Download Params</button>
+                    <button class="dork-btn" onclick="searchDork('Embed Parameters')">Embed Params</button>
+                    <button class="dork-btn" onclick="searchDork('Edu Errors')">Edu Errors</button>
                 </div>
             </div>
         </div>
@@ -385,42 +408,61 @@
 
         const dorks = {
             // Authentication & Access
-            'Login Pages User': 'site:{domain} inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl:weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
-            'Login Pages Admin': 'site:{domain} inurl:admin | inurl:administrator | inurl:adm | inurl:wp-admin | inurl:adminlogin | inurl:admin-login',
-            'Register Pages': 'site:{domain} inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account',
+            'Login Pages User': 'site:*.{domain} inurl:login | inurl:logon | inurl:sign-in | inurl:signin | inurl:wp-login | inurl:weblogin | inurl:loginpanel | inurl:quicklogin | inurl:memberlogin | inurl:forgotpassword | inurl:forgot-password | intitle:login | intitle:signin | intitle:sign-in | inurl:panel',
+            'Login Pages Admin': 'site:*.{domain} inurl:admin | inurl:administrator | inurl:adm | inurl:wp-admin | inurl:adminlogin | inurl:admin-login',
+            'Register Pages': 'site:*.{domain} inurl:signup | inurl:register | inurl:create | inurl:join | inurl:account | inurl:subscription | inurl:apply | inurl:enroll | inurl:membership | inurl:sign-up | inurl:register-account | inurl:feedback | inurl:contact | inurl:contact-us | inurl:contact-form | inurl:get-in-touch | inurl:reach-out',
+            'Dashboard Pages': 'site:*.{domain} intitle:dashboard | intitle:administrator | intitle:admin page | intitle:page admin | intitle:admin | intitle:portal admin',
+            'Logout Pages': 'site:*.{domain} inurl:"logout" | inurl:"auth?logout=" | inurl:"exit?" | inurl:"signout?" | inurl:"endSession" | inurl:"userSignOut" | inurl:"adminSignOut" | inurl:"logoutUser" | inurl:"endSession" | inurl:"?ReturnUrl=http" | inurl:"?back=http" | inurl:"=http" | inurl:"?relayState=http" -www',
 
             // Vulnerability Parameters
-            'XSS Prone Parameters': 'inurl:lang= | inurl:name= | inurl:view= | inurl:callback= | inurl:id= | inurl:q= | inurl:s= | inurl:keyword= | inurl:search= | inurl:page= | inurl:query= inurl:& site:{domain}',
-            'Open Redirect Prone Parameters': 'inurl:page= | inurl:next= | inurl:host= | inurl:go= | inurl:goto= | inurl:file= | inurl:redirect_to= | inurl:url= | inurl:redirect | inurl:src=http | inurl:r=http | inurl:return= | inurl:redir= | inurl:http inurl:& site:{domain}',
-            'SQLi Prone Parameters': 'inurl:id= | inurl:query= | inurl:q= | inurl:name= | inurl:from= | inurl:s= | inurl:search= | inurl:page= | inurl:filter= | inurl:action= | inurl:sort= | inurl:dir= | inurl:reg= | inurl:order= | inurl:update= | inurl:delete= | inurl:create= inurl:& site:{domain}',
-            'SSRF Prone Parameters': 'inurl:http= | inurl:load= | inurl:exec= | inurl:resource= | inurl:resources= | inurl:url= | inurl:path= | inurl:host= | inurl:proxy= | inurl:html= | inurl:data= | inurl:domain= | inurl:uri= inurl:& site:{domain}',
-            'LFI Prone Parameters': 'inurl:include= | inurl:page= | inurl:http= | inurl:path= | inurl:template= | inurl:show= | inurl:locate= | inurl:site= | inurl:dir= | inurl:detail= | inurl:file= | inurl:folder= | inurl:doc= | inurl:filename= inurl:& site:{domain}',
-            'SSTI Prone Parameters': 'inurl:module= | inurl:template= | inurl:load= | inurl:run= | inurl:preview= | inurl:view= | inurl:content= | inurl:activity= | inurl:name= inurl:& site:{domain}',
-            'RCE Prone Parameters': 'inurl:cmd= | inurl:ip= | inurl:cli= | inurl:load= | inurl:module= | inurl:run= | inurl:print= | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:read= | inurl:ping= inurl:& site:{domain}',
-            'Sensitive Parameters': 'inurl:email= | inurl:phone= | inurl:password= | inurl:secret= | inurl:token= inurl:& site:{domain}',
+            'XSS Prone Parameters': 'inurl:lang=" | inurl:"name=" | inurl:"view=" | inurl:"name=" | inurl:"callback=" | inurl:"id=" | inurl:"q=" | inurl:"s=" | inurl:"keyword=" | inurl:"search=" | inurl:"page=" | inurl:"query=" site:*.{domain}',
+            'Open Redirect Prone Parameters': 'inurl:"page=" | inurl:"next=" | inurl:"host=" | inurl:"go=" | inurl:"goto=" | inurl:"file=" | inurl:"host=" | inurl:"redirect_to=" | inurl:"url=" | inurl:"redirect | inurl:src=http | inurl:r=http | inurl:return=" | inurl:"next=" | inurl:"redir=" | inurl:"http" inurl:& site:*.{domain}',
+            'SQLi Prone Parameters': 'inurl:"id=" | inurl:"query=" | inurl:"q=" | inurl:"name=" | inurl:"from=" | inurl:"s=" | inurl:"search=" | inurl:"page=" | inurl:"filter=" | inurl:"action=" | inurl:"sort=" | inurl:"dir=" | inurl:"reg=" | inurl:"order=" | inurl:"update=" | inurl:"delete=" | inurl:"create=" inurl:& site:*.{domain}',
+            'SSRF Prone Parameters': 'inurl:"http=" | inurl:"load=" | inurl:"exec=" | inurl:"resource=" | inurl:"resources=" | inurl:"url=" | inurl:"path=" | inurl:"host=" | inurl:"proxy=" | inurl:"html=" | inurl:"data=" | inurl:"domain=" | inurl:"uri=" inurl:& site:*.{domain}',
+            'LFI Prone Parameters': 'inurl:"include=" | inurl:"page=" | inurl:"http=" | inurl:"path=" | inurl:"template=" | inurl:"show=" | inurl:"locate=" | inurl:"site=" | inurl:"dir=" | inurl:"detail=" | inurl:"file=" | inurl:"folder=" | inurl:"locate=" | inurl:"doc=" | inurl:"filename=" | inurl:"uri=http" inurl:& site:*.{domain}',
+            'SSTI Prone Parameters': 'inurl:"module=" | inurl:"template=" | inurl:"load=" | inurl:"run=" | inurl:"preview=" | inurl:"view=" | inurl:"content=" | inurl:"activity=" | inurl:"name=" inurl:& site:*.{domain}',
+            'RCE Prone Parameters': 'inurl:"cmd=" | inurl:"ip=" | inurl:"cli=" | inurl:"load=" | inurl:"module=" | inurl:"run=" | inurl:"print=" | inurl:"exec=" | inurl:"query=" | inurl:"code=" | inurl:"do=" | inurl:"run=" | inurl:"read=" | inurl:"ping=" inurl:& site:*.{domain}',
+            'Sensitive Parameters': 'inurl:"email=" | inurl:"phone=" | inurl:"password=" | inurl:"secret=" | inurl:"token=" inurl:& site:*.{domain}',
 
             // Files & Extensions
-            'Backup Files': 'site:{domain} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql',
-            'Juicy Info': 'site:{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
-            'PHP Extensions': 'site:{domain} ext:php | ext:phtm | ext:phtml',
-            'Java Extensions': 'site:{domain} ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear',
-            'NET Extensions': 'site:{domain} ext:aspx | ext:asa | ext:asp | ext:asax',
-            'Perl Extensions': 'site:{domain} ext:pl',
-            'Other Extensions': 'site:{domain} ext:cfm | ext:py | ext:rb | ext:js',
+            'Backup Files': 'site:*.{domain} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:log | ext:sql',
+            'Juicy Info': 'site:*.{domain} ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:swp | ext:old | ext:~ | ext:htpasswd | ext:htaccess | ext:csv | ext:.git-credentials | ext:yaml | ext:yml | ext:ppk | ext:pem | ext:json | ext:cfg | ext:xml | ext:ps1 | ext:reg | ext:inf | ext:rdp | ext:ora | ext:dbf | ext:mdb',
+            'PHP Extensions': 'site:*.{domain} ext:php | ext:phtm | ext:phtml | ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear | ext:aspx | ext:asa | ext:asp | ext:asax | ext:pl | ext:cfm | ext:py | ext:rb | ext:js',
+            'Java Extensions': 'site:*.{domain} ext:jsp | ext:do | ext:action | ext:struts | ext:java | ext:class | ext:jar | ext:war | ext:ear',
+            'NET Extensions': 'site:*.{domain} ext:aspx | ext:asa | ext:asp | ext:asax',
+            'Perl Extensions': 'site:*.{domain} ext:pl',
+            'Other Extensions': 'site:*.{domain} ext:cfm | ext:py | ext:rb | ext:js',
+            'Document Files': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive',
 
             // Web Applications
-            'API Docs': 'site:{domain} inurl:api | inurl:/rest | inurl:/v1 | inurl:/v2 | inurl:/v3 | inurl:swagger | inurl:graphql | inurl:graphiql',
-            'Server Errors': 'site:{domain} intext:"error" | intext:"exception" | intext:"failure" | intext:"server at" | intext:"database error" | intext:"SQL syntax" | intext:"undefined index" | intext:"unhandled exception" | intext:"stack trace"',
-            'File Upload': 'site:{domain} intext:"choose file" | intext:"file upload" | inurl:upload.php | inurl:upload.asp | inurl:upload.aspx | inurl:upload.jsp | inurl:upload.do | inurl:upload.action',
-            'Blind XSS Forms': 'site:{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" | inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
-            'App Frameworks': 'site:{domain} inurl:/content/usergenerated | inurl:/content/dam | inurl:/jcr:content | inurl:/libs/granite | inurl:/etc/clientlibs | inurl:/content/geometrixx | inurl:/bin/wcm | inurl:/crx/de',
+            'API Docs': 'site:*.{domain} inurl:api | inurl:/rest | inurl:/v1 | inurl:/v2 | inurl:/v3 | inurl:swagger | inurl:graphql | inurl:graphiql',
+            'Server Errors': 'site:*.{domain} intext:"error" | intext:"exception" | intext:"failure" | intext:"server at" | intext:exception | intext:"database error" | intext:"SQL syntax"',
+            'File Upload': 'site:*.{domain} intext:"choose file" | intext:"file upload" | inurl:upload.php | inurl:upload.asp | inurl:upload.aspx | inurl:upload.jsp | inurl:upload.do | inurl:upload.action | intitle:"index of" "upload"',
+            'Blind XSS Forms': 'site:*.{domain} intitle:"support" | inurl:support | inurl:"contact" | intitle:"survey" | inurl:"survey" | inurl:"feedback" | intitle:"feedback" | inurl:"submit" | intitle:"submit" -pdf -doc -docx -xls',
+            'App Frameworks': 'site:*.{domain} inurl:/content/usergenerated | inurl:/content/dam | inurl:/jcr:content | inurl:/libs/granite | inurl:/etc/clientlibs | inurl:/content/geometrixx | inurl:/bin/wcm | inurl:/crx/de | "Whoops! There was an error." | inurl:/frontend_dev.php/$ | inurl:/app/config/ | inurl:/settings.py intitle:"Index of" | "SF_ROOT_DIR"',
+            'Directory Listing': 'site:*.{domain} intitle:"index of /" | intitle:"index of /" admin|user|portal|data|config|backup|password|email|employee|upload|uploads|download | intitle:"Index of" .env | .git | wc.db | .svn | .hg | .ovpn | config.php | database.sql',
+            'Test Environment': 'site:*.{domain} inurl:test | inurl:env | inurl:dev | inurl:staging | inurl:sandbox | inurl:debug | inurl:temp | inurl:internal | inurl:demo',
+            'Error Messages': 'site:*.{domain} "unexpected error" | "Uncaught Exception" | "fatal error" | "Unknown column" | "exception occurred" | "undefined index" | "unhandled exception" | "stack trace" | "query failed"',
 
             // Cloud & Code Repositories
-            'Cloud Storage': 'site:s3.amazonaws.com | site:blob.core.windows.net | site:storage.googleapis.com | site:digitaloceanspaces.com ("{domain}" OR "{domain}") ("@gmail" OR "account" OR "employee" OR "username" OR "confidential" OR "password" OR "internal")',
-            'GitHub Leaks': 'site:github.com "{domain}" | site:gist.github.com "{domain}"',
-            'GitLab Leaks': 'site:gitlab.com "{domain}"',
-            'Pastebin Leaks': 'site:pastebin.com "{domain}" | site:paste.org "{domain}" | site:codepad.co "{domain}"',
-            'Code Sharing Sites': 'site:codepen.io "{domain}" | site:jsfiddle.net "{domain}" | site:repl.it "{domain}" | site:codeshare.io "{domain}" | site:trello.com "{domain}" | site:atlassian.net "{domain}"'
+            'Cloud Storage': 'site:s3.amazonaws.com "*.{domain}" | site:blob.core.windows.net "*.{domain}" | site:googleapis.com "*.{domain}" | site:drive.google.com "*.{domain}" | site:dev.azure.com "*.{domain}" | site:onedrive.live.com "*.{domain}" | site:digitaloceanspaces.com "*.{domain}" | site:sharepoint.com "*.{domain}" | site:amazonaws.com "*.{domain}" | inurl:www.dropbox.com/s/ "*.{domain}" | site:box.com/s "*.{domain}" | site:docs.google.com inurl:"/d/" "*.{domain}"',
+            'GitHub Leaks': 'site:github.com "*.{domain}" | site:gist.github.com "*.{domain}"',
+            'GitLab Leaks': 'site:gitlab.com "*.{domain}"',
+            'Pastebin Leaks': 'site:pastebin.com "*.{domain}" | site:codebeautify.org "*.{domain}" | site:codepad.co "*.{domain}" | site:codepen.io "*.{domain}" | site:codeshare.io "*.{domain}"',
+            'Code Sharing Sites': 'site:bitbucket.org "*.{domain}" | site:bitbucket.org inurl:*.{domain} | site:jsfiddle.net "*.{domain}" | site:libraries.io "*.{domain}" | site:npm.runkit.com "*.{domain}" | site:npmjs.com "*.{domain}" | site:repl.it "*.{domain}" | site:scribd.com "*.{domain}" | site:sharecode.io "*.{domain}" | site:ycombinator.com "*.{domain}"',
+            'Trello Boards': 'site:trello.com "*.{domain}"',
+            'Atlassian': 'site:atlassian.net "*.{domain}" | site:atlassian.net inurl:/servicedesk/customer/user/login "*.{domain}"',
+            'Firebase': 'site:firebaseio.com "*.{domain}"',
+
+            // Advanced Search
+            'Confidential Documents': 'site:*.{domain} intext:confidential|"Not for Public Release"|"internal use only"|"do not distribute" | intext:username|password|pass|email|confidential filetype:log',
+            'Database Files': 'site:*.{domain} intitle:"Index of" ext:sql | ext:sql.gz | ext:sql.rar | ext:sql.zip | ext:bkp | ext:bkp.gz | ext:bkp.rar | ext:bkp.zip | ext:zip | ext:7z | ext:rar | ext:gz',
+            'WordPress Files': 'site:*.{domain} inurl:wp- | inurl:wp-content | inurl:plugins | inurl:uploads | inurl:themes | inurl:download | inurl:readme | inurl:license | inurl:install | inurl:setup | inurl:config',
+            'Shell Files': 'site:*.{domain} inurl:shell | inurl:backdoor | inurl:wso | inurl:cmd | shadow | passwd | boot.ini | inurl:backdoor',
+            'JDBC Connections': 'site:*.{domain} jdbc',
+            'Download Parameters': 'inurl:"download?path=" | inurl:"download?file=" | inurl:"download?location=" | inurl:"download?f=" | inurl:"download?view=" | inurl:"download?preview=" | inurl:"download?show=" | inurl:"download?foder" | inurl:"download?d=" | inurl:"download?index=" | inurl:"download?id=" inurl:& site:*.{domain}',
+            'Embed Parameters': 'inurl:"?url=http" | inurl:"?link=http" | inurl:"?redirect=http" | inurl:"?next=http" | inurl:"?path=http" | inurl:"?file=http" | inurl:"?external=http" | inurl:"?proxy=http" | inurl:"?view=http" | inurl:"?show=http" | inurl:"?site=http" | inurl:"?page=http" | inurl:"?goto=http" | inurl:"?include=http" | inurl:"?module=http" inurl:& site:*.{domain}',
+            'Edu Errors': 'site:"*.{domain}" inurl:".php?error_message=" | inurl:".php?error_msg=" | inurl:".php?err_message=" | inurl:".php?msg=" | inurl:".php?message=" | inurl:".aspx?error_message=" | inurl:".aspx?error_msg=" | inurl:".aspx?err_message=" | inurl:".aspx?msg=" | inurl:".aspx?message=" | inurl:".asp?error_message=" | inurl:".asp?error_msg=" | inurl:".asp?err_message=" | inurl:".asp?msg=" | inurl:".asp?message=" | inurl:"error_message=" | inurl:"error_msg=" | inurl:"err_message=" | inurl:"msg=" | inurl:"message="'
         };
 
         function searchDork(type) {
