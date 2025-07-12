@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMS_Capabilities
+        version="1.3.0"
+        updateSequence="0"
+        xmlns="http://www.opengis.net/wms"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.opengis.net/wms http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd"
+
+     >
+    <Service>
+        <Name>WMS</Name>
+        <Title>msg_cpp_products</Title>
+        <Abstract>This service demonstrates how the ADAGUC server can be used to create OGC services.</Abstract>
+        <KeywordList>
+            <Keyword>view</Keyword>
+            <Keyword>infoMapAccessService</Keyword>
+            <Keyword>ADAGUCServer version 4.0.0, of Jul  1 2025 10:34:29 </Keyword>
+        </KeywordList>
+        <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;"/>
+        <ContactInformation>
+          
+        </ContactInformation>
+        <Fees>no conditions apply</Fees>
+        <AccessConstraints>None</AccessConstraints>
+        <MaxWidth>8192</MaxWidth>
+        <MaxHeight>8192</MaxHeight>
+    </Service>
+    <Capability>
+        <Request>
+            <GetCapabilities>
+                <Format>text/xml</Format>
+                <DCPType><HTTP><Get><OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;"/></Get></HTTP></DCPType>
+            </GetCapabilities>
+            <GetMap>
+                <Format>image/png</Format>
+                <Format>image/png;mode=8bit</Format>
+                <Format>image/png;mode=8bit_noalpha</Format>
+                <Format>image/png;mode=24bit</Format>
+                <Format>image/png;mode=32bit</Format>
+                <Format>image/gif</Format>
+                <Format>image/jpeg</Format>
+                <!--<Format>image/webp</Format>-->
+                <DCPType><HTTP><Get><OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;"/></Get></HTTP></DCPType>
+            </GetMap>
+            <GetFeatureInfo>
+                <Format>image/png</Format>
+                <Format>text/plain</Format>
+                <Format>text/html</Format>
+                <Format>text/xml</Format>
+                <Format>application/json</Format>
+                <DCPType><HTTP><Get><OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;"/></Get></HTTP></DCPType>
+            </GetFeatureInfo>
+        </Request>
+        <Exception>
+            <Format>XML</Format>
+            <Format>INIMAGE</Format>
+            <Format>BLANK</Format>
+        </Exception>
+        <UserDefinedSymbolization SupportSLD="1" />
+<Layer>
+<Title>WMS of  msg_cpp_products</Title>
+<CRS>CRS:84</CRS>
+<CRS>EPSG:25831</CRS>
+<CRS>EPSG:25832</CRS>
+<CRS>EPSG:28992</CRS>
+<CRS>EPSG:3035</CRS>
+<CRS>EPSG:3067</CRS>
+<CRS>EPSG:32661</CRS>
+<CRS>EPSG:3411</CRS>
+<CRS>EPSG:3412</CRS>
+<CRS>EPSG:3575</CRS>
+<CRS>EPSG:3857</CRS>
+<CRS>EPSG:40000</CRS>
+<CRS>EPSG:4258</CRS>
+<CRS>EPSG:4326</CRS>
+<CRS>EPSG:50001</CRS>
+<CRS>EPSG:54030</CRS>
+<CRS>EPSG:7399</CRS>
+<CRS>EPSG:900913</CRS>
+<BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>height_at_cloud_top</Name>
+<Title>Cloud top height (m)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>CloudTopHeight/nearest</Name>    <Title>CloudTopHeight/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudTopHeight/nearest</Name>    <Title>CloudTopHeight/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudTopHeight-gray/nearest</Name>    <Title>CloudTopHeight-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight-gray/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudTopHeight-gray/nearest</Name>    <Title>CloudTopHeight-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight-gray/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudTopHeight-rainbow/nearest</Name>    <Title>CloudTopHeight-rainbow/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight-rainbow/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudTopHeight-rainbow/nearest</Name>    <Title>CloudTopHeight-rainbow/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=height_at_cloud_top&amp;format=image/png&amp;STYLE=CloudTopHeight-rainbow/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>cloud_area_fraction</Name>
+<Title>Cloud cover (flag)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>cldmask/nearest</Name>    <Title>cldmask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=cloud_area_fraction&amp;format=image/png&amp;STYLE=cldmask/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>cldmask/nearest</Name>    <Title>cldmask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=cloud_area_fraction&amp;format=image/png&amp;STYLE=cldmask/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>atmosphere_optical_thickness_due_to_cloud</Name>
+<Title>Cloud optical thickness (1)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>CloudOptimalThickness-blue/nearest</Name>    <Title>CloudOptimalThickness-blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_optical_thickness_due_to_cloud&amp;format=image/png&amp;STYLE=CloudOptimalThickness-blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudOptimalThickness-gray/nearest</Name>    <Title>CloudOptimalThickness-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_optical_thickness_due_to_cloud&amp;format=image/png&amp;STYLE=CloudOptimalThickness-gray/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudOptimalThickness-blue-transparent/nearest</Name>    <Title>CloudOptimalThickness-blue-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_optical_thickness_due_to_cloud&amp;format=image/png&amp;STYLE=CloudOptimalThickness-blue-transparent/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudOptimalThickness-gray-transparent/nearest</Name>    <Title>CloudOptimalThickness-gray-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_optical_thickness_due_to_cloud&amp;format=image/png&amp;STYLE=CloudOptimalThickness-gray-transparent/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>air_temperature_at_cloud_top</Name>
+<Title>Cloud top temperature (K)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>air_temperature/nearest</Name>    <Title>air_temperature/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=air_temperature_at_cloud_top&amp;format=image/png&amp;STYLE=air_temperature/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>air_temperature/nearest</Name>    <Title>air_temperature/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=air_temperature_at_cloud_top&amp;format=image/png&amp;STYLE=air_temperature/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>air_temperature_tg/nearest</Name>    <Title>air_temperature_tg/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=air_temperature_at_cloud_top&amp;format=image/png&amp;STYLE=air_temperature_tg/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>air_temperature_tg/nearest</Name>    <Title>air_temperature_tg/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=air_temperature_at_cloud_top&amp;format=image/png&amp;STYLE=air_temperature_tg/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>atmosphere_cloud_condensed_water_content</Name>
+<Title>Cloud condensed water path (g m-2)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>CondensedWaterPath-blue/nearest</Name>    <Title>CondensedWaterPath-blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_cloud_condensed_water_content&amp;format=image/png&amp;STYLE=CondensedWaterPath-blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CondensedWaterPath-gray/nearest</Name>    <Title>CondensedWaterPath-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=atmosphere_cloud_condensed_water_content&amp;format=image/png&amp;STYLE=CondensedWaterPath-gray/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>lwe_precipitation_rate</Name>
+<Title>Precipitation rate (mm hr-1)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>precip/nearest</Name>    <Title>precip/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-transparent/nearest</Name>    <Title>precip-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip-transparent/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-gray/nearest</Name>    <Title>precip-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip-gray/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-rainbow/nearest</Name>    <Title>precip-rainbow/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip-rainbow/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-blue/nearest</Name>    <Title>precip-blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip-blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-blue-transparent/nearest</Name>    <Title>precip-blue-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=precip-blue-transparent/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>pseudoradar/nearest</Name>    <Title>pseudoradar/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate&amp;format=image/png&amp;STYLE=pseudoradar/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>lwe_precipitation_rate_ir</Name>
+<Title>Precipitation rate infrared (mm hr-1)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>precip/nearest</Name>    <Title>precip/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-transparent/nearest</Name>    <Title>precip-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip-transparent/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-gray/nearest</Name>    <Title>precip-gray/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip-gray/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-rainbow/nearest</Name>    <Title>precip-rainbow/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip-rainbow/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-blue/nearest</Name>    <Title>precip-blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip-blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>precip-blue-transparent/nearest</Name>    <Title>precip-blue-transparent/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=precip-blue-transparent/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>pseudoradar/nearest</Name>    <Title>pseudoradar/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=lwe_precipitation_rate_ir&amp;format=image/png&amp;STYLE=pseudoradar/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>surface_downwelling_shortwave_flux_in_air</Name>
+<Title>Surface downwelling shortwave radiation (W m-2)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_downwelling_shortwave_flux_in_air&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_downwelling_shortwave_flux_in_air&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>surface_direct_downwelling_shortwave_flux_in_air</Name>
+<Title>Surface direct downwelling shortwave radiation (W m-2)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_direct_downwelling_shortwave_flux_in_air&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_direct_downwelling_shortwave_flux_in_air&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>surface_downwelling_shortwave_flux_in_air_assuming_clear_sky</Name>
+<Title>Surface downwelling shortwave radiation clear-sky (W m-2)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_downwelling_shortwave_flux_in_air_assuming_clear_sky&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_downwelling_shortwave_flux_in_air_assuming_clear_sky&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>surface_direct_downwelling_shortwave_flux_in_air_assuming_clear_sky</Name>
+<Title>Surface direct downwelling shortwave radiation clear-sky (W m-2)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_direct_downwelling_shortwave_flux_in_air_assuming_clear_sky&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>DownwellingSolarRadiation/nearest</Name>    <Title>DownwellingSolarRadiation/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=surface_direct_downwelling_shortwave_flux_in_air_assuming_clear_sky&amp;format=image/png&amp;STYLE=DownwellingSolarRadiation/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>thermodynamic_phase_of_cloud_water_particles_at_cloud_top_defined_by_near_infrared_radiance</Name>
+<Title>Cloud phase (flag)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>CloudPhase/nearest</Name>    <Title>CloudPhase/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=thermodynamic_phase_of_cloud_water_particles_at_cloud_top_defined_by_near_infrared_radiance&amp;format=image/png&amp;STYLE=CloudPhase/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudPhase_showice/nearest</Name>    <Title>CloudPhase_showice/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=thermodynamic_phase_of_cloud_water_particles_at_cloud_top_defined_by_near_infrared_radiance&amp;format=image/png&amp;STYLE=CloudPhase_showice/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudPhase_showliquid/nearest</Name>    <Title>CloudPhase_showliquid/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=thermodynamic_phase_of_cloud_water_particles_at_cloud_top_defined_by_near_infrared_radiance&amp;format=image/png&amp;STYLE=CloudPhase_showliquid/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>CloudPhase_showmixed/nearest</Name>    <Title>CloudPhase_showmixed/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=thermodynamic_phase_of_cloud_water_particles_at_cloud_top_defined_by_near_infrared_radiance&amp;format=image/png&amp;STYLE=CloudPhase_showmixed/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>effective_radius_of_cloud_condensed_water_particles_at_cloud_top</Name>
+<Title>Cloud droplet effective radius (um)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>reff_linear/nearest</Name>    <Title>reff_linear/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=effective_radius_of_cloud_condensed_water_particles_at_cloud_top&amp;format=image/png&amp;STYLE=reff_linear/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>reff_linear/nearest</Name>    <Title>reff_linear/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=effective_radius_of_cloud_condensed_water_particles_at_cloud_top&amp;format=image/png&amp;STYLE=reff_linear/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>reff_logarithmic/nearest</Name>    <Title>reff_logarithmic/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=effective_radius_of_cloud_condensed_water_particles_at_cloud_top&amp;format=image/png&amp;STYLE=reff_logarithmic/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>reff_logarithmic/nearest</Name>    <Title>reff_logarithmic/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=effective_radius_of_cloud_condensed_water_particles_at_cloud_top&amp;format=image/png&amp;STYLE=reff_logarithmic/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer>
+<Title>auxiliary</Title>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>solar_zenith_angle</Name>
+<Title>Solar zenith angle (deg)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>degrees180/nearest</Name>    <Title>degrees180/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=solar_zenith_angle&amp;format=image/png&amp;STYLE=degrees180/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>platform_zenith_angle</Name>
+<Title>Platform zenith angle (deg)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>degrees90/nearest</Name>    <Title>degrees90/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=platform_zenith_angle&amp;format=image/png&amp;STYLE=degrees90/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>mask</Name>
+<Title>Mask (-)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>mask/nearest</Name>    <Title>mask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=mask/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>mask/nearest</Name>    <Title>mask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=mask/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>red/nearest</Name>    <Title>red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>red/nearest</Name>    <Title>red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>green/nearest</Name>    <Title>green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>green/nearest</Name>    <Title>green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>blue/nearest</Name>    <Title>blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>blue/nearest</Name>    <Title>blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=mask&amp;format=image/png&amp;STYLE=blue/nearest"/>    </LegendURL>  </Style></Layer>
+<Layer queryable="1" opaque="1" cascaded="0">
+<Name>hiwc</Name>
+<Title>High Ice Water Content (-)</Title>
+<EX_GeographicBoundingBox>
+  <westBoundLongitude>-80.000000</westBoundLongitude>
+  <eastBoundLongitude>80.000000</eastBoundLongitude>
+  <southBoundLatitude>-82.000000</southBoundLatitude>
+  <northBoundLatitude>82.000000</northBoundLatitude>
+</EX_GeographicBoundingBox><BoundingBox CRS="CRS:84" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:25831" minx="-15829189.443243" miny="-9888416.983481" maxx="14471377.776609" maxy="9888416.983481" />
+<BoundingBox CRS="EPSG:25832" minx="-15264657.753471" miny="-9982275.529154" maxx="11945888.771744" maxy="9982275.529154" />
+<BoundingBox CRS="EPSG:28992" minx="-19038974.606623" miny="-34469531.662814" maxx="16006947.008619" maxy="4740373.555817" />
+<BoundingBox CRS="EPSG:3035" minx="-5697643.374391" miny="-8507113.291291" maxx="12601884.225424" maxy="7337807.221666" />
+<BoundingBox CRS="EPSG:3067" minx="-16161007.194382" miny="-19283185.426750" maxx="7485035.220777" maxy="19283185.426750" />
+<BoundingBox CRS="EPSG:32661" minx="-174797979.804159" miny="-177438962.292274" maxx="178797979.804159" maxy="1845526.405265" />
+<BoundingBox CRS="EPSG:3411" minx="-100472816.489776" miny="-175160775.524988" maxx="175160775.524988" maxy="100472816.489776" />
+<BoundingBox CRS="EPSG:3412" minx="-172507799.092266" miny="150724.988615" maxx="172507799.092266" maxy="175084695.485373" />
+<BoundingBox CRS="EPSG:3575" minx="-12710700.045297" miny="-12708310.058069" maxx="11944151.037589" maxy="-0.000000" />
+<BoundingBox CRS="EPSG:3857" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="EPSG:40000" minx="-177865170.829134" miny="-180522094.861443" maxx="177865170.829134" maxy="-155406.030920" />
+<BoundingBox CRS="EPSG:4258" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:4326" minx="-82.000000" miny="-80.000000" maxx="82.000000" maxy="80.000000" />
+<BoundingBox CRS="EPSG:50001" minx="-2000000.000000" miny="-2000000.000000" maxx="10000000.000000" maxy="8500000.000000" />
+<BoundingBox CRS="EPSG:54030" minx="-7556494.674376" miny="-8240592.735000" maxx="7556494.674376" maxy="8240592.735000" />
+<BoundingBox CRS="EPSG:7399" minx="-8015318.955501" miny="-8654545.142404" maxx="8015318.955501" maxy="8654545.142404" />
+<BoundingBox CRS="EPSG:900913" minx="-8905559.263462" miny="-16967796.943511" maxx="8905559.263462" maxy="16967796.943511" />
+<BoundingBox CRS="none" minx="-5570.248248" miny="-5567.248248" maxx="5567.248248" maxy="5570.248248" />
+<Dimension name="time" units="ISO8601" default="2025-07-12T09:15:00Z" multipleValues="1" nearestValue="0" current="1">2025-07-05T10:00:00Z/2025-07-12T09:15:00Z/PT15M</Dimension>
+   <Style>    <Name>red/nearest</Name>    <Title>red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>red/nearest</Name>    <Title>red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>green/nearest</Name>    <Title>green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>green/nearest</Name>    <Title>green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>blue/nearest</Name>    <Title>blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>blue/nearest</Name>    <Title>blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>mask/nearest</Name>    <Title>mask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=mask/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>mask/nearest</Name>    <Title>mask/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=mask/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_red/nearest</Name>    <Title>gray_red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_red/nearest</Name>    <Title>gray_red/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_red/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_green/nearest</Name>    <Title>gray_green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_green/nearest</Name>    <Title>gray_green/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_green/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_blue/nearest</Name>    <Title>gray_blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_blue/nearest"/>    </LegendURL>  </Style>   <Style>    <Name>gray_blue/nearest</Name>    <Title>gray_blue/nearest</Title>    <LegendURL width="300" height="400">       <Format>image/png</Format>       <OnlineResource xlink:type="simple" xlink:href="https://eoow6y96ffo9mzx.m.pipedream.net/wms/adaguc-server?DATASET=msg_cpp_products&amp;SERVICE=WMS&amp;&amp;version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=hiwc&amp;format=image/png&amp;STYLE=gray_blue/nearest"/>    </LegendURL>  </Style></Layer>
+</Layer>
+    </Layer>
+  </Capability>
+</WMS_Capabilities>
