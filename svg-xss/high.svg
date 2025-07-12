@@ -1,10 +1,131 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="100%" height="100%">
-  <rect width="100%" height="100%" fill="#f8f9fa" />
-  <text x="50%" y="50" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="24">
-    This site is under maintenance
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#f8f9fa;stop-opacity:0.95" />
+    </linearGradient>
+    
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ee5a24;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="urlGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498db;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980b9;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Animation -->
+    <animateTransform id="pulse" attributeName="transform" type="scale" 
+                      values="1;1.1;1" dur="2s" repeatCount="indefinite"/>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"/>
+  
+  <!-- Floating circles for decoration -->
+  <circle cx="100" cy="80" r="30" fill="#ffffff" opacity="0.1">
+    <animate attributeName="cy" values="80;60;80" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="700" cy="120" r="20" fill="#ffffff" opacity="0.1">
+    <animate attributeName="cy" values="120;100;120" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="150" cy="400" r="25" fill="#ffffff" opacity="0.1">
+    <animate attributeName="cy" values="400;380;400" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Main container -->
+  <rect x="100" y="80" width="600" height="340" rx="25" ry="25" 
+        fill="url(#cardGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Icon container -->
+  <circle cx="400" cy="150" r="35" fill="url(#buttonGradient)" filter="url(#glow)">
+    <animateTransform attributeName="transform" type="scale" 
+                      values="1;1.1;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Maintenance icon (gear/wrench) -->
+  <g transform="translate(400,150)">
+    <path d="M-15,-15 L-15,-5 L-10,-5 L-10,5 L-15,5 L-15,15 L-5,15 L-5,10 L5,10 L5,15 L15,15 L15,5 L10,5 L10,-5 L15,-5 L15,-15 L5,-15 L5,-10 L-5,-10 L-5,-15 Z" 
+          fill="white" opacity="0.9">
+      <animateTransform attributeName="transform" type="rotate" 
+                        values="0;360" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Main title -->
+  <text x="400" y="220" text-anchor="middle" fill="#2c3e50" 
+        font-family="Arial, sans-serif" font-size="32" font-weight="bold">
+    Site Under Maintenance
   </text>
-  <text x="50%" y="100" text-anchor="middle" fill="#007bff" font-family="Arial, sans-serif" font-size="20">
-    Please follow this URL: 
-    <tspan fill="#ff0000" font-weight="bold">http://suivo.com</tspan>
+  
+  <!-- Subtitle -->
+  <text x="400" y="250" text-anchor="middle" fill="#7f8c8d" 
+        font-family="Arial, sans-serif" font-size="16">
+    We're working hard to improve your experience
   </text>
+  
+  <!-- URL container -->
+  <rect x="150" y="280" width="500" height="80" rx="15" ry="15" 
+        fill="url(#urlGradient)" filter="url(#dropshadow)">
+    <animate attributeName="y" values="280;275;280" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- URL text -->
+  <text x="400" y="305" text-anchor="middle" fill="white" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="500">
+    Please follow this URL:
+  </text>
+  
+  <!-- URL link -->
+  <rect x="250" y="315" width="300" height="35" rx="17" ry="17" 
+        fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.3)" stroke-width="2">
+    <animate attributeName="fill" values="rgba(255,255,255,0.2);rgba(255,255,255,0.3);rgba(255,255,255,0.2)" 
+             dur="2s" repeatCount="indefinite"/>
+  </rect>
+  
+  <text x="400" y="335" text-anchor="middle" fill="#ffd700" 
+        font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    http://attacker.com
+  </text>
+  
+  <!-- Progress bar -->
+  <rect x="200" y="380" width="400" height="6" rx="3" ry="3" fill="#ecf0f1"/>
+  <rect x="200" y="380" width="120" height="6" rx="3" ry="3" fill="url(#buttonGradient)">
+    <animate attributeName="width" values="120;300;120" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Status text -->
+  <text x="400" y="405" text-anchor="middle" fill="#95a5a6" 
+        font-family="Arial, sans-serif" font-size="12">
+    Estimated completion: Soon
+  </text>
+  
+  <!-- Decorative elements -->
+  <circle cx="180" cy="320" r="3" fill="#ffffff" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="620" cy="320" r="3" fill="#ffffff" opacity="0.6">
+    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite"/>
+  </circle>
 </svg>
