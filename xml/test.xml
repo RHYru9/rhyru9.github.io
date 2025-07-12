@@ -10,7 +10,7 @@
      >
     <Service>
         <Name>WMS</Name>
-        <Title>msg_cpp_products<![CDATA[<script>alert(1)</script>]]></Title>
+        <Title>msg_cpp_products</Title>
         <Abstract>This service demonstrates how the ADAGUC server can be used to create OGC services.</Abstract>
         <KeywordList>
             <Keyword>view</Keyword>
