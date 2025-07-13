@@ -385,6 +385,14 @@
             </div>
         </div>
 
+        <div class="dork-category">
+                <div class="category-title">Deutch Lang</div>
+                <div class="dork-grid">
+                    <button class="dork-btn" onclick="searchDork('confidential files-nl')">confidential files deutch 1</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Status Bar -->
         <div class="status-bar">
             <span class="status-indicator"></span>
@@ -454,6 +462,9 @@
             'Trello Boards': 'site:trello.com "*.{domain}"',
             'Atlassian': 'site:atlassian.net "*.{domain}" | site:atlassian.net inurl:/servicedesk/customer/user/login "*.{domain}"',
             'Firebase': 'site:firebaseio.com "*.{domain}"',
+
+            // deutch
+            'confidential files-nl': 'site:*.{domain} (ext:doc OR ext:xlsx OR ext:docx OR ext:dotx OR ext:xls OR ext:xlsm OR ext:odt OR ext:pdf OR ext:rtf OR ext:sxw OR ext:psw OR ext:ppt OR ext:pptx OR ext:pps OR ext:csv OR ext:swf) (intext:"Vertrouwelijk" OR intext:"Niet delen" OR intext:"E-mail" OR intext:"Alleen voor privégebruik" OR intext:"Niet voor publieke verspreiding" OR intext:"Alleen voor intern gebruik" OR intext:"Niet verspreiden" OR intext:wachtwoord OR intext:gebruiker OR intext:admin OR intext:intern OR intext:gevoelig OR intext:aanbieding OR intext:medewerker OR intext:bestelling OR intext:data OR intext:informatie OR intext:persoonlijk)',
 
             // Advanced Search
             'Confidential Documents 1': 'site:*.{domain} ext:doc | ext:xlsx | ext:docx | ext:dotx | ext:xls | ext:xlsm | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:swf intext:password|pass|email|admin|user|offer|data|employee|order|internal|sensitive',
