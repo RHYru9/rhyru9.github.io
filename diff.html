@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Diff & Decoder Comparison</title>
+    <title>Text Diff & Decoder</title>
     <style>
+        :root {
+            --bg-dark: #282828;
+            --bg-medium: #3c3836;
+            --bg-light: #504945;
+            --fg-main: #ebdbb2;
+            --fg-dim: #a89984;
+            --accent-red: #fb4934;
+            --accent-green: #b8bb26;
+            --accent-yellow: #fabd2f;
+            --accent-blue: #83a598;
+            --accent-purple: #d3869b;
+            --accent-orange: #fe8019;
+            --border: #665c54;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,254 +27,188 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            background: var(--bg-dark);
+            color: var(--fg-main);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.5;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            background: var(--bg-medium);
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid var(--border);
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-yellow);
+            margin-bottom: 32px;
+            font-size: 1.8rem;
+            font-weight: 500;
         }
 
-        .decode-selector {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border: 2px solid #e9ecef;
+        .section {
+            background: var(--bg-light);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
         }
 
-        .decode-selector h3 {
-            margin-bottom: 15px;
-            color: #495057;
+        .section h3 {
+            color: var(--fg-main);
+            margin-bottom: 12px;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .decode-options {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .decode-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: 2px solid #dee2e6;
+            background: var(--bg-medium);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
         }
 
         .decode-option:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .decode-option input[type="radio"] {
-            accent-color: #667eea;
+            border-color: var(--accent-blue);
+            background: var(--bg-dark);
         }
 
         .decode-option.selected {
-            border-color: #667eea;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+            background: var(--accent-blue);
+            color: var(--bg-dark);
+            border-color: var(--accent-blue);
+        }
+
+        .decode-option input {
+            display: none;
         }
 
         .input-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
-        }
-
-        .input-group h3 {
-            margin-bottom: 15px;
-            color: #495057;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .input-group textarea {
             width: 100%;
-            height: 150px;
-            padding: 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            height: 120px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px;
+            color: var(--fg-main);
+            font-family: inherit;
+            font-size: 0.875rem;
             resize: vertical;
-            transition: border-color 0.3s ease;
         }
 
         .input-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .input-group textarea::placeholder {
+            color: var(--fg-dim);
         }
 
         .compare-btn {
             display: block;
-            width: 200px;
-            margin: 0 auto 30px;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+            margin: 0 auto 20px;
+            background: var(--accent-green);
+            color: var(--bg-dark);
             border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 10px 24px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
         .compare-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .comparison-section {
-            margin-bottom: 30px;
-        }
-
-        .comparison-box {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid #e9ecef;
-            margin-bottom: 20px;
-        }
-
-        .comparison-box h3 {
-            margin-bottom: 15px;
-            color: #495057;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #dee2e6;
+            background: var(--accent-yellow);
+            transform: translateY(-1px);
         }
 
         .diff-container {
-            display: flex;
-            background: #2d3748;
-            border-radius: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border-radius: 4px;
             overflow: hidden;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.4;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
         }
 
         .diff-side {
-            flex: 1;
-            padding: 15px;
+            background: var(--bg-dark);
+            padding: 12px;
             overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .diff-side.left {
-            background: #2d3748;
-            border-right: 2px solid #4a5568;
-        }
-
-        .diff-side.right {
-            background: #2d3748;
-        }
-
-        .line-number {
-            display: inline-block;
-            width: 30px;
-            color: #718096;
-            margin-right: 10px;
-            text-align: right;
-            user-select: none;
-        }
-
-        .line-content {
-            color: #e2e8f0;
-            display: inline;
-        }
-
-        .char-added {
-            background-color: #22543d;
-            color: #68d391;
-        }
-
-        .char-removed {
-            background-color: #742a2a;
-            color: #fc8181;
-        }
-
-        .char-unchanged {
-            color: #e2e8f0;
-        }
-
-        .diff-content {
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-all;
             max-height: 300px;
             overflow-y: auto;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            border: 1px solid #dee2e6;
         }
 
-        .added {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 2px 4px;
-            border-radius: 3px;
+        .diff-line {
+            display: flex;
+            margin-bottom: 2px;
         }
 
-        .removed {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 2px 4px;
-            border-radius: 3px;
+        .line-number {
+            color: var(--fg-dim);
+            width: 40px;
+            text-align: right;
+            margin-right: 12px;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .line-content {
+            flex: 1;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .char-added {
+            background: rgba(184, 187, 38, 0.3);
+            color: var(--accent-green);
+        }
+
+        .char-removed {
+            background: rgba(251, 73, 52, 0.3);
+            color: var(--accent-red);
             text-decoration: line-through;
         }
 
-        .unchanged {
-            color: #6c757d;
+        .char-unchanged {
+            color: var(--fg-main);
         }
 
         .stats {
             display: flex;
             justify-content: space-around;
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+            background: var(--bg-dark);
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            border: 1px solid var(--border);
         }
 
         .stat-item {
@@ -267,78 +216,60 @@
         }
 
         .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-blue);
         }
 
         .stat-label {
-            font-size: 12px;
-            color: #6c757d;
-            margin-top: 5px;
+            font-size: 0.75rem;
+            color: var(--fg-dim);
+            margin-top: 4px;
         }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border: 1px solid #f5c6cb;
+        .error-message {
+            color: var(--accent-red);
+            background: rgba(251, 73, 52, 0.1);
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(251, 73, 52, 0.3);
         }
 
-        .success {
-            background: #d4edta;
-            color: #155724;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border: 1px solid #c3e6cb;
+        .position-info {
+            background: var(--bg-dark);
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
+            color: var(--fg-dim);
         }
 
         @media (max-width: 768px) {
-            .input-section {
+            .input-section,
+            .diff-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .decode-options {
-                justify-content: center;
             }
             
             .container {
-                padding: 20px;
+                padding: 16px;
             }
             
             h1 {
-                font-size: 2em;
-            }
-            
-            .diff-container {
-                flex-direction: column;
-            }
-            
-            .diff-side {
-                border-right: none !important;
-                border-bottom: 2px solid #4a5568;
-            }
-            
-            .diff-side.right {
-                border-bottom: none;
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔍 Text Diff & Decoder Comparison</h1>
+        <h1>Text Diff & Decoder</h1>
         
-        <div class="decode-selector">
-            <h3>🔧 Pilih Mode Decode:</h3>
+        <div class="section">
+            <h3>Decode Method</h3>
             <div class="decode-options">
                 <label class="decode-option selected">
                     <input type="radio" name="decode" value="none" checked>
-                    <span>Tanpa Decode</span>
+                    <span>None</span>
                 </label>
                 <label class="decode-option">
                     <input type="radio" name="decode" value="base64">
@@ -346,11 +277,11 @@
                 </label>
                 <label class="decode-option">
                     <input type="radio" name="decode" value="jwt">
-                    <span>JWT Token</span>
+                    <span>JWT</span>
                 </label>
                 <label class="decode-option">
                     <input type="radio" name="decode" value="url">
-                    <span>URL Decode</span>
+                    <span>URL</span>
                 </label>
                 <label class="decode-option">
                     <input type="radio" name="decode" value="unicode">
@@ -358,78 +289,86 @@
                 </label>
                 <label class="decode-option">
                     <input type="radio" name="decode" value="hex">
-                    <span>Hexadecimal</span>
+                    <span>Hex</span>
                 </label>
             </div>
         </div>
 
         <div class="input-section">
-            <div class="input-group">
-                <h3>📝 Text 1:</h3>
-                <textarea id="text1" placeholder="Masukkan text pertama di sini..."></textarea>
+            <div class="section">
+                <h3>Text 1</h3>
+                <textarea id="text1" placeholder="Enter first text here..."></textarea>
             </div>
-            <div class="input-group">
-                <h3>📝 Text 2:</h3>
-                <textarea id="text2" placeholder="Masukkan text kedua di sini..."></textarea>
+            <div class="section">
+                <h3>Text 2</h3>
+                <textarea id="text2" placeholder="Enter second text here..."></textarea>
             </div>
         </div>
 
-        <button class="compare-btn" onclick="compareTexts()">🚀 Compare & Decode</button>
+        <button class="compare-btn" onclick="compareTexts()">Compare</button>
 
-        <div class="comparison-section">
-            <div class="comparison-box">
-                <h3>📊 Original Text Comparison</h3>
-                <div id="originalDiff" class="diff-container">
-                    <div class="diff-side left">
-                        <div class="line-number">1</div>
-                        <div class="line-content">Belum ada comparison. Masukkan text dan klik tombol Compare.</div>
-                    </div>
-                    <div class="diff-side right">
-                        <div class="line-number">1</div>
-                        <div class="line-content"></div>
+        <div class="section">
+            <h3>Original Text Comparison</h3>
+            <div id="originalPosition" class="position-info"></div>
+            <div id="originalDiff" class="diff-container">
+                <div class="diff-side">
+                    <div class="diff-line">
+                        <span class="line-number">1</span>
+                        <span class="line-content">Enter text above and click Compare to see differences</span>
                     </div>
                 </div>
-                <div id="originalStats" class="stats" style="display: none;">
-                    <div class="stat-item">
-                        <div class="stat-value" id="originalAdded">0</div>
-                        <div class="stat-label">Added</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="originalRemoved">0</div>
-                        <div class="stat-label">Removed</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="originalSimilarity">0%</div>
-                        <div class="stat-label">Similarity</div>
+                <div class="diff-side">
+                    <div class="diff-line">
+                        <span class="line-number">1</span>
+                        <span class="line-content"></span>
                     </div>
                 </div>
             </div>
-            
-            <div class="comparison-box">
-                <h3>🔓 Decoded Text Comparison</h3>
-                <div id="decodedDiff" class="diff-container">
-                    <div class="diff-side left">
-                        <div class="line-number">1</div>
-                        <div class="line-content">Decoded comparison akan muncul di sini setelah comparison.</div>
-                    </div>
-                    <div class="diff-side right">
-                        <div class="line-number">1</div>
-                        <div class="line-content"></div>
+            <div id="originalStats" class="stats" style="display: none;">
+                <div class="stat-item">
+                    <div class="stat-value" id="originalAdded">0</div>
+                    <div class="stat-label">Added</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="originalRemoved">0</div>
+                    <div class="stat-label">Removed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="originalSimilarity">0%</div>
+                    <div class="stat-label">Similarity</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Decoded Text Comparison</h3>
+            <div id="decodedPosition" class="position-info"></div>
+            <div id="decodedDiff" class="diff-container">
+                <div class="diff-side">
+                    <div class="diff-line">
+                        <span class="line-number">1</span>
+                        <span class="line-content">Decoded comparison will appear here</span>
                     </div>
                 </div>
-                <div id="decodedStats" class="stats" style="display: none;">
-                    <div class="stat-item">
-                        <div class="stat-value" id="decodedAdded">0</div>
-                        <div class="stat-label">Added</div>
+                <div class="diff-side">
+                    <div class="diff-line">
+                        <span class="line-number">1</span>
+                        <span class="line-content"></span>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="decodedRemoved">0</div>
-                        <div class="stat-label">Removed</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="decodedSimilarity">0%</div>
-                        <div class="stat-label">Similarity</div>
-                    </div>
+                </div>
+            </div>
+            <div id="decodedStats" class="stats" style="display: none;">
+                <div class="stat-item">
+                    <div class="stat-value" id="decodedAdded">0</div>
+                    <div class="stat-label">Added</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="decodedRemoved">0</div>
+                    <div class="stat-label">Removed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="decodedSimilarity">0%</div>
+                    <div class="stat-label">Similarity</div>
                 </div>
             </div>
         </div>
@@ -445,7 +384,7 @@
             });
         });
 
-        // Sample data untuk testing
+        // Sample JWT data
         document.getElementById('text1').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiNTI5MzMwNzktOWQ1Ni00ZDVhLTgwMmEtYTIyYjQ5ZWE3MTc3IiwiaWF0IjoxNzUzMzg2ODExLCJleHAiOjE3NTU5Nzg4MTF9.21EBXB5TUmCZIiHRJs8udIWQinaBrkwDkljrGJtffQs';
         document.getElementById('text2').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiY2RkZDI4ZTEtODE4OC00NTRlLTk2NDgtZTRkNWY5ODIwOWE3IiwiaWF0IjoxNzUzMzg2ODEyLCJleHAiOjE3NTU5Nzg4MTJ9.wXM46C1Cdok3KJKIhqWjOfXGIwrCb1mi3M1cCHZbIko';
 
@@ -470,7 +409,7 @@
                         return text;
                 }
             } catch (error) {
-                return `Error decoding: ${error.message}`;
+                return `Error: ${error.message}`;
             }
         }
 
@@ -494,102 +433,132 @@
             }
         }
 
-        function generateSideBySideDiff(text1, text2) {
-            const maxLength = Math.max(text1.length, text2.length);
-            let leftSide = '';
-            let rightSide = '';
-            let addedCount = 0;
-            let removedCount = 0;
-            let unchangedCount = 0;
-            
-            // Character-by-character comparison
-            for (let i = 0; i < maxLength; i++) {
-                const char1 = text1[i] || '';
-                const char2 = text2[i] || '';
-                
-                if (char1 === char2) {
-                    leftSide += `<span class="char-unchanged">${escapeHtml(char1) || ' '}</span>`;
-                    rightSide += `<span class="char-unchanged">${escapeHtml(char2) || ' '}</span>`;
-                    if (char1) unchangedCount++;
-                } else {
-                    if (char1) {
-                        leftSide += `<span class="char-removed">${escapeHtml(char1)}</span>`;
-                        removedCount++;
-                    } else {
-                        leftSide += '<span class="char-unchanged"> </span>';
-                    }
-                    
-                    if (char2) {
-                        rightSide += `<span class="char-added">${escapeHtml(char2)}</span>`;
-                        addedCount++;
-                    } else {
-                        rightSide += '<span class="char-unchanged"> </span>';
-                    }
-                }
-            }
-            
-            const totalChars = Math.max(text1.length, text2.length);
-            const similarity = totalChars > 0 ? Math.round(((unchangedCount / totalChars) * 100)) : 100;
-            
-            return {
-                leftSide: leftSide,
-                rightSide: rightSide,
-                stats: { added: addedCount, removed: removedCount, similarity: similarity }
-            };
-        }
-
-        function renderSideBySideDiff(containerId, leftContent, rightContent) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = `
-                <div class="diff-side left">
-                    <span class="line-number">1</span>
-                    <span class="line-content">${leftContent}</span>
-                </div>
-                <div class="diff-side right">
-                    <span class="line-number">1</span>
-                    <span class="line-content">${rightContent}</span>
-                </div>
-            `;
-        }
-
-        function generateDiff(text1, text2) {
+        function findDifferences(text1, text2) {
             const lines1 = text1.split('\n');
             const lines2 = text2.split('\n');
             const maxLines = Math.max(lines1.length, lines2.length);
             
-            let diffHtml = '';
+            let differences = [];
             let addedCount = 0;
             let removedCount = 0;
             let unchangedCount = 0;
+
+            for (let lineNum = 0; lineNum < maxLines; lineNum++) {
+                const line1 = lines1[lineNum] || '';
+                const line2 = lines2[lineNum] || '';
+                
+                if (line1 === line2) {
+                    if (line1) unchangedCount++;
+                    continue;
+                }
+
+                // Character-level comparison within different lines
+                const maxLength = Math.max(line1.length, line2.length);
+                let lineDiff = {
+                    lineNumber: lineNum + 1,
+                    changes: []
+                };
+
+                for (let charPos = 0; charPos < maxLength; charPos++) {
+                    const char1 = line1[charPos];
+                    const char2 = line2[charPos];
+
+                    if (char1 !== char2) {
+                        lineDiff.changes.push({
+                            position: charPos + 1,
+                            char1: char1 || null,
+                            char2: char2 || null
+                        });
+
+                        if (char1 && !char2) removedCount++;
+                        if (!char1 && char2) addedCount++;
+                        if (char1 && char2) { addedCount++; removedCount++; }
+                    }
+                }
+
+                if (lineDiff.changes.length > 0) {
+                    differences.push(lineDiff);
+                }
+            }
+
+            const totalChars = Math.max(text1.length, text2.length);
+            const similarity = totalChars > 0 ? Math.round(((totalChars - addedCount - removedCount) / totalChars) * 100) : 100;
+
+            return {
+                differences,
+                stats: { added: addedCount, removed: removedCount, similarity, unchanged: unchangedCount }
+            };
+        }
+
+        function renderDiff(text1, text2, containerId, positionId) {
+            const lines1 = text1.split('\n');
+            const lines2 = text2.split('\n');
+            const maxLines = Math.max(lines1.length, lines2.length);
             
+            const result = findDifferences(text1, text2);
+            
+            // Show position information
+            const positionElement = document.getElementById(positionId);
+            if (result.differences.length > 0) {
+                const diffSummary = result.differences.map(diff => 
+                    `Line ${diff.lineNumber}: ${diff.changes.length} changes`
+                ).join(', ');
+                positionElement.textContent = `Differences found at: ${diffSummary}`;
+            } else {
+                positionElement.textContent = 'No differences found';
+            }
+
+            let leftSide = '';
+            let rightSide = '';
+
             for (let i = 0; i < maxLines; i++) {
                 const line1 = lines1[i] || '';
                 const line2 = lines2[i] || '';
-                
+                const lineNum = i + 1;
+
+                leftSide += `<div class="diff-line"><span class="line-number">${lineNum}</span><span class="line-content">`;
+                rightSide += `<div class="diff-line"><span class="line-number">${lineNum}</span><span class="line-content">`;
+
                 if (line1 === line2) {
-                    if (line1) {
-                        diffHtml += `<span class="unchanged">${escapeHtml(line1)}</span>\n`;
-                        unchangedCount++;
-                    }
+                    leftSide += escapeHtml(line1);
+                    rightSide += escapeHtml(line2);
                 } else {
-                    if (line1) {
-                        diffHtml += `<span class="removed">- ${escapeHtml(line1)}</span>\n`;
-                        removedCount++;
-                    }
-                    if (line2) {
-                        diffHtml += `<span class="added">+ ${escapeHtml(line2)}</span>\n`;
-                        addedCount++;
+                    // Character-by-character comparison
+                    const maxLength = Math.max(line1.length, line2.length);
+                    
+                    for (let j = 0; j < maxLength; j++) {
+                        const char1 = line1[j];
+                        const char2 = line2[j];
+
+                        if (char1 === char2) {
+                            leftSide += `<span class="char-unchanged">${escapeHtml(char1 || '')}</span>`;
+                            rightSide += `<span class="char-unchanged">${escapeHtml(char2 || '')}</span>`;
+                        } else {
+                            if (char1) {
+                                leftSide += `<span class="char-removed">${escapeHtml(char1)}</span>`;
+                            } else {
+                                leftSide += '<span class="char-unchanged"> </span>';
+                            }
+                            
+                            if (char2) {
+                                rightSide += `<span class="char-added">${escapeHtml(char2)}</span>`;
+                            } else {
+                                rightSide += '<span class="char-unchanged"> </span>';
+                            }
+                        }
                     }
                 }
+
+                leftSide += '</span></div>';
+                rightSide += '</span></div>';
             }
-            
-            const totalLines = addedCount + removedCount + unchangedCount;
-            const similarity = totalLines > 0 ? Math.round((unchangedCount / totalLines) * 100) : 0;
-            
-            return {
-                html: diffHtml || 'No differences found.',
-                stats: { added: addedCount, removed: removedCount, similarity: similarity }
-            };
+
+            document.getElementById(containerId).innerHTML = `
+                <div class="diff-side">${leftSide}</div>
+                <div class="diff-side">${rightSide}</div>
+            `;
+
+            return result.stats;
         }
 
         function escapeHtml(text) {
@@ -603,21 +572,20 @@
             const text2 = document.getElementById('text2').value;
             
             if (!text1 || !text2) {
-                alert('Harap masukkan kedua text untuk dibandingkan!');
+                alert('Please enter both texts to compare!');
                 return;
             }
             
             const decodeMethod = document.querySelector('input[name="decode"]:checked').value;
             
-            // Generate original text comparison (side-by-side)
-            const originalDiff = generateSideBySideDiff(text1, text2);
-            renderSideBySideDiff('originalDiff', originalDiff.leftSide, originalDiff.rightSide);
+            // Compare original texts
+            const originalStats = renderDiff(text1, text2, 'originalDiff', 'originalPosition');
             document.getElementById('originalStats').style.display = 'flex';
-            document.getElementById('originalAdded').textContent = originalDiff.stats.added;
-            document.getElementById('originalRemoved').textContent = originalDiff.stats.removed;
-            document.getElementById('originalSimilarity').textContent = originalDiff.stats.similarity + '%';
+            document.getElementById('originalAdded').textContent = originalStats.added;
+            document.getElementById('originalRemoved').textContent = originalStats.removed;
+            document.getElementById('originalSimilarity').textContent = originalStats.similarity + '%';
             
-            // Generate decoded text comparison
+            // Compare decoded texts
             if (decodeMethod !== 'none') {
                 try {
                     const decodedText1 = decodeText(text1, decodeMethod);
@@ -625,49 +593,50 @@
                     
                     if (decodedText1.startsWith('Error') || decodedText2.startsWith('Error')) {
                         document.getElementById('decodedDiff').innerHTML = `
-                            <div class="diff-side left" style="color: #fc8181; padding: 20px;">
-                                <div class="line-content">Error saat decode text 1: ${decodedText1}</div>
+                            <div class="diff-side">
+                                <div class="error-message">Decode Error Text 1: ${decodedText1}</div>
                             </div>
-                            <div class="diff-side right" style="color: #fc8181; padding: 20px;">
-                                <div class="line-content">Error saat decode text 2: ${decodedText2}</div>
+                            <div class="diff-side">
+                                <div class="error-message">Decode Error Text 2: ${decodedText2}</div>
                             </div>
                         `;
+                        document.getElementById('decodedPosition').textContent = 'Error during decode process';
                         document.getElementById('decodedStats').style.display = 'none';
                     } else {
-                        const decodedDiff = generateSideBySideDiff(decodedText1, decodedText2);
-                        renderSideBySideDiff('decodedDiff', decodedDiff.leftSide, decodedDiff.rightSide);
+                        const decodedStats = renderDiff(decodedText1, decodedText2, 'decodedDiff', 'decodedPosition');
                         document.getElementById('decodedStats').style.display = 'flex';
-                        document.getElementById('decodedAdded').textContent = decodedDiff.stats.added;
-                        document.getElementById('decodedRemoved').textContent = decodedDiff.stats.removed;
-                        document.getElementById('decodedSimilarity').textContent = decodedDiff.stats.similarity + '%';
+                        document.getElementById('decodedAdded').textContent = decodedStats.added;
+                        document.getElementById('decodedRemoved').textContent = decodedStats.removed;
+                        document.getElementById('decodedSimilarity').textContent = decodedStats.similarity + '%';
                     }
                 } catch (error) {
                     document.getElementById('decodedDiff').innerHTML = `
-                        <div class="diff-side left" style="color: #fc8181; padding: 20px;">
-                            <div class="line-content">Error saat decode: ${error.message}</div>
+                        <div class="diff-side">
+                            <div class="error-message">Decode failed: ${error.message}</div>
                         </div>
-                        <div class="diff-side right" style="color: #fc8181; padding: 20px;">
-                            <div class="line-content"></div>
-                        </div>
+                        <div class="diff-side"></div>
                     `;
+                    document.getElementById('decodedPosition').textContent = 'Error during decode process';
                     document.getElementById('decodedStats').style.display = 'none';
                 }
             } else {
                 document.getElementById('decodedDiff').innerHTML = `
-                    <div class="diff-side left" style="color: #a0aec0; padding: 20px;">
-                        <div class="line-content">Mode decode "Tanpa Decode" dipilih.</div>
+                    <div class="diff-side">
+                        <div style="color: var(--fg-dim); padding: 20px; text-align: center;">
+                            No decode method selected
+                        </div>
                     </div>
-                    <div class="diff-side right" style="color: #a0aec0; padding: 20px;">
-                        <div class="line-content">Tidak ada decoded comparison.</div>
-                    </div>
+                    <div class="diff-side"></div>
                 `;
+                document.getElementById('decodedPosition').textContent = 'No decode method selected';
                 document.getElementById('decodedStats').style.display = 'none';
             }
         }
 
+        // Auto-detect JWT format
         document.getElementById('text1').addEventListener('input', function() {
             const text = this.value;
-            if (text.includes('.') && text.split('.').length === 3) {
+            if (text.includes('.') && text.split('.').length === 3 && text.length > 50) {
                 document.querySelector('input[value="jwt"]').checked = true;
                 document.querySelectorAll('.decode-option').forEach(opt => opt.classList.remove('selected'));
                 document.querySelector('input[value="jwt"]').closest('.decode-option').classList.add('selected');
