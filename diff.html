@@ -148,9 +148,6 @@
         }
 
         .comparison-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
             margin-bottom: 30px;
         }
 
@@ -159,6 +156,7 @@
             border-radius: 15px;
             padding: 20px;
             border: 2px solid #e9ecef;
+            margin-bottom: 20px;
         }
 
         .comparison-box h3 {
@@ -166,6 +164,60 @@
             color: #495057;
             padding-bottom: 10px;
             border-bottom: 2px solid #dee2e6;
+        }
+
+        .diff-container {
+            display: flex;
+            background: #2d3748;
+            border-radius: 10px;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .diff-side {
+            flex: 1;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .diff-side.left {
+            background: #2d3748;
+            border-right: 2px solid #4a5568;
+        }
+
+        .diff-side.right {
+            background: #2d3748;
+        }
+
+        .line-number {
+            display: inline-block;
+            width: 30px;
+            color: #718096;
+            margin-right: 10px;
+            text-align: right;
+            user-select: none;
+        }
+
+        .line-content {
+            color: #e2e8f0;
+            display: inline;
+        }
+
+        .char-added {
+            background-color: #22543d;
+            color: #68d391;
+        }
+
+        .char-removed {
+            background-color: #742a2a;
+            color: #fc8181;
+        }
+
+        .char-unchanged {
+            color: #e2e8f0;
         }
 
         .diff-content {
@@ -245,8 +297,7 @@
         }
 
         @media (max-width: 768px) {
-            .input-section,
-            .comparison-section {
+            .input-section {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
@@ -261,6 +312,19 @@
             
             h1 {
                 font-size: 2em;
+            }
+            
+            .diff-container {
+                flex-direction: column;
+            }
+            
+            .diff-side {
+                border-right: none !important;
+                border-bottom: 2px solid #4a5568;
+            }
+            
+            .diff-side.right {
+                border-bottom: none;
             }
         }
     </style>
@@ -315,7 +379,16 @@
         <div class="comparison-section">
             <div class="comparison-box">
                 <h3>📊 Original Text Comparison</h3>
-                <div id="originalDiff" class="diff-content">Belum ada comparison. Masukkan text dan klik tombol Compare.</div>
+                <div id="originalDiff" class="diff-container">
+                    <div class="diff-side left">
+                        <div class="line-number">1</div>
+                        <div class="line-content">Belum ada comparison. Masukkan text dan klik tombol Compare.</div>
+                    </div>
+                    <div class="diff-side right">
+                        <div class="line-number">1</div>
+                        <div class="line-content"></div>
+                    </div>
+                </div>
                 <div id="originalStats" class="stats" style="display: none;">
                     <div class="stat-item">
                         <div class="stat-value" id="originalAdded">0</div>
@@ -334,7 +407,16 @@
             
             <div class="comparison-box">
                 <h3>🔓 Decoded Text Comparison</h3>
-                <div id="decodedDiff" class="diff-content">Decoded comparison akan muncul di sini setelah comparison.</div>
+                <div id="decodedDiff" class="diff-container">
+                    <div class="diff-side left">
+                        <div class="line-number">1</div>
+                        <div class="line-content">Decoded comparison akan muncul di sini setelah comparison.</div>
+                    </div>
+                    <div class="diff-side right">
+                        <div class="line-number">1</div>
+                        <div class="line-content"></div>
+                    </div>
+                </div>
                 <div id="decodedStats" class="stats" style="display: none;">
                     <div class="stat-item">
                         <div class="stat-value" id="decodedAdded">0</div>
@@ -412,6 +494,64 @@
             }
         }
 
+        function generateSideBySideDiff(text1, text2) {
+            const maxLength = Math.max(text1.length, text2.length);
+            let leftSide = '';
+            let rightSide = '';
+            let addedCount = 0;
+            let removedCount = 0;
+            let unchangedCount = 0;
+            
+            // Character-by-character comparison
+            for (let i = 0; i < maxLength; i++) {
+                const char1 = text1[i] || '';
+                const char2 = text2[i] || '';
+                
+                if (char1 === char2) {
+                    leftSide += `<span class="char-unchanged">${escapeHtml(char1) || ' '}</span>`;
+                    rightSide += `<span class="char-unchanged">${escapeHtml(char2) || ' '}</span>`;
+                    if (char1) unchangedCount++;
+                } else {
+                    if (char1) {
+                        leftSide += `<span class="char-removed">${escapeHtml(char1)}</span>`;
+                        removedCount++;
+                    } else {
+                        leftSide += '<span class="char-unchanged"> </span>';
+                    }
+                    
+                    if (char2) {
+                        rightSide += `<span class="char-added">${escapeHtml(char2)}</span>`;
+                        addedCount++;
+                    } else {
+                        rightSide += '<span class="char-unchanged"> </span>';
+                    }
+                }
+            }
+            
+            const totalChars = Math.max(text1.length, text2.length);
+            const similarity = totalChars > 0 ? Math.round(((unchangedCount / totalChars) * 100)) : 100;
+            
+            return {
+                leftSide: leftSide,
+                rightSide: rightSide,
+                stats: { added: addedCount, removed: removedCount, similarity: similarity }
+            };
+        }
+
+        function renderSideBySideDiff(containerId, leftContent, rightContent) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="diff-side left">
+                    <span class="line-number">1</span>
+                    <span class="line-content">${leftContent}</span>
+                </div>
+                <div class="diff-side right">
+                    <span class="line-number">1</span>
+                    <span class="line-content">${rightContent}</span>
+                </div>
+            `;
+        }
+
         function generateDiff(text1, text2) {
             const lines1 = text1.split('\n');
             const lines2 = text2.split('\n');
@@ -469,9 +609,9 @@
             
             const decodeMethod = document.querySelector('input[name="decode"]:checked').value;
             
-            // Generate original text comparison
-            const originalDiff = generateDiff(text1, text2);
-            document.getElementById('originalDiff').innerHTML = originalDiff.html;
+            // Generate original text comparison (side-by-side)
+            const originalDiff = generateSideBySideDiff(text1, text2);
+            renderSideBySideDiff('originalDiff', originalDiff.leftSide, originalDiff.rightSide);
             document.getElementById('originalStats').style.display = 'flex';
             document.getElementById('originalAdded').textContent = originalDiff.stats.added;
             document.getElementById('originalRemoved').textContent = originalDiff.stats.removed;
@@ -483,23 +623,48 @@
                     const decodedText1 = decodeText(text1, decodeMethod);
                     const decodedText2 = decodeText(text2, decodeMethod);
                     
-                    const decodedDiff = generateDiff(decodedText1, decodedText2);
-                    document.getElementById('decodedDiff').innerHTML = decodedDiff.html;
-                    document.getElementById('decodedStats').style.display = 'flex';
-                    document.getElementById('decodedAdded').textContent = decodedDiff.stats.added;
-                    document.getElementById('decodedRemoved').textContent = decodedDiff.stats.removed;
-                    document.getElementById('decodedSimilarity').textContent = decodedDiff.stats.similarity + '%';
+                    if (decodedText1.startsWith('Error') || decodedText2.startsWith('Error')) {
+                        document.getElementById('decodedDiff').innerHTML = `
+                            <div class="diff-side left" style="color: #fc8181; padding: 20px;">
+                                <div class="line-content">Error saat decode text 1: ${decodedText1}</div>
+                            </div>
+                            <div class="diff-side right" style="color: #fc8181; padding: 20px;">
+                                <div class="line-content">Error saat decode text 2: ${decodedText2}</div>
+                            </div>
+                        `;
+                        document.getElementById('decodedStats').style.display = 'none';
+                    } else {
+                        const decodedDiff = generateSideBySideDiff(decodedText1, decodedText2);
+                        renderSideBySideDiff('decodedDiff', decodedDiff.leftSide, decodedDiff.rightSide);
+                        document.getElementById('decodedStats').style.display = 'flex';
+                        document.getElementById('decodedAdded').textContent = decodedDiff.stats.added;
+                        document.getElementById('decodedRemoved').textContent = decodedDiff.stats.removed;
+                        document.getElementById('decodedSimilarity').textContent = decodedDiff.stats.similarity + '%';
+                    }
                 } catch (error) {
-                    document.getElementById('decodedDiff').innerHTML = `<div class="error">Error saat decode: ${error.message}</div>`;
+                    document.getElementById('decodedDiff').innerHTML = `
+                        <div class="diff-side left" style="color: #fc8181; padding: 20px;">
+                            <div class="line-content">Error saat decode: ${error.message}</div>
+                        </div>
+                        <div class="diff-side right" style="color: #fc8181; padding: 20px;">
+                            <div class="line-content"></div>
+                        </div>
+                    `;
                     document.getElementById('decodedStats').style.display = 'none';
                 }
             } else {
-                document.getElementById('decodedDiff').innerHTML = 'Mode decode "Tanpa Decode" dipilih. Tidak ada decoded comparison.';
+                document.getElementById('decodedDiff').innerHTML = `
+                    <div class="diff-side left" style="color: #a0aec0; padding: 20px;">
+                        <div class="line-content">Mode decode "Tanpa Decode" dipilih.</div>
+                    </div>
+                    <div class="diff-side right" style="color: #a0aec0; padding: 20px;">
+                        <div class="line-content">Tidak ada decoded comparison.</div>
+                    </div>
+                `;
                 document.getElementById('decodedStats').style.display = 'none';
             }
         }
 
-        // Auto-set JWT mode when JWT-like text is detected
         document.getElementById('text1').addEventListener('input', function() {
             const text = this.value;
             if (text.includes('.') && text.split('.').length === 3) {
