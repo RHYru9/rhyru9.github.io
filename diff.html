@@ -54,16 +54,16 @@
 
         .section {
             background: var(--bg-light);
-            border-radius: 6px;
-            padding: 16px;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
             border: 1px solid var(--border);
         }
 
         .section h3 {
-            color: var(--fg-main);
-            margin-bottom: 12px;
-            font-size: 1rem;
+            color: var(--accent-yellow);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
             font-weight: 500;
         }
 
@@ -81,6 +81,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.875rem;
+            color: var(--fg-main);
         }
 
         .decode-option:hover {
@@ -105,26 +106,49 @@
             margin-bottom: 20px;
         }
 
+        .input-group {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 280px; /* Fixed height for consistency */
+        }
+
+        .input-group h3 {
+            color: var(--accent-yellow);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
         .input-group textarea {
             width: 100%;
-            height: 120px;
+            flex: 1; /* Take remaining space */
             background: var(--bg-dark);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 12px;
+            border-radius: 6px;
+            padding: 16px;
             color: var(--fg-main);
-            font-family: inherit;
-            font-size: 0.875rem;
-            resize: vertical;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            resize: none; /* Prevent manual resizing */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            min-height: 0; /* Allow flex to control height */
         }
 
         .input-group textarea:focus {
             outline: none;
             border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(131, 165, 152, 0.2);
         }
 
         .input-group textarea::placeholder {
             color: var(--fg-dim);
+            font-style: italic;
         }
 
         .compare-btn {
@@ -248,6 +272,16 @@
             .input-section,
             .diff-container {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .input-group {
+                height: auto;
+                min-height: 200px;
+            }
+            
+            .input-group textarea {
+                min-height: 140px;
             }
             
             .container {
@@ -295,11 +329,11 @@
         </div>
 
         <div class="input-section">
-            <div class="section">
+            <div class="input-group">
                 <h3>Text 1</h3>
                 <textarea id="text1" placeholder="Enter first text here..."></textarea>
             </div>
-            <div class="section">
+            <div class="input-group">
                 <h3>Text 2</h3>
                 <textarea id="text2" placeholder="Enter second text here..."></textarea>
             </div>
@@ -375,7 +409,6 @@
     </div>
 
     <script>
-        // Handle decode option selection
         document.querySelectorAll('.decode-option').forEach(option => {
             option.addEventListener('click', function() {
                 document.querySelectorAll('.decode-option').forEach(opt => opt.classList.remove('selected'));
@@ -384,7 +417,6 @@
             });
         });
 
-        // Sample JWT data
         document.getElementById('text1').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiNTI5MzMwNzktOWQ1Ni00ZDVhLTgwMmEtYTIyYjQ5ZWE3MTc3IiwiaWF0IjoxNzUzMzg2ODExLCJleHAiOjE3NTU5Nzg4MTF9.21EBXB5TUmCZIiHRJs8udIWQinaBrkwDkljrGJtffQs';
         document.getElementById('text2').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiY2RkZDI4ZTEtODE4OC00NTRlLTk2NDgtZTRkNWY5ODIwOWE3IiwiaWF0IjoxNzUzMzg2ODEyLCJleHAiOjE3NTU5Nzg4MTJ9.wXM46C1Cdok3KJKIhqWjOfXGIwrCb1mi3M1cCHZbIko';
 
@@ -452,7 +484,6 @@
                     continue;
                 }
 
-                // Character-level comparison within different lines
                 const maxLength = Math.max(line1.length, line2.length);
                 let lineDiff = {
                     lineNumber: lineNum + 1,
@@ -497,7 +528,6 @@
             
             const result = findDifferences(text1, text2);
             
-            // Show position information
             const positionElement = document.getElementById(positionId);
             if (result.differences.length > 0) {
                 const diffSummary = result.differences.map(diff => 
@@ -523,7 +553,6 @@
                     leftSide += escapeHtml(line1);
                     rightSide += escapeHtml(line2);
                 } else {
-                    // Character-by-character comparison
                     const maxLength = Math.max(line1.length, line2.length);
                     
                     for (let j = 0; j < maxLength; j++) {
@@ -577,15 +606,12 @@
             }
             
             const decodeMethod = document.querySelector('input[name="decode"]:checked').value;
-            
-            // Compare original texts
             const originalStats = renderDiff(text1, text2, 'originalDiff', 'originalPosition');
             document.getElementById('originalStats').style.display = 'flex';
             document.getElementById('originalAdded').textContent = originalStats.added;
             document.getElementById('originalRemoved').textContent = originalStats.removed;
             document.getElementById('originalSimilarity').textContent = originalStats.similarity + '%';
             
-            // Compare decoded texts
             if (decodeMethod !== 'none') {
                 try {
                     const decodedText1 = decodeText(text1, decodeMethod);
@@ -633,7 +659,6 @@
             }
         }
 
-        // Auto-detect JWT format
         document.getElementById('text1').addEventListener('input', function() {
             const text = this.value;
             if (text.includes('.') && text.split('.').length === 3 && text.length > 50) {
