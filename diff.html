@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Diff & Decoder Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .decode-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .decode-selector h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .decode-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .decode-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .decode-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .decode-option input[type="radio"] {
+            accent-color: #667eea;
+        }
+
+        .decode-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .compare-btn {
+            display: block;
+            width: 200px;
+            margin: 0 auto 30px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .compare-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .comparison-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .comparison-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .comparison-box h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .diff-content {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .added {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .removed {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-decoration: line-through;
+        }
+
+        .unchanged {
+            color: #6c757d;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success {
+            background: #d4edta;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .input-section,
+            .comparison-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .decode-options {
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Text Diff & Decoder Comparison</h1>
+        
+        <div class="decode-selector">
+            <h3>🔧 Pilih Mode Decode:</h3>
+            <div class="decode-options">
+                <label class="decode-option selected">
+                    <input type="radio" name="decode" value="none" checked>
+                    <span>Tanpa Decode</span>
+                </label>
+                <label class="decode-option">
+                    <input type="radio" name="decode" value="base64">
+                    <span>Base64</span>
+                </label>
+                <label class="decode-option">
+                    <input type="radio" name="decode" value="jwt">
+                    <span>JWT Token</span>
+                </label>
+                <label class="decode-option">
+                    <input type="radio" name="decode" value="url">
+                    <span>URL Decode</span>
+                </label>
+                <label class="decode-option">
+                    <input type="radio" name="decode" value="unicode">
+                    <span>Unicode</span>
+                </label>
+                <label class="decode-option">
+                    <input type="radio" name="decode" value="hex">
+                    <span>Hexadecimal</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <h3>📝 Text 1:</h3>
+                <textarea id="text1" placeholder="Masukkan text pertama di sini..."></textarea>
+            </div>
+            <div class="input-group">
+                <h3>📝 Text 2:</h3>
+                <textarea id="text2" placeholder="Masukkan text kedua di sini..."></textarea>
+            </div>
+        </div>
+
+        <button class="compare-btn" onclick="compareTexts()">🚀 Compare & Decode</button>
+
+        <div class="comparison-section">
+            <div class="comparison-box">
+                <h3>📊 Original Text Comparison</h3>
+                <div id="originalDiff" class="diff-content">Belum ada comparison. Masukkan text dan klik tombol Compare.</div>
+                <div id="originalStats" class="stats" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-value" id="originalAdded">0</div>
+                        <div class="stat-label">Added</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="originalRemoved">0</div>
+                        <div class="stat-label">Removed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="originalSimilarity">0%</div>
+                        <div class="stat-label">Similarity</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison-box">
+                <h3>🔓 Decoded Text Comparison</h3>
+                <div id="decodedDiff" class="diff-content">Decoded comparison akan muncul di sini setelah comparison.</div>
+                <div id="decodedStats" class="stats" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-value" id="decodedAdded">0</div>
+                        <div class="stat-label">Added</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="decodedRemoved">0</div>
+                        <div class="stat-label">Removed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="decodedSimilarity">0%</div>
+                        <div class="stat-label">Similarity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle decode option selection
+        document.querySelectorAll('.decode-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.decode-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input').checked = true;
+            });
+        });
+
+        // Sample data untuk testing
+        document.getElementById('text1').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiNTI5MzMwNzktOWQ1Ni00ZDVhLTgwMmEtYTIyYjQ5ZWE3MTc3IiwiaWF0IjoxNzUzMzg2ODExLCJleHAiOjE3NTU5Nzg4MTF9.21EBXB5TUmCZIiHRJs8udIWQinaBrkwDkljrGJtffQs';
+        document.getElementById('text2').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dGlsaXNhdGV1cklkIjoiY2RkZDI4ZTEtODE4OC00NTRlLTk2NDgtZTRkNWY5ODIwOWE3IiwiaWF0IjoxNzUzMzg2ODEyLCJleHAiOjE3NTU5Nzg4MTJ9.wXM46C1Cdok3KJKIhqWjOfXGIwrCb1mi3M1cCHZbIko';
+
+        function decodeText(text, method) {
+            try {
+                switch (method) {
+                    case 'base64':
+                        return atob(text);
+                    case 'jwt':
+                        return decodeJWT(text);
+                    case 'url':
+                        return decodeURIComponent(text);
+                    case 'unicode':
+                        return text.replace(/\\u[\dA-F]{4}/gi, match => 
+                            String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16))
+                        );
+                    case 'hex':
+                        return text.replace(/[0-9A-F]{2}/gi, match => 
+                            String.fromCharCode(parseInt(match, 16))
+                        );
+                    default:
+                        return text;
+                }
+            } catch (error) {
+                return `Error decoding: ${error.message}`;
+            }
+        }
+
+        function decodeJWT(token) {
+            try {
+                const parts = token.split('.');
+                if (parts.length !== 3) {
+                    throw new Error('Invalid JWT format');
+                }
+                
+                const header = JSON.parse(atob(parts[0]));
+                const payload = JSON.parse(atob(parts[1]));
+                
+                return JSON.stringify({
+                    header: header,
+                    payload: payload,
+                    signature: parts[2]
+                }, null, 2);
+            } catch (error) {
+                throw new Error('Invalid JWT token');
+            }
+        }
+
+        function generateDiff(text1, text2) {
+            const lines1 = text1.split('\n');
+            const lines2 = text2.split('\n');
+            const maxLines = Math.max(lines1.length, lines2.length);
+            
+            let diffHtml = '';
+            let addedCount = 0;
+            let removedCount = 0;
+            let unchangedCount = 0;
+            
+            for (let i = 0; i < maxLines; i++) {
+                const line1 = lines1[i] || '';
+                const line2 = lines2[i] || '';
+                
+                if (line1 === line2) {
+                    if (line1) {
+                        diffHtml += `<span class="unchanged">${escapeHtml(line1)}</span>\n`;
+                        unchangedCount++;
+                    }
+                } else {
+                    if (line1) {
+                        diffHtml += `<span class="removed">- ${escapeHtml(line1)}</span>\n`;
+                        removedCount++;
+                    }
+                    if (line2) {
+                        diffHtml += `<span class="added">+ ${escapeHtml(line2)}</span>\n`;
+                        addedCount++;
+                    }
+                }
+            }
+            
+            const totalLines = addedCount + removedCount + unchangedCount;
+            const similarity = totalLines > 0 ? Math.round((unchangedCount / totalLines) * 100) : 0;
+            
+            return {
+                html: diffHtml || 'No differences found.',
+                stats: { added: addedCount, removed: removedCount, similarity: similarity }
+            };
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function compareTexts() {
+            const text1 = document.getElementById('text1').value;
+            const text2 = document.getElementById('text2').value;
+            
+            if (!text1 || !text2) {
+                alert('Harap masukkan kedua text untuk dibandingkan!');
+                return;
+            }
+            
+            const decodeMethod = document.querySelector('input[name="decode"]:checked').value;
+            
+            // Generate original text comparison
+            const originalDiff = generateDiff(text1, text2);
+            document.getElementById('originalDiff').innerHTML = originalDiff.html;
+            document.getElementById('originalStats').style.display = 'flex';
+            document.getElementById('originalAdded').textContent = originalDiff.stats.added;
+            document.getElementById('originalRemoved').textContent = originalDiff.stats.removed;
+            document.getElementById('originalSimilarity').textContent = originalDiff.stats.similarity + '%';
+            
+            // Generate decoded text comparison
+            if (decodeMethod !== 'none') {
+                try {
+                    const decodedText1 = decodeText(text1, decodeMethod);
+                    const decodedText2 = decodeText(text2, decodeMethod);
+                    
+                    const decodedDiff = generateDiff(decodedText1, decodedText2);
+                    document.getElementById('decodedDiff').innerHTML = decodedDiff.html;
+                    document.getElementById('decodedStats').style.display = 'flex';
+                    document.getElementById('decodedAdded').textContent = decodedDiff.stats.added;
+                    document.getElementById('decodedRemoved').textContent = decodedDiff.stats.removed;
+                    document.getElementById('decodedSimilarity').textContent = decodedDiff.stats.similarity + '%';
+                } catch (error) {
+                    document.getElementById('decodedDiff').innerHTML = `<div class="error">Error saat decode: ${error.message}</div>`;
+                    document.getElementById('decodedStats').style.display = 'none';
+                }
+            } else {
+                document.getElementById('decodedDiff').innerHTML = 'Mode decode "Tanpa Decode" dipilih. Tidak ada decoded comparison.';
+                document.getElementById('decodedStats').style.display = 'none';
+            }
+        }
+
+        // Auto-set JWT mode when JWT-like text is detected
+        document.getElementById('text1').addEventListener('input', function() {
+            const text = this.value;
+            if (text.includes('.') && text.split('.').length === 3) {
+                document.querySelector('input[value="jwt"]').checked = true;
+                document.querySelectorAll('.decode-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('input[value="jwt"]').closest('.decode-option').classList.add('selected');
+            }
+        });
+    </script>
+</body>
+</html>
