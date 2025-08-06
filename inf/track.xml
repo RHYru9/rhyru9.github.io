@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Draw.io" etag="example" version="22.1.16">
+  <diagram name="OSINT-Name-Tracking" id="flowchart">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#2b2d42" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- START NODE -->
+        <mxCell id="start" value="Start Investigation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#81C784;strokeWidth=3;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- MAIN PROCESS NODES -->
+        <mxCell id="data_collection" value="Data Collection &amp; Sources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#64B5F6;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="preprocessing" value="Data Preprocessing &amp; Cleaning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#64B5F6;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_analysis" value="Core Name Intelligence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#64B5F6;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="advanced_analytics" value="Advanced Analytics &amp; Intelligence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#64B5F6;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="output_generation" value="Intelligence Output &amp; Reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#64B5F6;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="200" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feedback_loop" value="Continuous Learning &amp; Improvement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#BA68C8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="200" width="180" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- DATA COLLECTION SUBPROCESSES -->
+        <mxCell id="social_media" value="Social Media Monitoring" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="200" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="public_records" value="Public Records Search" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="news_media" value="News &amp; Media Analysis" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="darkweb" value="Dark Web Surveillance" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- DATA DETAILS -->
+        <mxCell id="twitter" value="Twitter/X APIs" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#FFB74D;strokeWidth=1;fontColor=#FFFFFF;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="120" y="250" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="linkedin" value="LinkedIn/Facebook" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#FFB74D;strokeWidth=1;fontColor=#FFFFFF;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="210" y="250" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="telegram" value="Telegram Channels" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#FFB74D;strokeWidth=1;fontColor=#FFFFFF;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="300" y="250" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- PREPROCESSING SUBPROCESSES -->
+        <mxCell id="text_extraction" value="Raw Data Extraction" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="standardization" value="Data Standardization" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- CORE ANALYSIS SUBPROCESSES -->
+        <mxCell id="identity_resolution" value="Identity Resolution Engine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="relationship_discovery" value="Relationship Discovery" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="790" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ADVANCED ANALYTICS SUBPROCESSES -->
+        <mxCell id="pattern_recognition" value="Pattern Recognition" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="anomaly_detection" value="Anomaly Detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F44336;strokeColor=#EF5350;strokeWidth=2;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="150" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- OUTPUT SUBPROCESSES -->
+        <mxCell id="visualizations" value="Interactive Visualizations" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="reports" value="Comprehensive Reports" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#607D8B;strokeColor=#90A4AE;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="790" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="alerts" value="Real-time Alerts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F44336;strokeColor=#EF5350;strokeWidth=2;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="920" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- MAIN FLOW CONNECTIONS -->
+        <mxCell id="edge1" edge="1" parent="1" source="start" target="data_collection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge2" edge="1" parent="1" source="data_collection" target="preprocessing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge3" edge="1" parent="1" source="preprocessing" target="core_analysis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge4" edge="1" parent="1" source="core_analysis" target="advanced_analytics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge5" edge="1" parent="1" source="advanced_analytics" target="output_generation">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="135" />
+              <mxPoint x="1030" y="180" />
+              <mxPoint x="800" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge6" edge="1" parent="1" source="output_generation" target="feedback_loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- SUBPROCESS CONNECTIONS -->
+        <mxCell id="edge7" edge="1" parent="1" source="data_collection" target="social_media">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge8" edge="1" parent="1" source="data_collection" target="public_records">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge9" edge="1" parent="1" source="social_media" target="twitter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge10" edge="1" parent="1" source="social_media" target="linkedin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge11" edge="1" parent="1" source="preprocessing" target="text_extraction">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge12" edge="1" parent="1" source="preprocessing" target="standardization">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge13" edge="1" parent="1" source="core_analysis" target="identity_resolution">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge14" edge="1" parent="1" source="core_analysis" target="relationship_discovery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge15" edge="1" parent="1" source="advanced_analytics" target="pattern_recognition">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge16" edge="1" parent="1" source="advanced_analytics" target="anomaly_detection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge17" edge="1" parent="1" source="output_generation" target="visualizations">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge18" edge="1" parent="1" source="output_generation" target="reports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge19" edge="1" parent="1" source="output_generation" target="alerts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- FEEDBACK CONNECTIONS -->
+        <mxCell id="feedback1" edge="1" parent="1" source="feedback_loop" target="data_collection" style="dashed=1;dashPattern=5 5;strokeColor=#BA68C8;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="235" />
+              <mxPoint x="340" y="235" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- ALERT PATHS -->
+        <mxCell id="alert1" edge="1" parent="1" source="anomaly_detection" target="alerts" style="strokeColor=#F44336;strokeWidth=3;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="200" />
+              <mxPoint x="980" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
