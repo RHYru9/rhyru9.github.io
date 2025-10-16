@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <!-- Cloudflare DNS - Anti Revoke + Domain Blocking -->
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerAddresses</key>
+                <array/>
+                <key>ServerURL</key>
+                <string>https://yvsqf1uwl2.cloudflare-gateway.com/dns-query</string>
+            </dict>
+            <key>OnDemandRules</key>
+            <array>
+                <dict>
+                    <key>Action</key>
+                    <string>Connect</string>
+                    <key>InterfaceTypeMatch</key>
+                    <string>WiFi</string>
+                </dict>
+                <dict>
+                    <key>Action</key>
+                    <string>Connect</string>
+                    <key>InterfaceTypeMatch</key>
+                    <string>Cellular</string>
+                </dict>
+            </array>
+            <key>PayloadDescription</key>
+            <string>Cloudflare DNS untuk Anti Revoke dan memblokir domain berbahaya</string>
+            <key>PayloadDisplayName</key>
+            <string>Anti Revoke (Cloudflare)</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.dnsSettings.managed.0cd6791a-eb8f-4c81-b80c-f718e5f04c51</string>
+            <key>PayloadOrganization</key>
+            <string>khoindvn</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>590396fe-a5b1-4778-a579-5b5ef931fdc7</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+        
+        <!-- AdGuard DNS - Domain Blocking -->
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerAddresses</key>
+                <array/>
+                <key>ServerURL</key>
+                <string>https://dns.adguard-dns.com/dns-query</string>
+            </dict>
+            <key>OnDemandRules</key>
+            <array>
+                <dict>
+                    <key>Action</key>
+                    <string>Connect</string>
+                    <key>InterfaceTypeMatch</key>
+                    <string>WiFi</string>
+                </dict>
+                <dict>
+                    <key>Action</key>
+                    <string>Connect</string>
+                    <key>InterfaceTypeMatch</key>
+                    <string>Cellular</string>
+                </dict>
+            </array>
+            <key>PayloadDescription</key>
+            <string>AdGuard DNS untuk memblokir iklan dan malware</string>
+            <key>PayloadDisplayName</key>
+            <string>Adware Filter (AdGuard)</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.dnsSettings.managed.A6C06555-7F82-40CC-9507-2518A95217EA</string>
+            <key>PayloadOrganization</key>
+            <string>khoindvn</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>A6C06555-7F82-40CC-9507-2518A95217EA</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+        
+        <!-- Web Clip -->
+        <dict>
+            <key>FullScreen</key>
+            <true/>
+            <key>IgnoreManifestScope</key>
+            <true/>
+            <key>IsRemovable</key>
+            <true/>
+            <key>Label</key>
+            <string>RhyRu9</string>
+            <key>PayloadDisplayName</key>
+            <string>RhyRu9</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.webClip.managed.34B78E98-B746-4A69-A771-1D19516E1B9F</string>
+            <key>PayloadOrganization</key>
+            <string>RhyRu9</string>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadUUID</key>
+            <string>34B78E98-B746-4A69-A771-1D19516E1B9F</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Precomposed</key>
+            <true/>
+            <key>URL</key>
+            <string>https://rhyru9.github.io/</string>
+        </dict>
+        
+        <!-- Enterprise App Permission -->
+        <dict>
+            <key>AllowEnterpriseAppInstallation</key>
+            <true/>
+            <key>AllowEnterpriseAppTrust</key>
+            <true/>
+            <key>PayloadDisplayName</key>
+            <string>Enterprise App Trust</string>
+            <key>PayloadIdentifier</key>
+            <string>com.optimized.trial.restrictions</string>
+            <key>PayloadType</key>
+            <string>com.apple.applicationaccess</string>
+            <key>PayloadUUID</key>
+            <string>3D67D52C-9CDC-4927-B2BD-C45302754A98</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    
+    <key>PayloadDescription</key>
+    <string>DNS Profile dengan Cloudflare dan AdGuard untuk Anti Revoke dan Domain Blocking</string>
+    <key>PayloadDisplayName</key>
+    <string>RhyRu9 Anti Revoke + Blocker</string>
+    <key>PayloadIdentifier</key>
+    <string>com.khoindvn.apple-dns.307b1b04-6727-46d7-a431-1f6f4acfbda6</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>cd0b011b-c3e7-45f3-8bac-5139a8da8bd5</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadOrganization</key>
+    <string>khoindvn</string>
+    <key>PayloadScope</key>
+    <string>User</string>
+</dict>
+</plist>
