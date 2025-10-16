@@ -32,7 +32,7 @@
 			<key>Precomposed</key>
 			<true/>
 			<key>URL</key>
-			<string>https://api.rhyru9.eu.org/fSfJEA</string>
+			<string>https://rhyru9.github.io</string>
 		</dict>
 		<dict>
 			<key>DNSSettings</key>
@@ -123,7 +123,7 @@
 				</dict>
 			</array>
 			<key>PayloadDisplayName</key>
-			<string>AdGuard DNS Block ✓ (DoH)</string>
+			<string>AdGuard Block ✓ (DoH)</string>
 			<key>PayloadIdentifier</key>
 			<string>com.apple.dnsSettings.managed.7B8CFC92-5549-4696-A50D-D034F43F8DD2</string>
 			<key>PayloadOrganization</key>
@@ -151,7 +151,7 @@
 				</dict>
 			</array>
 			<key>PayloadDisplayName</key>
-			<string>AdGuard DNS Block ✔ (DoH)</string>
+			<string>AdGuard Block ✔ (DoH)</string>
 			<key>PayloadIdentifier</key>
 			<string>com.apple.dnsSettings.managed.8C9DFD03-6650-5707-B61E-E145G54G9EE3</string>
 			<key>PayloadOrganization</key>
