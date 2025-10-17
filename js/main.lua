@@ -73,7 +73,7 @@ local Config = {
     -- Telegram Hooked Config
     Hooked = {
         Enabled = false,
-        BotToken = "8397717015:AAGpYPg2X_rBDumP30MSSXWtDnR_Bi5e_30",
+        BotToken = "8388162363:AAEHzCAxgvOaJrPNc80HYnbiXaYcoJ7sb50,
         ChatID = "",
         TargetRarities = {}
     }
