@@ -1,145 +1,137 @@
+-- RhyRu9 UI Library - Pure Standalone Edition
+
 local RhyRu9 = {}
-RhyRu9.__index = RhyRu9
-RhyRu9.Version = "3.1.0"
-RhyRu9.Flags = {}
+RhyRu9.Version = "1.0.0"
 RhyRu9.Windows = {}
-RhyRu9.Events = {}
+RhyRu9.Flags = {}
 RhyRu9.Presets = {}
-RhyRu9.DebugMode = false
-RhyRu9._internal = {}
+RhyRu9.Events = {}
 
--- ===== SERVICES =====
-local HttpService = game:GetService("HttpService")
-local TweenService = game:GetService("TweenService")
+-- Services
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
 
--- ===== LOAD RAYFIELD =====
-local Rayfield
-local RayfieldLoadSuccess, RayfieldError = pcall(function()
-    Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-end)
+-- Theme System
+RhyRu9.Themes = {
+    Dark = {
+        Background = Color3.fromRGB(25, 25, 25),
+        Secondary = Color3.fromRGB(35, 35, 35),
+        Tertiary = Color3.fromRGB(45, 45, 45),
+        Text = Color3.fromRGB(255, 255, 255),
+        TextDark = Color3.fromRGB(150, 150, 150),
+        Accent = Color3.fromRGB(0, 120, 215),
+        Border = Color3.fromRGB(60, 60, 60),
+        Hover = Color3.fromRGB(50, 50, 50),
+        Success = Color3.fromRGB(76, 175, 80),
+        Warning = Color3.fromRGB(255, 152, 0),
+        Error = Color3.fromRGB(244, 67, 54)
+    },
+    Light = {
+        Background = Color3.fromRGB(240, 240, 240),
+        Secondary = Color3.fromRGB(255, 255, 255),
+        Tertiary = Color3.fromRGB(230, 230, 230),
+        Text = Color3.fromRGB(0, 0, 0),
+        TextDark = Color3.fromRGB(100, 100, 100),
+        Accent = Color3.fromRGB(0, 120, 215),
+        Border = Color3.fromRGB(200, 200, 200),
+        Hover = Color3.fromRGB(245, 245, 245),
+        Success = Color3.fromRGB(76, 175, 80),
+        Warning = Color3.fromRGB(255, 152, 0),
+        Error = Color3.fromRGB(244, 67, 54)
+    }
+}
 
-if not RayfieldLoadSuccess then
-    warn("❌ RhyRu9 Error: Failed to load Rayfield - " .. tostring(RayfieldError))
-    return nil
-end
+RhyRu9.CurrentTheme = RhyRu9.Themes.Dark
 
--- ===== UTILITY FUNCTIONS =====
+-- Utility Functions
 local Utility = {}
 
-function Utility:ValidateString(value, default)
-    if type(value) == "string" and #value > 0 then
-        return value
-    end
-    return default or "Unnamed"
+function Utility:Tween(object, properties, duration)
+    local tweenInfo = TweenInfo.new(duration or 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(object, tweenInfo, properties)
+    tween:Play()
+    return tween
 end
 
-function Utility:ValidateNumber(value, min, max, default)
-    if type(value) == "number" then
-        if min and value < min then return min end
-        if max and value > max then return max end
-        return value
-    end
-    return default or 0
+function Utility:Round(num)
+    return math.floor(num + 0.5)
 end
 
-function Utility:ValidateBoolean(value, default)
-    if type(value) == "boolean" then
-        return value
-    end
-    return default or false
-end
+function Utility:CreateDrag(gui)
+    local dragging
+    local dragInput
+    local dragStart
+    local startPos
 
-function Utility:ValidateTable(value, default)
-    if type(value) == "table" then
-        return value
+    local function update(input)
+        local delta = input.Position - dragStart
+        gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
-    return default or {}
-end
 
-function Utility:ValidateCallback(callback)
-    if type(callback) == "function" then
-        return callback
-    end
-    return function() end
-end
-
-function Utility:ValidateColor(color)
-    if typeof(color) == "Color3" then
-        return color
-    elseif type(color) == "table" and color.R and color.G and color.B then
-        return Color3.fromRGB(color.R, color.G, color.B)
-    end
-    return Color3.fromRGB(255, 255, 255)
-end
-
-function Utility:SafeCall(func, ...)
-    local success, result = pcall(func, ...)
-    if not success then
-        if RhyRu9.DebugMode then
-            warn("⚠️ RhyRu9 Callback Error: " .. tostring(result))
+    gui.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = gui.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
         end
-        return false, result
-    end
-    return true, result
-end
+    end)
 
-function Utility:DeepCopy(original)
-    local copy
-    if type(original) == 'table' then
-        copy = {}
-        for key, value in next, original, nil do
-            copy[Utility:DeepCopy(key)] = Utility:DeepCopy(value)
+    gui.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            dragInput = input
         end
-        setmetatable(copy, Utility:DeepCopy(getmetatable(original)))
-    else
-        copy = original
-    end
-    return copy
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
+    end)
 end
 
-function Utility:GenerateID()
-    return HttpService:GenerateGUID(false)
-end
-
-function Utility:Timestamp()
-    return os.time()
-end
-
--- ===== DEBUG LOGGER =====
+-- Logger System
 local Logger = {}
 
-function Logger:Log(level, message)
-    if not RhyRu9.DebugMode then return end
+function Logger:Log(message, messageType)
+    local timestamp = os.date("%H:%M:%S")
+    local prefix = "[" .. timestamp .. "] "
     
-    local prefix = {
-        ["INFO"] = "ℹ️",
-        ["WARN"] = "⚠️",
-        ["ERROR"] = "❌",
-        ["SUCCESS"] = "✅"
-    }
-    
-    print(string.format("[RhyRu9 %s] %s %s", level, prefix[level] or "•", message))
-end
-
-function Logger:Info(message)
-    self:Log("INFO", message)
-end
-
-function Logger:Warn(message)
-    self:Log("WARN", message)
+    if messageType == "ERROR" then
+        print(prefix .. "❌ [ERROR] " .. message)
+    elseif messageType == "WARN" then
+        print(prefix .. "⚠️ [WARN] " .. message)
+    elseif messageType == "SUCCESS" then
+        print(prefix .. "✅ [SUCCESS] " .. message)
+    else
+        print(prefix .. "ℹ️ [INFO] " .. message)
+    end
 end
 
 function Logger:Error(message)
-    self:Log("ERROR", message)
+    self:Log(message, "ERROR")
+end
+
+function Logger:Warn(message)
+    self:Log(message, "WARN")
 end
 
 function Logger:Success(message)
-    self:Log("SUCCESS", message)
+    self:Log(message, "SUCCESS")
 end
 
--- ===== EVENT SYSTEM =====
+function Logger:Info(message)
+    self:Log(message, "INFO")
+end
+
+-- Event System
 local EventSystem = {}
 
 function EventSystem:Create(eventName)
@@ -148,767 +140,1396 @@ function EventSystem:Create(eventName)
             Callbacks = {},
             Fired = 0
         }
-        Logger:Info("Event created: " .. eventName)
     end
+    return RhyRu9.Events[eventName]
 end
 
 function EventSystem:Connect(eventName, callback)
-    if not RhyRu9.Events[eventName] then
-        self:Create(eventName)
-    end
-    
-    local id = Utility:GenerateID()
-    RhyRu9.Events[eventName].Callbacks[id] = callback
+    local event = self:Create(eventName)
+    local connectionId = #event.Callbacks + 1
+    event.Callbacks[connectionId] = callback
     
     return {
         Disconnect = function()
-            RhyRu9.Events[eventName].Callbacks[id] = nil
+            event.Callbacks[connectionId] = nil
         end
     }
 end
 
 function EventSystem:Fire(eventName, ...)
-    if not RhyRu9.Events[eventName] then return end
-    
-    RhyRu9.Events[eventName].Fired = RhyRu9.Events[eventName].Fired + 1
-    
-    for _, callback in pairs(RhyRu9.Events[eventName].Callbacks) do
-        Utility:SafeCall(callback, ...)
+    local event = RhyRu9.Events[eventName]
+    if event then
+        event.Fired = event.Fired + 1
+        for _, callback in pairs(event.Callbacks) do
+            task.spawn(callback, ...)
+        end
     end
 end
 
--- ===== PERFORMANCE MONITOR =====
-local Performance = {}
-Performance.Stats = {
-    ElementsCreated = 0,
-    CallbacksFired = 0,
-    ErrorsOccurred = 0,
-    StartTime = tick()
-}
+-- Component System
+local Components = {}
 
-function Performance:RecordElement()
-    self.Stats.ElementsCreated = self.Stats.ElementsCreated + 1
+function Components:CreateMain()
+    local theme = RhyRu9.CurrentTheme
+    
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "RhyRu9UI"
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = game:GetService("CoreGui") or game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    return ScreenGui
 end
 
-function Performance:RecordCallback()
-    self.Stats.CallbacksFired = self.Stats.CallbacksFired + 1
-end
-
-function Performance:RecordError()
-    self.Stats.ErrorsOccurred = self.Stats.ErrorsOccurred + 1
-end
-
-function Performance:GetUptime()
-    return tick() - self.Stats.StartTime
-end
-
-function Performance:GetStats()
+function Components:CreateWindow(parent, title)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Main = Instance.new("Frame")
+    Main.Name = "Main"
+    Main.Size = UDim2.new(0, 550, 0, 400)
+    Main.Position = UDim2.new(0.5, -275, 0.5, -200)
+    Main.BackgroundColor3 = theme.Background
+    Main.BorderSizePixel = 0
+    Main.Parent = parent
+    
+    Utility:CreateDrag(Main)
+    
+    local MainCorner = Instance.new("UICorner")
+    MainCorner.CornerRadius = UDim.new(0, 8)
+    MainCorner.Parent = Main
+    
+    local MainStroke = Instance.new("UIStroke")
+    MainStroke.Color = theme.Border
+    MainStroke.Thickness = 1
+    MainStroke.Parent = Main
+    
+    -- Topbar
+    local Topbar = Instance.new("Frame")
+    Topbar.Name = "Topbar"
+    Topbar.Size = UDim2.new(1, 0, 0, 40)
+    Topbar.BackgroundColor3 = theme.Secondary
+    Topbar.BorderSizePixel = 0
+    Topbar.Parent = Main
+    
+    local TopbarCorner = Instance.new("UICorner")
+    TopbarCorner.CornerRadius = UDim.new(0, 8)
+    TopbarCorner.Parent = Topbar
+    
+    -- Title
+    local Title = Instance.new("TextLabel")
+    Title.Name = "Title"
+    Title.Size = UDim2.new(0.7, 0, 1, 0)
+    Title.Position = UDim2.new(0, 15, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = title or "RhyRu9 UI"
+    Title.TextColor3 = theme.Text
+    Title.TextSize = 16
+    Title.Font = Enum.Font.GothamBold
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Parent = Topbar
+    
+    -- Close Button
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Name = "CloseBtn"
+    CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+    CloseBtn.Position = UDim2.new(1, -35, 0.5, -15)
+    CloseBtn.BackgroundColor3 = theme.Error
+    CloseBtn.Text = "×"
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.TextSize = 18
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.BorderSizePixel = 0
+    CloseBtn.Parent = Topbar
+    
+    local CloseCorner = Instance.new("UICorner")
+    CloseCorner.CornerRadius = UDim.new(0, 6)
+    CloseCorner.Parent = CloseBtn
+    
+    -- Minimize Button
+    local MinimizeBtn = Instance.new("TextButton")
+    MinimizeBtn.Name = "MinimizeBtn"
+    MinimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+    MinimizeBtn.Position = UDim2.new(1, -70, 0.5, -15)
+    MinimizeBtn.BackgroundColor3 = theme.Warning
+    MinimizeBtn.Text = "−"
+    MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinimizeBtn.TextSize = 18
+    MinimizeBtn.Font = Enum.Font.GothamBold
+    MinimizeBtn.BorderSizePixel = 0
+    MinimizeBtn.Parent = Topbar
+    
+    local MinimizeCorner = Instance.new("UICorner")
+    MinimizeCorner.CornerRadius = UDim.new(0, 6)
+    MinimizeCorner.Parent = MinimizeBtn
+    
+    -- Content Area
+    local ContentArea = Instance.new("Frame")
+    ContentArea.Name = "ContentArea"
+    ContentArea.Size = UDim2.new(1, -20, 1, -60)
+    ContentArea.Position = UDim2.new(0, 10, 0, 50)
+    ContentArea.BackgroundTransparency = 1
+    ContentArea.BorderSizePixel = 0
+    ContentArea.Parent = Main
+    
+    -- Tab List Container
+    local TabListContainer = Instance.new("Frame")
+    TabListContainer.Name = "TabListContainer"
+    TabListContainer.Size = UDim2.new(0, 150, 1, 0)
+    TabListContainer.BackgroundTransparency = 1
+    TabListContainer.BorderSizePixel = 0
+    TabListContainer.Parent = ContentArea
+    
+    local TabList = Instance.new("ScrollingFrame")
+    TabList.Name = "TabList"
+    TabList.Size = UDim2.new(1, 0, 1, 0)
+    TabList.BackgroundTransparency = 1
+    TabList.BorderSizePixel = 0
+    TabList.ScrollBarThickness = 4
+    TabList.ScrollBarImageColor3 = theme.Accent
+    TabList.CanvasSize = UDim2.new(0, 0, 0, 0)
+    TabList.Parent = TabListContainer
+    
+    local TabListLayout = Instance.new("UIListLayout")
+    TabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    TabListLayout.Padding = UDim.new(0, 5)
+    TabListLayout.Parent = TabList
+    
+    local TabListPadding = Instance.new("UIPadding")
+    TabListPadding.PaddingTop = UDim.new(0, 5)
+    TabListPadding.PaddingLeft = UDim.new(0, 5)
+    TabListPadding.Parent = TabList
+    
+    -- Content Container
+    local ContentContainer = Instance.new("Frame")
+    ContentContainer.Name = "ContentContainer"
+    ContentContainer.Size = UDim2.new(1, -160, 1, 0)
+    ContentContainer.Position = UDim2.new(0, 160, 0, 0)
+    ContentContainer.BackgroundTransparency = 1
+    ContentContainer.BorderSizePixel = 0
+    ContentContainer.Parent = ContentArea
+    
+    TabListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        TabList.CanvasSize = UDim2.new(0, 0, 0, TabListLayout.AbsoluteContentSize.Y + 10)
+    end)
+    
     return {
-        ElementsCreated = self.Stats.ElementsCreated,
-        CallbacksFired = self.Stats.CallbacksFired,
-        ErrorsOccurred = self.Stats.ErrorsOccurred,
-        Uptime = self:GetUptime(),
-        Windows = #RhyRu9.Windows,
-        Flags = #RhyRu9.Flags
+        Main = Main,
+        Topbar = Topbar,
+        Title = Title,
+        CloseBtn = CloseBtn,
+        MinimizeBtn = MinimizeBtn,
+        TabList = TabList,
+        ContentContainer = ContentContainer
     }
+end
+
+function Components:CreateTab(parent, name)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Tab = Instance.new("TextButton")
+    Tab.Name = name
+    Tab.Size = UDim2.new(1, -10, 0, 35)
+    Tab.BackgroundColor3 = theme.Tertiary
+    Tab.Text = ""
+    Tab.AutoButtonColor = false
+    Tab.BorderSizePixel = 0
+    Tab.Parent = parent
+    
+    local TabCorner = Instance.new("UICorner")
+    TabCorner.CornerRadius = UDim.new(0, 6)
+    TabCorner.Parent = Tab
+    
+    local Label = Instance.new("TextLabel")
+    Label.Name = "Label"
+    Label.Size = UDim2.new(1, -10, 1, 0)
+    Label.Position = UDim2.new(0, 10, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = name
+    Label.TextColor3 = theme.TextDark
+    Label.TextSize = 14
+    Label.Font = Enum.Font.Gotham
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Parent = Tab
+    
+    Tab.MouseEnter:Connect(function()
+        if not Tab:GetAttribute("Selected") then
+            Utility:Tween(Tab, {BackgroundColor3 = theme.Hover})
+        end
+    end)
+    
+    Tab.MouseLeave:Connect(function()
+        if not Tab:GetAttribute("Selected") then
+            Utility:Tween(Tab, {BackgroundColor3 = theme.Tertiary})
+        end
+    end)
+    
+    return Tab
+end
+
+function Components:CreateTabContent(parent, name)
+    local theme = RhyRu9.CurrentTheme
+    
+    local TabContent = Instance.new("ScrollingFrame")
+    TabContent.Name = name
+    TabContent.Size = UDim2.new(1, 0, 1, 0)
+    TabContent.BackgroundTransparency = 1
+    TabContent.BorderSizePixel = 0
+    TabContent.ScrollBarThickness = 4
+    TabContent.ScrollBarImageColor3 = theme.Accent
+    TabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
+    TabContent.Visible = false
+    TabContent.Parent = parent
+    
+    local Layout = Instance.new("UIListLayout")
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
+    Layout.Padding = UDim.new(0, 10)
+    Layout.Parent = TabContent
+    
+    local Padding = Instance.new("UIPadding")
+    Padding.PaddingTop = UDim.new(0, 5)
+    Padding.PaddingLeft = UDim.new(0, 5)
+    Padding.PaddingRight = UDim.new(0, 5)
+    Padding.Parent = TabContent
+    
+    Layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        TabContent.CanvasSize = UDim2.new(0, 0, 0, Layout.AbsoluteContentSize.Y + 10)
+    end)
+    
+    return TabContent
+end
+
+function Components:CreateSection(parent, title)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Section = Instance.new("Frame")
+    Section.Name = title
+    Section.Size = UDim2.new(1, -10, 0, 40)
+    Section.BackgroundColor3 = theme.Secondary
+    Section.BorderSizePixel = 0
+    Section.Parent = parent
+    
+    local SectionCorner = Instance.new("UICorner")
+    SectionCorner.CornerRadius = UDim.new(0, 6)
+    SectionCorner.Parent = Section
+    
+    local SectionStroke = Instance.new("UIStroke")
+    SectionStroke.Color = theme.Border
+    SectionStroke.Thickness = 1
+    SectionStroke.Parent = Section
+    
+    local SectionLabel = Instance.new("TextLabel")
+    SectionLabel.Name = "Label"
+    SectionLabel.Size = UDim2.new(1, -20, 1, 0)
+    SectionLabel.Position = UDim2.new(0, 10, 0, 0)
+    SectionLabel.BackgroundTransparency = 1
+    SectionLabel.Text = title
+    SectionLabel.TextColor3 = theme.Text
+    SectionLabel.TextSize = 14
+    SectionLabel.Font = Enum.Font.GothamBold
+    SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+    SectionLabel.Parent = Section
+    
+    local ContentContainer = Instance.new("Frame")
+    ContentContainer.Name = "Content"
+    ContentContainer.Size = UDim2.new(1, 0, 0, 0)
+    ContentContainer.Position = UDim2.new(0, 0, 1, 5)
+    ContentContainer.BackgroundTransparency = 1
+    ContentContainer.BorderSizePixel = 0
+    ContentContainer.Parent = Section
+    
+    local ContentLayout = Instance.new("UIListLayout")
+    ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    ContentLayout.Padding = UDim.new(0, 5)
+    ContentLayout.Parent = ContentContainer
+    
+    ContentLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        ContentContainer.Size = UDim2.new(1, 0, 0, ContentLayout.AbsoluteContentSize.Y)
+        Section.Size = UDim2.new(1, -10, 0, 40 + ContentLayout.AbsoluteContentSize.Y + 5)
+    end)
+    
+    return ContentContainer
+end
+
+function Components:CreateButton(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Button = Instance.new("TextButton")
+    Button.Name = config.Name
+    Button.Size = UDim2.new(1, 0, 0, 35)
+    Button.BackgroundColor3 = theme.Accent
+    Button.Text = ""
+    Button.AutoButtonColor = false
+    Button.BorderSizePixel = 0
+    Button.Parent = parent
+    
+    local ButtonCorner = Instance.new("UICorner")
+    ButtonCorner.CornerRadius = UDim.new(0, 6)
+    ButtonCorner.Parent = Button
+    
+    local ButtonLabel = Instance.new("TextLabel")
+    ButtonLabel.Name = "Label"
+    ButtonLabel.Size = UDim2.new(1, 0, 1, 0)
+    ButtonLabel.BackgroundTransparency = 1
+    ButtonLabel.Text = config.Name
+    ButtonLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ButtonLabel.TextSize = 14
+    ButtonLabel.Font = Enum.Font.Gotham
+    ButtonLabel.Parent = Button
+    
+    Button.MouseEnter:Connect(function()
+        Utility:Tween(Button, {BackgroundColor3 = theme.Accent:Lerp(Color3.fromRGB(255, 255, 255), 0.2)})
+    end)
+    
+    Button.MouseLeave:Connect(function()
+        Utility:Tween(Button, {BackgroundColor3 = theme.Accent})
+    end)
+    
+    Button.MouseButton1Down:Connect(function()
+        Utility:Tween(Button, {Size = UDim2.new(1, -2, 0, 33)}, 0.1)
+    end)
+    
+    Button.MouseButton1Up:Connect(function()
+        Utility:Tween(Button, {Size = UDim2.new(1, 0, 0, 35)}, 0.1)
+    end)
+    
+    Button.MouseButton1Click:Connect(function()
+        if config.Callback then
+            task.spawn(config.Callback)
+        end
+        
+        EventSystem:Fire("ButtonClicked", config.Name)
+    end)
+    
+    return {
+        Frame = Button,
+        Fire = function() 
+            if config.Callback then
+                task.spawn(config.Callback)
+            end
+        end
+    }
+end
+
+function Components:CreateToggle(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Toggle = Instance.new("Frame")
+    Toggle.Name = config.Name
+    Toggle.Size = UDim2.new(1, 0, 0, 35)
+    Toggle.BackgroundColor3 = theme.Secondary
+    Toggle.BorderSizePixel = 0
+    Toggle.Parent = parent
+    
+    local ToggleCorner = Instance.new("UICorner")
+    ToggleCorner.CornerRadius = UDim.new(0, 6)
+    ToggleCorner.Parent = Toggle
+    
+    local ToggleStroke = Instance.new("UIStroke")
+    ToggleStroke.Color = theme.Border
+    ToggleStroke.Thickness = 1
+    ToggleStroke.Parent = Toggle
+    
+    local ToggleLabel = Instance.new("TextLabel")
+    ToggleLabel.Name = "Label"
+    ToggleLabel.Size = UDim2.new(0.7, 0, 1, 0)
+    ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
+    ToggleLabel.BackgroundTransparency = 1
+    ToggleLabel.Text = config.Name
+    ToggleLabel.TextColor3 = theme.Text
+    ToggleLabel.TextSize = 14
+    ToggleLabel.Font = Enum.Font.Gotham
+    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ToggleLabel.Parent = Toggle
+    
+    -- Toggle Switch
+    local ToggleSwitch = Instance.new("TextButton")
+    ToggleSwitch.Name = "Switch"
+    ToggleSwitch.Size = UDim2.new(0, 40, 0, 20)
+    ToggleSwitch.Position = UDim2.new(1, -50, 0.5, -10)
+    ToggleSwitch.BackgroundColor3 = theme.Tertiary
+    ToggleSwitch.Text = ""
+    ToggleSwitch.AutoButtonColor = false
+    ToggleSwitch.BorderSizePixel = 0
+    ToggleSwitch.Parent = Toggle
+    
+    local SwitchCorner = Instance.new("UICorner")
+    SwitchCorner.CornerRadius = UDim.new(1, 0)
+    SwitchCorner.Parent = ToggleSwitch
+    
+    local ToggleThumb = Instance.new("Frame")
+    ToggleThumb.Name = "Thumb"
+    ToggleThumb.Size = UDim2.new(0, 16, 0, 16)
+    ToggleThumb.Position = UDim2.new(0, 2, 0.5, -8)
+    ToggleThumb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleThumb.BorderSizePixel = 0
+    ToggleThumb.Parent = ToggleSwitch
+    
+    local ThumbCorner = Instance.new("UICorner")
+    ThumbCorner.CornerRadius = UDim.new(1, 0)
+    ThumbCorner.Parent = ToggleThumb
+    
+    local State = config.Default or false
+    
+    local function UpdateToggle()
+        if State then
+            Utility:Tween(ToggleSwitch, {BackgroundColor3 = theme.Accent}, 0.2)
+            Utility:Tween(ToggleThumb, {Position = UDim2.new(1, -18, 0.5, -8)}, 0.2)
+        else
+            Utility:Tween(ToggleSwitch, {BackgroundColor3 = theme.Tertiary}, 0.2)
+            Utility:Tween(ToggleThumb, {Position = UDim2.new(0, 2, 0.5, -8)}, 0.2)
+        end
+    end
+    
+    ToggleSwitch.MouseButton1Click:Connect(function()
+        State = not State
+        UpdateToggle()
+        
+        if config.Callback then
+            task.spawn(config.Callback, State)
+        end
+        
+        EventSystem:Fire("ToggleChanged", config.Name, State)
+    end)
+    
+    -- Initial state
+    UpdateToggle()
+    
+    return {
+        Frame = Toggle,
+        Set = function(value)
+            State = value
+            UpdateToggle()
+        end,
+        GetValue = function() return State end,
+        Toggle = function() 
+            State = not State
+            UpdateToggle()
+            if config.Callback then
+                task.spawn(config.Callback, State)
+            end
+        end
+    }
+end
+
+function Components:CreateSlider(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Slider = Instance.new("Frame")
+    Slider.Name = config.Name
+    Slider.Size = UDim2.new(1, 0, 0, 60)
+    Slider.BackgroundColor3 = theme.Secondary
+    Slider.BorderSizePixel = 0
+    Slider.Parent = parent
+    
+    local SliderCorner = Instance.new("UICorner")
+    SliderCorner.CornerRadius = UDim.new(0, 6)
+    SliderCorner.Parent = Slider
+    
+    local SliderStroke = Instance.new("UIStroke")
+    SliderStroke.Color = theme.Border
+    SliderStroke.Thickness = 1
+    SliderStroke.Parent = Slider
+    
+    -- Slider Label
+    local SliderLabel = Instance.new("TextLabel")
+    SliderLabel.Name = "Label"
+    SliderLabel.Size = UDim2.new(0.6, 0, 0, 20)
+    SliderLabel.Position = UDim2.new(0, 10, 0, 5)
+    SliderLabel.BackgroundTransparency = 1
+    SliderLabel.Text = config.Name
+    SliderLabel.TextColor3 = theme.Text
+    SliderLabel.TextSize = 14
+    SliderLabel.Font = Enum.Font.Gotham
+    SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+    SliderLabel.Parent = Slider
+    
+    -- Value Label
+    local ValueLabel = Instance.new("TextLabel")
+    ValueLabel.Name = "Value"
+    ValueLabel.Size = UDim2.new(0.35, 0, 0, 20)
+    ValueLabel.Position = UDim2.new(0.6, 0, 0, 5)
+    ValueLabel.BackgroundTransparency = 1
+    ValueLabel.Text = "0"
+    ValueLabel.TextColor3 = theme.Text
+    ValueLabel.TextSize = 14
+    ValueLabel.Font = Enum.Font.Gotham
+    ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+    ValueLabel.Parent = Slider
+    
+    -- Slider Track
+    local SliderTrack = Instance.new("Frame")
+    SliderTrack.Name = "Track"
+    SliderTrack.Size = UDim2.new(1, -20, 0, 6)
+    SliderTrack.Position = UDim2.new(0, 10, 1, -20)
+    SliderTrack.BackgroundColor3 = theme.Tertiary
+    SliderTrack.BorderSizePixel = 0
+    SliderTrack.Parent = Slider
+    
+    local TrackCorner = Instance.new("UICorner")
+    TrackCorner.CornerRadius = UDim.new(1, 0)
+    TrackCorner.Parent = SliderTrack
+    
+    -- Slider Fill
+    local SliderFill = Instance.new("Frame")
+    SliderFill.Name = "Fill"
+    SliderFill.Size = UDim2.new(0, 0, 1, 0)
+    SliderFill.BackgroundColor3 = theme.Accent
+    SliderFill.BorderSizePixel = 0
+    SliderFill.Parent = SliderTrack
+    
+    local FillCorner = Instance.new("UICorner")
+    FillCorner.CornerRadius = UDim.new(1, 0)
+    FillCorner.Parent = SliderFill
+    
+    -- Slider Thumb
+    local SliderThumb = Instance.new("Frame")
+    SliderThumb.Name = "Thumb"
+    SliderThumb.Size = UDim2.new(0, 16, 0, 16)
+    SliderThumb.Position = UDim2.new(0, -8, 0.5, -8)
+    SliderThumb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SliderThumb.BorderSizePixel = 0
+    SliderThumb.Parent = SliderFill
+    
+    local ThumbCorner = Instance.new("UICorner")
+    ThumbCorner.CornerRadius = UDim.new(1, 0)
+    ThumbCorner.Parent = SliderThumb
+    
+    local ThumbStroke = Instance.new("UIStroke")
+    ThumbStroke.Color = theme.Accent
+    ThumbStroke.Thickness = 2
+    ThumbStroke.Parent = SliderThumb
+    
+    -- Values
+    local Min = config.Min or 0
+    local Max = config.Max or 100
+    local Increment = config.Increment or 1
+    local Value = config.Default or Min
+    local Suffix = config.Suffix or ""
+    
+    local Dragging = false
+    
+    local function UpdateSlider(newValue)
+        newValue = math.clamp(newValue, Min, Max)
+        newValue = Utility:Round(newValue / Increment) * Increment
+        Value = newValue
+        
+        local Percent = (Value - Min) / (Max - Min)
+        
+        Utility:Tween(SliderFill, {Size = UDim2.new(Percent, 0, 1, 0)}, 0.1)
+        ValueLabel.Text = tostring(Value) .. Suffix
+        
+        if config.Callback then
+            task.spawn(config.Callback, Value)
+        end
+        
+        EventSystem:Fire("SliderChanged", config.Name, Value)
+    end
+    
+    -- Initial Update
+    UpdateSlider(Value)
+    
+    -- Input Handling
+    local function HandleInput(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = true
+            Utility:Tween(SliderThumb, {Size = UDim2.new(0, 20, 0, 20), Position = UDim2.new(0, -10, 0.5, -10)}, 0.1)
+        end
+    end
+    
+    SliderTrack.InputBegan:Connect(HandleInput)
+    SliderThumb.InputBegan:Connect(HandleInput)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = false
+            Utility:Tween(SliderThumb, {Size = UDim2.new(0, 16, 0, 16), Position = UDim2.new(0, -8, 0.5, -8)}, 0.1)
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local Mouse = UserInputService:GetMouseLocation()
+            local RelativeX = math.clamp(Mouse.X - SliderTrack.AbsolutePosition.X, 0, SliderTrack.AbsoluteSize.X)
+            local Percent = RelativeX / SliderTrack.AbsoluteSize.X
+            local NewValue = Min + (Max - Min) * Percent
+            UpdateSlider(NewValue)
+        end
+    end)
+    
+    return {
+        Frame = Slider,
+        Set = UpdateSlider,
+        GetValue = function() return Value end
+    }
+end
+
+function Components:CreateInput(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Input = Instance.new("Frame")
+    Input.Name = config.Name
+    Input.Size = UDim2.new(1, 0, 0, 40)
+    Input.BackgroundColor3 = theme.Secondary
+    Input.BorderSizePixel = 0
+    Input.Parent = parent
+    
+    local InputCorner = Instance.new("UICorner")
+    InputCorner.CornerRadius = UDim.new(0, 6)
+    InputCorner.Parent = Input
+    
+    local InputStroke = Instance.new("UIStroke")
+    InputStroke.Color = theme.Border
+    InputStroke.Thickness = 1
+    InputStroke.Parent = Input
+    
+    local InputLabel = Instance.new("TextLabel")
+    InputLabel.Name = "Label"
+    InputLabel.Size = UDim2.new(0.4, 0, 1, 0)
+    InputLabel.Position = UDim2.new(0, 10, 0, 0)
+    InputLabel.BackgroundTransparency = 1
+    InputLabel.Text = config.Name
+    InputLabel.TextColor3 = theme.Text
+    InputLabel.TextSize = 14
+    InputLabel.Font = Enum.Font.Gotham
+    InputLabel.TextXAlignment = Enum.TextXAlignment.Left
+    InputLabel.Parent = Input
+    
+    -- Input Box Container
+    local InputBoxContainer = Instance.new("Frame")
+    InputBoxContainer.Name = "InputContainer"
+    InputBoxContainer.Size = UDim2.new(0.55, 0, 0, 30)
+    InputBoxContainer.Position = UDim2.new(0.43, 0, 0.5, -15)
+    InputBoxContainer.BackgroundColor3 = theme.Tertiary
+    InputBoxContainer.BorderSizePixel = 0
+    InputBoxContainer.Parent = Input
+    
+    local InputBoxCorner = Instance.new("UICorner")
+    InputBoxCorner.CornerRadius = UDim.new(0, 6)
+    InputBoxCorner.Parent = InputBoxContainer
+    
+    local InputBox = Instance.new("TextBox")
+    InputBox.Name = "Box"
+    InputBox.Size = UDim2.new(1, -10, 1, 0)
+    InputBox.Position = UDim2.new(0, 5, 0, 0)
+    InputBox.BackgroundTransparency = 1
+    InputBox.Text = config.Default or ""
+    InputBox.PlaceholderText = config.Placeholder or "Enter text..."
+    InputBox.TextColor3 = theme.Text
+    InputBox.PlaceholderColor3 = theme.TextDark
+    InputBox.TextSize = 13
+    InputBox.Font = Enum.Font.Gotham
+    InputBox.TextXAlignment = Enum.TextXAlignment.Left
+    InputBox.ClearTextOnFocus = false
+    InputBox.Parent = InputBoxContainer
+    
+    -- Focus Effects
+    InputBox.Focused:Connect(function()
+        Utility:Tween(InputStroke, {Color = theme.Accent, Thickness = 2})
+        Utility:Tween(InputBoxContainer, {BackgroundColor3 = theme.Background})
+    end)
+    
+    InputBox.FocusLost:Connect(function(enterPressed)
+        Utility:Tween(InputStroke, {Color = theme.Border, Thickness = 1})
+        Utility:Tween(InputBoxContainer, {BackgroundColor3 = theme.Tertiary})
+        
+        if config.Callback then
+            task.spawn(config.Callback, InputBox.Text)
+        end
+        
+        EventSystem:Fire("InputChanged", config.Name, InputBox.Text)
+    end)
+    
+    return {
+        Frame = Input,
+        Set = function(text) InputBox.Text = text end,
+        GetValue = function() return InputBox.Text end
+    }
+end
+
+function Components:CreateDropdown(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Dropdown = Instance.new("Frame")
+    Dropdown.Name = config.Name
+    Dropdown.Size = UDim2.new(1, 0, 0, 40)
+    Dropdown.BackgroundColor3 = theme.Secondary
+    Dropdown.BorderSizePixel = 0
+    Dropdown.ClipsDescendants = false
+    Dropdown.Parent = parent
+    
+    local DropdownCorner = Instance.new("UICorner")
+    DropdownCorner.CornerRadius = UDim.new(0, 6)
+    DropdownCorner.Parent = Dropdown
+    
+    local DropdownStroke = Instance.new("UIStroke")
+    DropdownStroke.Color = theme.Border
+    DropdownStroke.Thickness = 1
+    DropdownStroke.Parent = Dropdown
+    
+    local DropdownLabel = Instance.new("TextLabel")
+    DropdownLabel.Name = "Label"
+    DropdownLabel.Size = UDim2.new(0.4, 0, 0, 40)
+    DropdownLabel.Position = UDim2.new(0, 10, 0, 0)
+    DropdownLabel.BackgroundTransparency = 1
+    DropdownLabel.Text = config.Name
+    DropdownLabel.TextColor3 = theme.Text
+    DropdownLabel.TextSize = 14
+    DropdownLabel.Font = Enum.Font.Gotham
+    DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+    DropdownLabel.Parent = Dropdown
+    
+    -- Selected Display
+    local SelectedButton = Instance.new("TextButton")
+    SelectedButton.Name = "Selected"
+    SelectedButton.Size = UDim2.new(0.55, 0, 0, 30)
+    SelectedButton.Position = UDim2.new(0.43, 0, 0, 5)
+    SelectedButton.BackgroundColor3 = theme.Tertiary
+    SelectedButton.Text = ""
+    SelectedButton.AutoButtonColor = false
+    SelectedButton.BorderSizePixel = 0
+    SelectedButton.Parent = Dropdown
+    
+    local SelectedCorner = Instance.new("UICorner")
+    SelectedCorner.CornerRadius = UDim.new(0, 6)
+    SelectedCorner.Parent = SelectedButton
+    
+    local SelectedText = Instance.new("TextLabel")
+    SelectedText.Name = "Text"
+    SelectedText.Size = UDim2.new(1, -30, 1, 0)
+    SelectedText.Position = UDim2.new(0, 10, 0, 0)
+    SelectedText.BackgroundTransparency = 1
+    SelectedText.Text = config.Default or "Select..."
+    SelectedText.TextColor3 = theme.Text
+    SelectedText.TextSize = 13
+    SelectedText.Font = Enum.Font.Gotham
+    SelectedText.TextXAlignment = Enum.TextXAlignment.Left
+    SelectedText.Parent = SelectedButton
+    
+    -- Arrow Icon
+    local Arrow = Instance.new("TextLabel")
+    Arrow.Name = "Arrow"
+    Arrow.Size = UDim2.new(0, 20, 1, 0)
+    Arrow.Position = UDim2.new(1, -25, 0, 0)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Text = "▼"
+    Arrow.TextColor3 = theme.TextDark
+    Arrow.TextSize = 12
+    Arrow.Font = Enum.Font.Gotham
+    Arrow.Parent = SelectedButton
+    
+    -- Options Container
+    local OptionsContainer = Instance.new("Frame")
+    OptionsContainer.Name = "Options"
+    OptionsContainer.Size = UDim2.new(0.55, 0, 0, 0)
+    OptionsContainer.Position = UDim2.new(0.43, 0, 0, 40)
+    OptionsContainer.BackgroundColor3 = theme.Tertiary
+    OptionsContainer.BorderSizePixel = 0
+    OptionsContainer.ClipsDescendants = true
+    OptionsContainer.Visible = false
+    OptionsContainer.ZIndex = 10
+    OptionsContainer.Parent = Dropdown
+    
+    local OptionsCorner = Instance.new("UICorner")
+    OptionsCorner.CornerRadius = UDim.new(0, 6)
+    OptionsCorner.Parent = OptionsContainer
+    
+    local OptionsList = Instance.new("ScrollingFrame")
+    OptionsList.Name = "List"
+    OptionsList.Size = UDim2.new(1, 0, 1, 0)
+    OptionsList.BackgroundTransparency = 1
+    OptionsList.BorderSizePixel = 0
+    OptionsList.ScrollBarThickness = 4
+    OptionsList.ScrollBarImageColor3 = theme.Accent
+    OptionsList.CanvasSize = UDim2.new(0, 0, 0, 0)
+    OptionsList.Parent = OptionsContainer
+    
+    local OptionsLayout = Instance.new("UIListLayout")
+    OptionsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    OptionsLayout.Padding = UDim.new(0, 2)
+    OptionsLayout.Parent = OptionsList
+    
+    local OptionsPadding = Instance.new("UIPadding")
+    OptionsPadding.PaddingTop = UDim.new(0, 5)
+    OptionsPadding.PaddingBottom = UDim.new(0, 5)
+    OptionsPadding.PaddingLeft = UDim.new(0, 5)
+    OptionsPadding.PaddingRight = UDim.new(0, 5)
+    OptionsPadding.Parent = OptionsList
+    
+    local IsOpen = false
+    local CurrentValue = config.Default
+    
+    -- Create Options
+    for _, option in ipairs(config.Options or {}) do
+        local OptionButton = Instance.new("TextButton")
+        OptionButton.Name = option
+        OptionButton.Size = UDim2.new(1, -10, 0, 30)
+        OptionButton.BackgroundColor3 = theme.Secondary
+        OptionButton.Text = ""
+        OptionButton.AutoButtonColor = false
+        OptionButton.BorderSizePixel = 0
+        OptionButton.Parent = OptionsList
+        
+        local OptionCorner = Instance.new("UICorner")
+        OptionCorner.CornerRadius = UDim.new(0, 4)
+        OptionCorner.Parent = OptionButton
+        
+        local OptionLabel = Instance.new("TextLabel")
+        OptionLabel.Size = UDim2.new(1, -10, 1, 0)
+        OptionLabel.Position = UDim2.new(0, 10, 0, 0)
+        OptionLabel.BackgroundTransparency = 1
+        OptionLabel.Text = option
+        OptionLabel.TextColor3 = theme.Text
+        OptionLabel.TextSize = 13
+        OptionLabel.Font = Enum.Font.Gotham
+        OptionLabel.TextXAlignment = Enum.TextXAlignment.Left
+        OptionLabel.Parent = OptionButton
+        
+        OptionButton.MouseEnter:Connect(function()
+            Utility:Tween(OptionButton, {BackgroundColor3 = theme.Hover})
+        end)
+        
+        OptionButton.MouseLeave:Connect(function()
+            Utility:Tween(OptionButton, {BackgroundColor3 = theme.Secondary})
+        end)
+        
+        OptionButton.MouseButton1Click:Connect(function()
+            CurrentValue = option
+            SelectedText.Text = option
+            
+            -- Close dropdown
+            IsOpen = false
+            Utility:Tween(Arrow, {Rotation = 0}, 0.2)
+            Utility:Tween(OptionsContainer, {Size = UDim2.new(0.55, 0, 0, 0)}, 0.2)
+            task.wait(0.2)
+            OptionsContainer.Visible = false
+            
+            if config.Callback then
+                task.spawn(config.Callback, option)
+            end
+            
+            EventSystem:Fire("DropdownChanged", config.Name, option)
+        end)
+    end
+    
+    OptionsLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        OptionsList.CanvasSize = UDim2.new(0, 0, 0, OptionsLayout.AbsoluteContentSize.Y + 10)
+    end)
+    
+    -- Toggle Dropdown
+    SelectedButton.MouseButton1Click:Connect(function()
+        IsOpen = not IsOpen
+        
+        if IsOpen then
+            OptionsContainer.Visible = true
+            local contentHeight = math.min(OptionsLayout.AbsoluteContentSize.Y + 10, 150)
+            Utility:Tween(Arrow, {Rotation = 180}, 0.2)
+            Utility:Tween(OptionsContainer, {Size = UDim2.new(0.55, 0, 0, contentHeight)}, 0.2)
+            Utility:Tween(Dropdown, {Size = UDim2.new(1, 0, 0, 40 + contentHeight + 5)}, 0.2)
+        else
+            Utility:Tween(Arrow, {Rotation = 0}, 0.2)
+            Utility:Tween(OptionsContainer, {Size = UDim2.new(0.55, 0, 0, 0)}, 0.2)
+            Utility:Tween(Dropdown, {Size = UDim2.new(1, 0, 0, 40)}, 0.2)
+            task.wait(0.2)
+            OptionsContainer.Visible = false
+        end
+    end)
+    
+    return {
+        Frame = Dropdown,
+        Set = function(value)
+            CurrentValue = value
+            SelectedText.Text = value
+        end,
+        GetValue = function() return CurrentValue end,
+        Refresh = function(newOptions)
+            for _, child in ipairs(OptionsList:GetChildren()) do
+                if child:IsA("TextButton") then
+                    child:Destroy()
+                end
+            end
+            
+            for _, option in ipairs(newOptions) do
+                -- Recreate options (same code as above)
+                local OptionButton = Instance.new("TextButton")
+                OptionButton.Name = option
+                OptionButton.Size = UDim2.new(1, -10, 0, 30)
+                OptionButton.BackgroundColor3 = theme.Secondary
+                OptionButton.Text = ""
+                OptionButton.AutoButtonColor = false
+                OptionButton.BorderSizePixel = 0
+                OptionButton.Parent = OptionsList
+                
+                local OptionCorner = Instance.new("UICorner")
+                OptionCorner.CornerRadius = UDim.new(0, 4)
+                OptionCorner.Parent = OptionButton
+                
+                local OptionLabel = Instance.new("TextLabel")
+                OptionLabel.Size = UDim2.new(1, -10, 1, 0)
+                OptionLabel.Position = UDim2.new(0, 10, 0, 0)
+                OptionLabel.BackgroundTransparency = 1
+                OptionLabel.Text = option
+                OptionLabel.TextColor3 = theme.Text
+                OptionLabel.TextSize = 13
+                OptionLabel.Font = Enum.Font.Gotham
+                OptionLabel.TextXAlignment = Enum.TextXAlignment.Left
+                OptionLabel.Parent = OptionButton
+                
+                OptionButton.MouseEnter:Connect(function()
+                    Utility:Tween(OptionButton, {BackgroundColor3 = theme.Hover})
+                end)
+                
+                OptionButton.MouseLeave:Connect(function()
+                    Utility:Tween(OptionButton, {BackgroundColor3 = theme.Secondary})
+                end)
+                
+                OptionButton.MouseButton1Click:Connect(function()
+                    CurrentValue = option
+                    SelectedText.Text = option
+                    IsOpen = false
+                    Utility:Tween(Arrow, {Rotation = 0}, 0.2)
+                    Utility:Tween(OptionsContainer, {Size = UDim2.new(0.55, 0, 0, 0)}, 0.2)
+                    task.wait(0.2)
+                    OptionsContainer.Visible = false
+                    
+                    if config.Callback then
+                        task.spawn(config.Callback, option)
+                    end
+                end)
+            end
+        end
+    }
+end
+
+function Components:CreateLabel(parent, config)
+    local theme = RhyRu9.CurrentTheme
+    
+    local Label = Instance.new("Frame")
+    Label.Name = config.Name or "Label"
+    Label.Size = UDim2.new(1, 0, 0, 30)
+    Label.BackgroundTransparency = 1
+    Label.BorderSizePixel = 0
+    Label.Parent = parent
+    
+    local LabelText = Instance.new("TextLabel")
+    LabelText.Name = "Text"
+    LabelText.Size = UDim2.new(1, -10, 1, 0)
+    LabelText.Position = UDim2.new(0, 10, 0, 0)
+    LabelText.BackgroundTransparency = 1
+    LabelText.Text = config.Text or ""
+    LabelText.TextColor3 = theme.TextDark
+    LabelText.TextSize = 13
+    LabelText.Font = Enum.Font.Gotham
+    LabelText.TextXAlignment = Enum.TextXAlignment.Left
+    LabelText.TextWrapped = true
+    LabelText.Parent = Label
+    
+    return {
+        Frame = Label,
+        Set = function(text) LabelText.Text = text end
+    }
+end
+
+-- ===== NOTIFICATION SYSTEM =====
+local Notifications = {}
+Notifications.Queue = {}
+Notifications.Active = {}
+Notifications.Container = nil
+
+function Notifications:Initialize(parent)
+    if self.Container then return end
+    
+    local theme = RhyRu9.CurrentTheme
+    
+    self.Container = Instance.new("Frame")
+    self.Container.Name = "Notifications"
+    self.Container.Size = UDim2.new(0, 300, 1, 0)
+    self.Container.Position = UDim2.new(1, -310, 0, 10)
+    self.Container.BackgroundTransparency = 1
+    self.Container.BorderSizePixel = 0
+    self.Container.Parent = parent
+    
+    local Layout = Instance.new("UIListLayout")
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
+    Layout.Padding = UDim.new(0, 10)
+    Layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+    Layout.Parent = self.Container
+end
+
+function Notifications:Create(config)
+    if not self.Container then return end
+    
+    local theme = RhyRu9.CurrentTheme
+    
+    local Notification = Instance.new("Frame")
+    Notification.Name = "Notification"
+    Notification.Size = UDim2.new(1, 0, 0, 0)
+    Notification.BackgroundColor3 = theme.Secondary
+    Notification.BorderSizePixel = 0
+    Notification.ClipsDescendants = true
+    Notification.Parent = self.Container
+    
+    local NotifCorner = Instance.new("UICorner")
+    NotifCorner.CornerRadius = UDim.new(0, 8)
+    NotifCorner.Parent = Notification
+    
+    local NotifStroke = Instance.new("UIStroke")
+    NotifStroke.Color = theme.Border
+    NotifStroke.Thickness = 1
+    NotifStroke.Parent = Notification
+    
+    -- Accent Bar
+    local AccentBar = Instance.new("Frame")
+    AccentBar.Name = "Accent"
+    AccentBar.Size = UDim2.new(0, 4, 1, 0)
+    AccentBar.BackgroundColor3 = config.Type == "Error" and theme.Error or 
+                                  config.Type == "Warning" and theme.Warning or
+                                  config.Type == "Success" and theme.Success or theme.Accent
+    AccentBar.BorderSizePixel = 0
+    AccentBar.Parent = Notification
+    
+    local AccentCorner = Instance.new("UICorner")
+    AccentCorner.CornerRadius = UDim.new(0, 8)
+    AccentCorner.Parent = AccentBar
+    
+    -- Cover right side of accent bar
+    local AccentCover = Instance.new("Frame")
+    AccentCover.Size = UDim2.new(0, 4, 1, 0)
+    AccentCover.Position = UDim2.new(1, -4, 0, 0)
+    AccentCover.BackgroundColor3 = AccentBar.BackgroundColor3
+    AccentCover.BorderSizePixel = 0
+    AccentCover.Parent = AccentBar
+    
+    -- Content Container
+    local ContentContainer = Instance.new("Frame")
+    ContentContainer.Name = "Content"
+    ContentContainer.Size = UDim2.new(1, -15, 1, -10)
+    ContentContainer.Position = UDim2.new(0, 10, 0, 5)
+    ContentContainer.BackgroundTransparency = 1
+    ContentContainer.BorderSizePixel = 0
+    ContentContainer.Parent = Notification
+    
+    -- Title
+    local Title = Instance.new("TextLabel")
+    Title.Name = "Title"
+    Title.Size = UDim2.new(1, 0, 0, 20)
+    Title.BackgroundTransparency = 1
+    Title.Text = config.Title or "Notification"
+    Title.TextColor3 = theme.Text
+    Title.TextSize = 14
+    Title.Font = Enum.Font.GothamBold
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Parent = ContentContainer
+    
+    -- Content
+    local Content = Instance.new("TextLabel")
+    Content.Name = "Message"
+    Content.Size = UDim2.new(1, 0, 1, -25)
+    Content.Position = UDim2.new(0, 0, 0, 22)
+    Content.BackgroundTransparency = 1
+    Content.Text = config.Content or ""
+    Content.TextColor3 = theme.TextDark
+    Content.TextSize = 12
+    Content.Font = Enum.Font.Gotham
+    Content.TextXAlignment = Enum.TextXAlignment.Left
+    Content.TextYAlignment = Enum.TextYAlignment.Top
+    Content.TextWrapped = true
+    Content.Parent = ContentContainer
+    
+    -- Calculate height
+    local textBounds = Content.TextBounds.Y
+    local finalHeight = math.max(textBounds + 35, 60)
+    
+    -- Animate in
+    Notification.BackgroundTransparency = 1
+    NotifStroke.Transparency = 1
+    Title.TextTransparency = 1
+    Content.TextTransparency = 1
+    
+    Utility:Tween(Notification, {Size = UDim2.new(1, 0, 0, finalHeight)}, 0.3)
+    Utility:Tween(Notification, {BackgroundTransparency = 0}, 0.3)
+    Utility:Tween(NotifStroke, {Transparency = 0}, 0.3)
+    Utility:Tween(Title, {TextTransparency = 0}, 0.3)
+    Utility:Tween(Content, {TextTransparency = 0.2}, 0.3)
+    
+    -- Auto dismiss
+    local duration = config.Duration or 3
+    task.delay(duration, function()
+        Utility:Tween(Notification, {BackgroundTransparency = 1}, 0.3)
+        Utility:Tween(NotifStroke, {Transparency = 1}, 0.3)
+        Utility:Tween(Title, {TextTransparency = 1}, 0.3)
+        Utility:Tween(Content, {TextTransparency = 1}, 0.3)
+        Utility:Tween(Notification, {Size = UDim2.new(1, 0, 0, 0)}, 0.3)
+        task.wait(0.3)
+        Notification:Destroy()
+    end)
+    
+    EventSystem:Fire("NotificationShown", config)
 end
 
 -- ===== WINDOW CLASS =====
 local Window = {}
 Window.__index = Window
 
-function RhyRu9:CreateWindow(WindowSettings)
-    WindowSettings = Utility:ValidateTable(WindowSettings, {})
+function RhyRu9:CreateWindow(config)
+    config = config or {}
     
     local self = setmetatable({}, Window)
     
-    -- Validate Settings
-    self.Name = Utility:ValidateString(WindowSettings.Name, "RhyRu9 Window")
+    self.Name = config.Name or "RhyRu9 UI"
     self.Tabs = {}
     self.CurrentTab = nil
-    self.Elements = {}
-    self.Groups = {}
-    self.ID = Utility:GenerateID()
-    self.CreatedAt = Utility:Timestamp()
+    self.UI = Components:CreateMain()
+    self.Elements = Components:CreateWindow(self.UI, self.Name)
+    self.Minimized = false
+    self.Hidden = false
     
-    -- Create Rayfield Window
-    local success, result = pcall(function()
-        return Rayfield:CreateWindow(WindowSettings)
+    -- Initialize Notifications
+    Notifications:Initialize(self.UI)
+    
+    -- Close Button
+    self.Elements.CloseBtn.MouseButton1Click:Connect(function()
+        self:Destroy()
     end)
     
-    if not success then
-        Logger:Error("Failed to create window - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
+    -- Minimize Button
+    self.Elements.MinimizeBtn.MouseButton1Click:Connect(function()
+        self:Toggle()
+    end)
     
-    self.RayfieldWindow = result
     table.insert(RhyRu9.Windows, self)
-    
     Logger:Success("Window created: " .. self.Name)
     EventSystem:Fire("WindowCreated", self)
     
     return self
 end
 
-function Window:CreateTab(TabName, Icon)
-    TabName = Utility:ValidateString(TabName, "New Tab")
-    
+function Window:CreateTab(name)
     local Tab = {
-        Name = TabName,
-        Icon = Icon,
-        Sections = {},
+        Name = name,
         Elements = {},
-        ID = Utility:GenerateID(),
-        Visible = true,
-        Enabled = true,
-        Order = #self.Tabs + 1
+        Button = Components:CreateTab(self.Elements.TabList, name),
+        Content = Components:CreateTabContent(self.Elements.ContentContainer, name)
     }
     
-    -- Create Rayfield Tab
-    local success, result = pcall(function()
-        return self.RayfieldWindow:CreateTab(TabName, Icon or 0)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create tab '" .. TabName .. "' - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    Tab.RayfieldTab = result
     table.insert(self.Tabs, Tab)
     
-    if not self.CurrentTab then
-        self.CurrentTab = Tab
+    -- First tab is automatically selected
+    if #self.Tabs == 1 then
+        self:SelectTab(Tab)
     end
+    
+    -- Tab Click
+    Tab.Button.MouseButton1Click:Connect(function()
+        self:SelectTab(Tab)
+    end)
     
     -- Enhanced Tab Methods
     local TabMethods = {
-        -- Section
-        CreateSection = function(_, SectionName)
-            return self:CreateSection(Tab, SectionName)
+        CreateSection = function(_, title)
+            return Components:CreateSection(Tab.Content, title)
         end,
         
-        -- Divider
+        CreateButton = function(_, config)
+            local element = Components:CreateButton(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Button", Element = element, Config = config})
+            if config.Flag then
+                RhyRu9.Flags[config.Flag] = element
+            end
+            return element
+        end,
+        
+        CreateToggle = function(_, config)
+            local element = Components:CreateToggle(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Toggle", Element = element, Config = config})
+            if config.Flag then
+                RhyRu9.Flags[config.Flag] = element
+            end
+            return element
+        end,
+        
+        CreateSlider = function(_, config)
+            local element = Components:CreateSlider(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Slider", Element = element, Config = config})
+            if config.Flag then
+                RhyRu9.Flags[config.Flag] = element
+            end
+            return element
+        end,
+        
+        CreateInput = function(_, config)
+            local element = Components:CreateInput(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Input", Element = element, Config = config})
+            if config.Flag then
+                RhyRu9.Flags[config.Flag] = element
+            end
+            return element
+        end,
+        
+        CreateDropdown = function(_, config)
+            local element = Components:CreateDropdown(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Dropdown", Element = element, Config = config})
+            if config.Flag then
+                RhyRu9.Flags[config.Flag] = element
+            end
+            return element
+        end,
+        
+        CreateLabel = function(_, config)
+            local element = Components:CreateLabel(Tab.Content, config)
+            table.insert(Tab.Elements, {Type = "Label", Element = element, Config = config})
+            return element
+        end,
+        
+        CreateParagraph = function(_, config)
+            return TabMethods.CreateLabel(_, {
+                Name = config.Title,
+                Text = (config.Title and config.Title .. "\n" or "") .. (config.Content or "")
+            })
+        end,
+        
         CreateDivider = function(_)
-            return self:CreateDivider(Tab)
-        end,
-        
-        -- Label
-        CreateLabel = function(_, LabelText, Icon, Color, IgnoreTheme)
-            return self:CreateLabel(Tab, LabelText, Icon, Color, IgnoreTheme)
-        end,
-        
-        -- Paragraph
-        CreateParagraph = function(_, ParagraphSettings)
-            return self:CreateParagraph(Tab, ParagraphSettings)
-        end,
-        
-        -- Button
-        CreateButton = function(_, ButtonSettings)
-            return self:CreateButton(Tab, ButtonSettings)
-        end,
-        
-        -- Toggle
-        CreateToggle = function(_, ToggleSettings)
-            return self:CreateToggle(Tab, ToggleSettings)
-        end,
-        
-        -- Slider
-        CreateSlider = function(_, SliderSettings)
-            return self:CreateSlider(Tab, SliderSettings)
-        end,
-        
-        -- Input
-        CreateInput = function(_, InputSettings)
-            return self:CreateInput(Tab, InputSettings)
-        end,
-        
-        -- Dropdown
-        CreateDropdown = function(_, DropdownSettings)
-            return self:CreateDropdown(Tab, DropdownSettings)
-        end,
-        
-        -- ColorPicker
-        CreateColorPicker = function(_, ColorPickerSettings)
-            return self:CreateColorPicker(Tab, ColorPickerSettings)
-        end,
-        
-        -- Keybind
-        CreateKeybind = function(_, KeybindSettings)
-            return self:CreateKeybind(Tab, KeybindSettings)
-        end,
-        
-        -- Tab Management
-        Hide = function(_)
-            return self:HideTab(Tab)
-        end,
-        
-        Show = function(_)
-            return self:ShowTab(Tab)
-        end,
-        
-        Enable = function(_)
-            return self:EnableTab(Tab)
-        end,
-        
-        Disable = function(_)
-            return self:DisableTab(Tab)
-        end,
-        
-        SetOrder = function(_, order)
-            return self:SetTabOrder(Tab, order)
-        end,
-        
-        -- Element Management
-        GetElements = function(_)
-            return Tab.Elements
-        end,
-        
-        FindElement = function(_, name)
-            return self:FindElement(Tab, name)
-        end,
-        
-        ClearElements = function(_)
-            return self:ClearTabElements(Tab)
+            local theme = RhyRu9.CurrentTheme
+            local Divider = Instance.new("Frame")
+            Divider.Name = "Divider"
+            Divider.Size = UDim2.new(1, 0, 0, 1)
+            Divider.BackgroundColor3 = theme.Border
+            Divider.BorderSizePixel = 0
+            Divider.Parent = Tab.Content
+            return Divider
         end
     }
     
     setmetatable(Tab, {__index = TabMethods})
     
-    Logger:Success("Tab created: " .. TabName)
+    Logger:Success("Tab created: " .. name)
     EventSystem:Fire("TabCreated", Tab)
     
     return Tab
 end
 
--- ===== TAB MANAGEMENT =====
-function Window:HideTab(Tab)
-    Tab.Visible = false
-    Logger:Info("Tab hidden: " .. Tab.Name)
-    EventSystem:Fire("TabHidden", Tab)
-end
-
-function Window:ShowTab(Tab)
-    Tab.Visible = true
-    Logger:Info("Tab shown: " .. Tab.Name)
-    EventSystem:Fire("TabShown", Tab)
-end
-
-function Window:EnableTab(Tab)
-    Tab.Enabled = true
-    Logger:Info("Tab enabled: " .. Tab.Name)
-end
-
-function Window:DisableTab(Tab)
-    Tab.Enabled = false
-    Logger:Info("Tab disabled: " .. Tab.Name)
-end
-
-function Window:SetTabOrder(Tab, order)
-    Tab.Order = order
-    table.sort(self.Tabs, function(a, b) return a.Order < b.Order end)
-    Logger:Info("Tab order changed: " .. Tab.Name .. " -> " .. order)
-end
-
-function Window:GetTabByName(name)
+function Window:SelectTab(Tab)
+    local theme = RhyRu9.CurrentTheme
+    
+    -- Hide all tabs
     for _, tab in ipairs(self.Tabs) do
-        if tab.Name == name then
-            return tab
-        end
+        tab.Content.Visible = false
+        tab.Button:SetAttribute("Selected", false)
+        Utility:Tween(tab.Button, {BackgroundColor3 = theme.Tertiary})
+        Utility:Tween(tab.Button.Label, {TextColor3 = theme.TextDark})
     end
-    return nil
+    
+    -- Show selected tab
+    Tab.Content.Visible = true
+    Tab.Button:SetAttribute("Selected", true)
+    Utility:Tween(Tab.Button, {BackgroundColor3 = theme.Accent})
+    Utility:Tween(Tab.Button.Label, {TextColor3 = Color3.fromRGB(255, 255, 255)})
+    
+    self.CurrentTab = Tab
+    EventSystem:Fire("TabSelected", Tab)
 end
 
--- ===== ELEMENT WRAPPER =====
-local function WrapElement(element, elementType, Tab, settings)
-    if not element then return nil end
-    
-    local wrapped = {
-        Type = elementType,
-        Name = settings.Name or "Unnamed",
-        ID = Utility:GenerateID(),
-        RayfieldElement = element,
-        Tab = Tab,
-        Visible = true,
-        Enabled = true,
-        Settings = settings,
-        CreatedAt = Utility:Timestamp(),
-        Dependencies = {}
-    }
-    
-    table.insert(Tab.Elements, wrapped)
-    
-    -- Enhanced methods
-    wrapped.Hide = function()
-        wrapped.Visible = false
-        Logger:Info("Element hidden: " .. wrapped.Name)
-    end
-    
-    wrapped.Show = function()
-        wrapped.Visible = true
-        Logger:Info("Element shown: " .. wrapped.Name)
-    end
-    
-    wrapped.Enable = function()
-        wrapped.Enabled = true
-        Logger:Info("Element enabled: " .. wrapped.Name)
-    end
-    
-    wrapped.Disable = function()
-        wrapped.Enabled = false
-        Logger:Info("Element disabled: " .. wrapped.Name)
-    end
-    
-    wrapped.AddDependency = function(flag, condition)
-        table.insert(wrapped.Dependencies, {Flag = flag, Condition = condition})
-    end
-    
-    wrapped.CheckDependencies = function()
-        for _, dep in ipairs(wrapped.Dependencies) do
-            local flagValue = RhyRu9:GetFlag(dep.Flag)
-            if flagValue and not dep.Condition(flagValue.CurrentValue or flagValue.CurrentKeybind) then
-                return false
-            end
-        end
-        return true
-    end
-    
-    Performance:RecordElement()
-    EventSystem:Fire("ElementCreated", wrapped)
-    
-    return wrapped
+function Window:Notify(config)
+    Notifications:Create(config)
 end
 
--- ===== SECTION =====
-function Window:CreateSection(Tab, SectionName)
-    SectionName = Utility:ValidateString(SectionName, "Section")
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateSection(SectionName)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create section - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    local section = {Name = SectionName, Element = result}
-    table.insert(Tab.Sections, section)
-    
-    return result
-end
-
--- ===== DIVIDER =====
-function Window:CreateDivider(Tab)
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateDivider()
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create divider - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    return result
-end
-
--- ===== LABEL =====
-function Window:CreateLabel(Tab, LabelText, Icon, Color, IgnoreTheme)
-    LabelText = Utility:ValidateString(LabelText, "Label")
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateLabel(
-            LabelText,
-            Icon,
-            Color and Utility:ValidateColor(Color) or nil,
-            Utility:ValidateBoolean(IgnoreTheme, false)
-        )
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create label - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    return WrapElement(result, "Label", Tab, {Name = LabelText})
-end
-
--- ===== PARAGRAPH =====
-function Window:CreateParagraph(Tab, ParagraphSettings)
-    ParagraphSettings = Utility:ValidateTable(ParagraphSettings, {})
-    
-    local Settings = {
-        Title = Utility:ValidateString(ParagraphSettings.Title, "Paragraph"),
-        Content = Utility:ValidateString(ParagraphSettings.Content, "Content")
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateParagraph(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create paragraph - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    return WrapElement(result, "Paragraph", Tab, Settings)
-end
-
--- ===== BUTTON =====
-function Window:CreateButton(Tab, ButtonSettings)
-    ButtonSettings = Utility:ValidateTable(ButtonSettings, {})
-    
-    local originalCallback = Utility:ValidateCallback(ButtonSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(ButtonSettings.Name, "Button"),
-        Callback = function()
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback)
-            EventSystem:Fire("ButtonClicked", Settings.Name)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateButton(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create button - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    return WrapElement(result, "Button", Tab, Settings)
-end
-
--- ===== TOGGLE =====
-function Window:CreateToggle(Tab, ToggleSettings)
-    ToggleSettings = Utility:ValidateTable(ToggleSettings, {})
-    
-    local currentValue = ToggleSettings.CurrentValue
-    if currentValue == nil and ToggleSettings.Default ~= nil then
-        currentValue = ToggleSettings.Default
-    end
-    
-    local originalCallback = Utility:ValidateCallback(ToggleSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(ToggleSettings.Name, "Toggle"),
-        CurrentValue = Utility:ValidateBoolean(currentValue, false),
-        Flag = ToggleSettings.Flag,
-        Callback = function(Value)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Value)
-            EventSystem:Fire("ToggleChanged", Settings.Name, Value)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateToggle(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create toggle - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "Toggle", Tab, Settings)
-end
-
--- ===== SLIDER =====
-function Window:CreateSlider(Tab, SliderSettings)
-    SliderSettings = Utility:ValidateTable(SliderSettings, {})
-    
-    local currentValue = SliderSettings.CurrentValue
-    if currentValue == nil and SliderSettings.Default ~= nil then
-        currentValue = SliderSettings.Default
-    end
-    
-    local min, max
-    if SliderSettings.Range and type(SliderSettings.Range) == "table" then
-        min = SliderSettings.Range[1] or 0
-        max = SliderSettings.Range[2] or 100
-    else
-        min = SliderSettings.Min or 0
-        max = SliderSettings.Max or 100
-    end
-    
-    local originalCallback = Utility:ValidateCallback(SliderSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(SliderSettings.Name, "Slider"),
-        Range = {
-            Utility:ValidateNumber(min, nil, nil, 0),
-            Utility:ValidateNumber(max, nil, nil, 100)
-        },
-        Increment = Utility:ValidateNumber(SliderSettings.Increment, nil, nil, 1),
-        Suffix = SliderSettings.Suffix or "",
-        CurrentValue = Utility:ValidateNumber(currentValue, min, max, min),
-        Flag = SliderSettings.Flag,
-        Callback = function(Value)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Value)
-            EventSystem:Fire("SliderChanged", Settings.Name, Value)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateSlider(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create slider - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "Slider", Tab, Settings)
-end
-
--- ===== INPUT =====
-function Window:CreateInput(Tab, InputSettings)
-    InputSettings = Utility:ValidateTable(InputSettings, {})
-    
-    local placeholder = InputSettings.PlaceholderText or InputSettings.Placeholder or ""
-    local originalCallback = Utility:ValidateCallback(InputSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(InputSettings.Name, "Input"),
-        CurrentValue = Utility:ValidateString(InputSettings.CurrentValue, ""),
-        PlaceholderText = placeholder,
-        RemoveTextAfterFocusLost = Utility:ValidateBoolean(InputSettings.RemoveTextAfterFocusLost, false),
-        Flag = InputSettings.Flag,
-        Callback = function(Text)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Text)
-            EventSystem:Fire("InputChanged", Settings.Name, Text)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateInput(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create input - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "Input", Tab, Settings)
-end
-
--- ===== DROPDOWN =====
-function Window:CreateDropdown(Tab, DropdownSettings)
-    DropdownSettings = Utility:ValidateTable(DropdownSettings, {})
-    
-    local options = Utility:ValidateTable(DropdownSettings.Options, {"Option 1"})
-    local currentOption = DropdownSettings.CurrentOption
-    
-    if type(currentOption) == "string" then
-        currentOption = {currentOption}
-    elseif type(currentOption) ~= "table" then
-        currentOption = {options[1]}
-    end
-    
-    local originalCallback = Utility:ValidateCallback(DropdownSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(DropdownSettings.Name, "Dropdown"),
-        Options = options,
-        CurrentOption = currentOption,
-        MultipleOptions = Utility:ValidateBoolean(DropdownSettings.MultipleOptions, false),
-        Flag = DropdownSettings.Flag,
-        Callback = function(Option)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Option)
-            EventSystem:Fire("DropdownChanged", Settings.Name, Option)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateDropdown(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create dropdown - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "Dropdown", Tab, Settings)
-end
-
--- ===== COLOR PICKER =====
-function Window:CreateColorPicker(Tab, ColorPickerSettings)
-    ColorPickerSettings = Utility:ValidateTable(ColorPickerSettings, {})
-    
-    local originalCallback = Utility:ValidateCallback(ColorPickerSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(ColorPickerSettings.Name, "Color Picker"),
-        Color = Utility:ValidateColor(ColorPickerSettings.Color or Color3.fromRGB(255, 255, 255)),
-        Flag = ColorPickerSettings.Flag,
-        Callback = function(Color)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Color)
-            EventSystem:Fire("ColorChanged", Settings.Name, Color)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateColorPicker(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create color picker - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "ColorPicker", Tab, Settings)
-end
-
--- ===== KEYBIND =====
-function Window:CreateKeybind(Tab, KeybindSettings)
-    KeybindSettings = Utility:ValidateTable(KeybindSettings, {})
-    
-    local originalCallback = Utility:ValidateCallback(KeybindSettings.Callback)
-    
-    local Settings = {
-        Name = Utility:ValidateString(KeybindSettings.Name, "Keybind"),
-        CurrentKeybind = Utility:ValidateString(KeybindSettings.CurrentKeybind, "Q"),
-        HoldToInteract = Utility:ValidateBoolean(KeybindSettings.HoldToInteract, false),
-        Flag = KeybindSettings.Flag,
-        Callback = function(Keybind)
-            Performance:RecordCallback()
-            Utility:SafeCall(originalCallback, Keybind)
-            EventSystem:Fire("KeybindPressed", Settings.Name, Keybind)
-        end
-    }
-    
-    local success, result = pcall(function()
-        return Tab.RayfieldTab:CreateKeybind(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to create keybind - " .. tostring(result))
-        Performance:RecordError()
-        return nil
-    end
-    
-    if Settings.Flag then
-        RhyRu9.Flags[Settings.Flag] = result
-    end
-    
-    return WrapElement(result, "Keybind", Tab, Settings)
-end
-
--- ===== NOTIFICATION SYSTEM =====
-function Window:Notify(NotificationSettings)
-    NotificationSettings = Utility:ValidateTable(NotificationSettings, {})
-    
-    local content = NotificationSettings.Content or NotificationSettings.Message or "Notification"
-    
-    local Settings = {
-        Title = Utility:ValidateString(NotificationSettings.Title, "RhyRu9"),
-        Content = content,
-        Duration = Utility:ValidateNumber(NotificationSettings.Duration, 1, 30, 3),
-        Image = NotificationSettings.Image or NotificationSettings.Icon
-    }
-    
-    local success = pcall(function()
-        Rayfield:Notify(Settings)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to send notification")
-        Performance:RecordError()
-    else
-        EventSystem:Fire("NotificationSent", Settings)
-    end
-end
-
--- ===== THEME SYSTEM =====
-function Window:SetTheme(ThemeName)
-    ThemeName = Utility:ValidateString(ThemeName, "Default")
-    
-    if self.RayfieldWindow and self.RayfieldWindow.ModifyTheme then
-        local success = pcall(function()
-            self.RayfieldWindow.ModifyTheme(ThemeName)
-        end)
+function Window:SetTheme(themeName)
+    if RhyRu9.Themes[themeName] then
+        RhyRu9.CurrentTheme = RhyRu9.Themes[themeName]
         
-        if success then
-            self:Notify({
-                Title = "Theme Changed",
-                Content = "Theme set to: " .. ThemeName,
-                Duration = 2
-            })
-            EventSystem:Fire("ThemeChanged", ThemeName)
-        else
-            Logger:Error("Failed to change theme")
-            Performance:RecordError()
+        -- Update all UI elements with new theme
+        local theme = RhyRu9.CurrentTheme
+        
+        -- Main elements
+        self.Elements.Main.BackgroundColor3 = theme.Background
+        self.Elements.Topbar.BackgroundColor3 = theme.Secondary
+        self.Elements.Title.TextColor3 = theme.Text
+        
+        self:Notify({
+            Title = "Theme Changed",
+            Content = "Theme set to: " .. themeName,
+            Type = "Success",
+            Duration = 2
+        })
+        
+        EventSystem:Fire("ThemeChanged", themeName)
+    else
+        Logger:Error("Theme not found: " .. themeName)
+    end
+end
+
+function Window:Toggle()
+    if self.Minimized then
+        self.Minimized = false
+        Utility:Tween(self.Elements.Main, {Size = UDim2.new(0, 550, 0, 400)}, 0.3)
+        self.Elements.TabList.Parent.Visible = true
+        self.Elements.ContentContainer.Visible = true
+    else
+        self.Minimized = true
+        Utility:Tween(self.Elements.Main, {Size = UDim2.new(0, 550, 0, 40)}, 0.3)
+        task.wait(0.3)
+        self.Elements.TabList.Parent.Visible = false
+        self.Elements.ContentContainer.Visible = false
+    end
+end
+
+function Window:Hide()
+    self.Hidden = true
+    Utility:Tween(self.Elements.Main, {Position = UDim2.new(0.5, -275, 1, 50)}, 0.3)
+end
+
+function Window:Show()
+    self.Hidden = false
+    Utility:Tween(self.Elements.Main, {Position = UDim2.new(0.5, -275, 0.5, -200)}, 0.3)
+end
+
+function Window:Destroy()
+    EventSystem:Fire("WindowDestroyed", self)
+    
+    if self.UI then
+        Utility:Tween(self.Elements.Main, {Size = UDim2.new(0, 0, 0, 0)}, 0.3)
+        Utility:Tween(self.Elements.Main, {BackgroundTransparency = 1}, 0.3)
+        task.wait(0.3)
+        self.UI:Destroy()
+    end
+    
+    for i, win in ipairs(RhyRu9.Windows) do
+        if win == self then
+            table.remove(RhyRu9.Windows, i)
+            break
         end
     end
+    
+    Logger:Success("Window destroyed: " .. self.Name)
 end
 
 -- ===== PRESET SYSTEM =====
 function Window:SavePreset(presetName)
-    presetName = Utility:ValidateString(presetName, "Preset_" .. os.time())
+    presetName = presetName or "Preset_" .. os.time()
     
     local preset = {
         Name = presetName,
-        CreatedAt = Utility:Timestamp(),
+        CreatedAt = os.time(),
         Flags = {}
     }
     
     for flagName, flagData in pairs(RhyRu9.Flags) do
-        preset.Flags[flagName] = {
-            CurrentValue = flagData.CurrentValue,
-            CurrentKeybind = flagData.CurrentKeybind,
-            CurrentOption = flagData.CurrentOption,
-            Color = flagData.Color
-        }
+        if flagData.GetValue then
+            preset.Flags[flagName] = flagData.GetValue()
+        end
     end
     
     RhyRu9.Presets[presetName] = preset
     
     self:Notify({
         Title = "Preset Saved",
-        Content = "Preset '" .. presetName .. "' saved successfully!",
+        Content = "Preset '" .. presetName .. "' saved!",
+        Type = "Success",
         Duration = 2
     })
     
     Logger:Success("Preset saved: " .. presetName)
     EventSystem:Fire("PresetSaved", presetName)
+    
+    return preset
 end
 
 function Window:LoadPreset(presetName)
@@ -918,30 +1539,24 @@ function Window:LoadPreset(presetName)
         self:Notify({
             Title = "Preset Error",
             Content = "Preset '" .. presetName .. "' not found!",
+            Type = "Error",
             Duration = 2
         })
         Logger:Error("Preset not found: " .. presetName)
         return false
     end
     
-    for flagName, flagData in pairs(preset.Flags) do
+    for flagName, value in pairs(preset.Flags) do
         local flag = RhyRu9.Flags[flagName]
-        if flag then
-            if flagData.CurrentValue ~= nil then
-                flag:Set(flagData.CurrentValue)
-            elseif flagData.CurrentKeybind then
-                flag:Set(flagData.CurrentKeybind)
-            elseif flagData.CurrentOption then
-                flag:Set(flagData.CurrentOption)
-            elseif flagData.Color then
-                flag:Set(flagData.Color)
-            end
+        if flag and flag.Set then
+            flag.Set(value)
         end
     end
     
     self:Notify({
         Title = "Preset Loaded",
-        Content = "Preset '" .. presetName .. "' loaded successfully!",
+        Content = "Preset '" .. presetName .. "' loaded!",
+        Type = "Success",
         Duration = 2
     })
     
@@ -953,11 +1568,14 @@ end
 function Window:DeletePreset(presetName)
     if RhyRu9.Presets[presetName] then
         RhyRu9.Presets[presetName] = nil
+        
         self:Notify({
             Title = "Preset Deleted",
             Content = "Preset '" .. presetName .. "' deleted!",
+            Type = "Warning",
             Duration = 2
         })
+        
         Logger:Info("Preset deleted: " .. presetName)
         EventSystem:Fire("PresetDeleted", presetName)
         return true
@@ -973,442 +1591,133 @@ function Window:GetAllPresets()
     return presets
 end
 
--- ===== CONFIGURATION BACKUP =====
-function Window:BackupConfiguration(backupName)
-    backupName = backupName or "Backup_" .. os.date("%Y%m%d_%H%M%S")
-    
-    local backup = {
-        Name = backupName,
-        Timestamp = Utility:Timestamp(),
-        Flags = Utility:DeepCopy(RhyRu9.Flags),
-        Presets = Utility:DeepCopy(RhyRu9.Presets),
-        WindowSettings = {
-            Name = self.Name,
-            Theme = self.CurrentTheme or "Default"
-        }
-    }
-    
-    if not _G.RhyRu9Backups then
-        _G.RhyRu9Backups = {}
-    end
-    
-    _G.RhyRu9Backups[backupName] = backup
-    
-    self:Notify({
-        Title = "Backup Created",
-        Content = "Configuration backed up as '" .. backupName .. "'",
-        Duration = 2
-    })
-    
-    Logger:Success("Backup created: " .. backupName)
-    return backup
-end
-
-function Window:RestoreConfiguration(backupName)
-    if not _G.RhyRu9Backups or not _G.RhyRu9Backups[backupName] then
+-- ===== CONFIGURATION SYSTEM =====
+function Window:SaveConfiguration(fileName)
+    if not (writefile and isfolder and makefolder) then
         self:Notify({
-            Title = "Restore Error",
-            Content = "Backup '" .. backupName .. "' not found!",
-            Duration = 2
+            Title = "Config Error",
+            Content = "Executor doesn't support file operations!",
+            Type = "Error",
+            Duration = 3
         })
-        Logger:Error("Backup not found: " .. backupName)
         return false
     end
     
-    local backup = _G.RhyRu9Backups[backupName]
+    fileName = fileName or self.Name
+    local folderName = "RhyRu9_Configs"
     
-    -- Restore flags
-    for flagName, flagData in pairs(backup.Flags) do
-        if RhyRu9.Flags[flagName] then
-            RhyRu9.Flags[flagName] = flagData
-        end
+    if not isfolder(folderName) then
+        makefolder(folderName)
     end
     
-    -- Restore presets
-    RhyRu9.Presets = Utility:DeepCopy(backup.Presets)
-    
-    self:Notify({
-        Title = "Restore Complete",
-        Content = "Configuration restored from '" .. backupName .. "'",
-        Duration = 2
-    })
-    
-    Logger:Success("Configuration restored: " .. backupName)
-    EventSystem:Fire("ConfigurationRestored", backupName)
-    return true
-end
-
-function Window:GetAllBackups()
-    if not _G.RhyRu9Backups then return {} end
-    
-    local backups = {}
-    for name, backup in pairs(_G.RhyRu9Backups) do
-        table.insert(backups, {
-            Name = name,
-            Timestamp = backup.Timestamp,
-            Date = os.date("%Y-%m-%d %H:%M:%S", backup.Timestamp)
-        })
-    end
-    return backups
-end
-
--- ===== ELEMENT SEARCH & MANAGEMENT =====
-function Window:FindElement(Tab, name)
-    for _, element in ipairs(Tab.Elements) do
-        if element.Name == name then
-            return element
-        end
-    end
-    return nil
-end
-
-function Window:FindElementByID(id)
-    for _, tab in ipairs(self.Tabs) do
-        for _, element in ipairs(tab.Elements) do
-            if element.ID == id then
-                return element
-            end
-        end
-    end
-    return nil
-end
-
-function Window:SearchElements(query)
-    query = string.lower(query)
-    local results = {}
-    
-    for _, tab in ipairs(self.Tabs) do
-        for _, element in ipairs(tab.Elements) do
-            if string.find(string.lower(element.Name), query, 1, true) then
-                table.insert(results, element)
-            end
-        end
-    end
-    
-    return results
-end
-
-function Window:GetElementsByType(elementType)
-    local results = {}
-    
-    for _, tab in ipairs(self.Tabs) do
-        for _, element in ipairs(tab.Elements) do
-            if element.Type == elementType then
-                table.insert(results, element)
-            end
-        end
-    end
-    
-    return results
-end
-
-function Window:ClearTabElements(Tab)
-    Tab.Elements = {}
-    Logger:Info("Cleared elements from tab: " .. Tab.Name)
-    EventSystem:Fire("TabCleared", Tab)
-end
-
--- ===== ELEMENT GROUPS =====
-function Window:CreateGroup(groupName)
-    if not self.Groups[groupName] then
-        self.Groups[groupName] = {
-            Name = groupName,
-            Elements = {},
-            Enabled = true
-        }
-        Logger:Success("Group created: " .. groupName)
-    end
-    return self.Groups[groupName]
-end
-
-function Window:AddToGroup(groupName, element)
-    if not self.Groups[groupName] then
-        self:CreateGroup(groupName)
-    end
-    
-    table.insert(self.Groups[groupName].Elements, element)
-    element.Group = groupName
-    Logger:Info("Element added to group: " .. groupName)
-end
-
-function Window:EnableGroup(groupName)
-    local group = self.Groups[groupName]
-    if not group then return false end
-    
-    group.Enabled = true
-    for _, element in ipairs(group.Elements) do
-        if element.Enable then
-            element:Enable()
-        end
-    end
-    
-    Logger:Info("Group enabled: " .. groupName)
-    EventSystem:Fire("GroupEnabled", groupName)
-    return true
-end
-
-function Window:DisableGroup(groupName)
-    local group = self.Groups[groupName]
-    if not group then return false end
-    
-    group.Enabled = false
-    for _, element in ipairs(group.Elements) do
-        if element.Disable then
-            element:Disable()
-        end
-    end
-    
-    Logger:Info("Group disabled: " .. groupName)
-    EventSystem:Fire("GroupDisabled", groupName)
-    return true
-end
-
-function Window:ToggleGroup(groupName)
-    local group = self.Groups[groupName]
-    if not group then return false end
-    
-    if group.Enabled then
-        return self:DisableGroup(groupName)
-    else
-        return self:EnableGroup(groupName)
-    end
-end
-
--- ===== BULK OPERATIONS =====
-function Window:SetMultipleFlags(flagsTable)
-    for flagName, value in pairs(flagsTable) do
-        local flag = RhyRu9.Flags[flagName]
-        if flag and flag.Set then
-            flag:Set(value)
-        end
-    end
-    
-    Logger:Success("Set multiple flags: " .. #flagsTable)
-    EventSystem:Fire("BulkFlagsSet", flagsTable)
-end
-
-function Window:GetMultipleFlags(flagNames)
-    local results = {}
-    
-    for _, flagName in ipairs(flagNames) do
-        local flag = RhyRu9.Flags[flagName]
-        if flag then
-            results[flagName] = flag.CurrentValue or flag.CurrentKeybind or flag.CurrentOption or flag.Color
-        end
-    end
-    
-    return results
-end
-
-function Window:ResetAllFlags()
-    for _, flag in pairs(RhyRu9.Flags) do
-        if flag.Set then
-            if flag.CurrentValue ~= nil then
-                flag:Set(false)
-            elseif flag.CurrentKeybind then
-                flag:Set("Q")
-            elseif flag.CurrentOption then
-                flag:Set({})
-            end
-        end
-    end
-    
-    self:Notify({
-        Title = "Flags Reset",
-        Content = "All flags have been reset to default values!",
-        Duration = 2
-    })
-    
-    Logger:Success("All flags reset")
-    EventSystem:Fire("AllFlagsReset")
-end
-
--- ===== CHANGELOG SYSTEM =====
-function Window:ShowChangelog(changelog)
-    if type(changelog) == "table" then
-        local changelogText = ""
-        for version, changes in pairs(changelog) do
-            changelogText = changelogText .. version .. ":\n"
-            for _, change in ipairs(changes) do
-                changelogText = changelogText .. "  • " .. change .. "\n"
-            end
-            changelogText = changelogText .. "\n"
-        end
-        
-        self:Notify({
-            Title = "Changelog",
-            Content = changelogText,
-            Duration = 10
-        })
-    elseif type(changelog) == "string" then
-        self:Notify({
-            Title = "Changelog",
-            Content = changelog,
-            Duration = 10
-        })
-    end
-end
-
--- ===== AUTO-UPDATE CHECKER =====
-function Window:CheckForUpdates(versionUrl, currentVersion)
-    if not versionUrl or not currentVersion then
-        Logger:Warn("Update check requires versionUrl and currentVersion")
-        return
-    end
-    
-    local success, result = pcall(function()
-        local response = game:HttpGet(versionUrl)
-        local latestVersion = response:match("%d+%.%d+%.%d+")
-        
-        if latestVersion and latestVersion ~= currentVersion then
-            self:Notify({
-                Title = "Update Available",
-                Content = "New version " .. latestVersion .. " is available!\nCurrent: " .. currentVersion,
-                Duration = 5,
-                Image = 4335487866
-            })
-            
-            Logger:Info("Update available: " .. latestVersion)
-            EventSystem:Fire("UpdateAvailable", latestVersion, currentVersion)
-            return true, latestVersion
-        else
-            Logger:Info("No updates available")
-            return false, currentVersion
-        end
-    end)
-    
-    if not success then
-        Logger:Error("Failed to check for updates: " .. tostring(result))
-    end
-    
-    return false, currentVersion
-end
-
--- ===== CONFIGURATION SYSTEM =====
-function Window:LoadConfiguration()
-    if self.RayfieldWindow and self.RayfieldWindow.LoadConfiguration then
-        local success = pcall(function()
-            self.RayfieldWindow:LoadConfiguration()
-        end)
-        
-        if success then
-            self:Notify({
-                Title = "Configuration Loaded",
-                Content = "Settings restored successfully!",
-                Duration = 2
-            })
-            Logger:Success("Configuration loaded")
-            EventSystem:Fire("ConfigurationLoaded")
-        else
-            Logger:Error("Failed to load configuration")
-            Performance:RecordError()
-        end
-    end
-end
-
-function Window:SaveConfiguration()
-    if self.RayfieldWindow and self.RayfieldWindow.SaveConfiguration then
-        local success = pcall(function()
-            self.RayfieldWindow:SaveConfiguration()
-        end)
-        
-        if success then
-            self:Notify({
-                Title = "Configuration Saved",
-                Content = "Settings saved successfully!",
-                Duration = 2
-            })
-            Logger:Success("Configuration saved")
-            EventSystem:Fire("ConfigurationSaved")
-        end
-    end
-end
-
--- ===== VISIBILITY CONTROL =====
-function Window:SetVisibility(Visible)
-    if self.RayfieldWindow and self.RayfieldWindow.SetVisibility then
-        pcall(function()
-            self.RayfieldWindow:SetVisibility(Utility:ValidateBoolean(Visible, true))
-        end)
-        
-        EventSystem:Fire("VisibilityChanged", Visible)
-    end
-end
-
-function Window:IsVisible()
-    if self.RayfieldWindow and self.RayfieldWindow.IsVisible then
-        return self.RayfieldWindow:IsVisible()
-    end
-    return false
-end
-
-function Window:Toggle()
-    self:SetVisibility(not self:IsVisible())
-end
-
--- ===== DESTROY WINDOW =====
-function Window:Destroy()
-    if self.RayfieldWindow and self.RayfieldWindow.Destroy then
-        pcall(function()
-            self.RayfieldWindow:Destroy()
-        end)
-    end
-    
-    -- Remove from windows table
-    for i, win in ipairs(RhyRu9.Windows) do
-        if win == self then
-            table.remove(RhyRu9.Windows, i)
-            break
-        end
-    end
-    
-    Logger:Info("Window destroyed: " .. self.Name)
-    EventSystem:Fire("WindowDestroyed", self)
-end
-
--- ===== PERFORMANCE MONITORING =====
-function Window:GetPerformanceStats()
-    return Performance:GetStats()
-end
-
-function Window:ShowPerformanceStats()
-    local stats = self:GetPerformanceStats()
-    
-    local message = string.format(
-        "Elements: %d\nCallbacks: %d\nErrors: %d\nUptime: %.1fs\nWindows: %d",
-        stats.ElementsCreated,
-        stats.CallbacksFired,
-        stats.ErrorsOccurred,
-        stats.Uptime,
-        stats.Windows
-    )
-    
-    self:Notify({
-        Title = "Performance Stats",
-        Content = message,
-        Duration = 5,
-        Image = 4483362458
-    })
-end
-
-function Window:ResetPerformanceStats()
-    Performance.Stats = {
-        ElementsCreated = 0,
-        CallbacksFired = 0,
-        ErrorsOccurred = 0,
-        StartTime = tick()
+    local config = {
+        Version = RhyRu9.Version,
+        Created = os.time(),
+        Flags = {}
     }
     
-    Logger:Success("Performance stats reset")
+    for flagName, flagData in pairs(RhyRu9.Flags) do
+        if flagData.GetValue then
+            config.Flags[flagName] = flagData.GetValue()
+        end
+    end
+    
+    local success, encoded = pcall(function()
+        return HttpService:JSONEncode(config)
+    end)
+    
+    if success then
+        writefile(folderName .. "/" .. fileName .. ".json", encoded)
+        
+        self:Notify({
+            Title = "Config Saved",
+            Content = "Configuration saved to " .. fileName .. ".json",
+            Type = "Success",
+            Duration = 2
+        })
+        
+        Logger:Success("Configuration saved: " .. fileName)
+        EventSystem:Fire("ConfigurationSaved", fileName)
+        return true
+    else
+        Logger:Error("Failed to encode configuration")
+        return false
+    end
+end
+
+function Window:LoadConfiguration(fileName)
+    if not (readfile and isfile) then
+        self:Notify({
+            Title = "Config Error",
+            Content = "Executor doesn't support file operations!",
+            Type = "Error",
+            Duration = 3
+        })
+        return false
+    end
+    
+    fileName = fileName or self.Name
+    local folderName = "RhyRu9_Configs"
+    local filePath = folderName .. "/" .. fileName .. ".json"
+    
+    if not isfile(filePath) then
+        self:Notify({
+            Title = "Config Error",
+            Content = "Configuration file not found!",
+            Type = "Error",
+            Duration = 2
+        })
+        return false
+    end
+    
+    local success, decoded = pcall(function()
+        local content = readfile(filePath)
+        return HttpService:JSONDecode(content)
+    end)
+    
+    if success and decoded then
+        for flagName, value in pairs(decoded.Flags) do
+            local flag = RhyRu9.Flags[flagName]
+            if flag and flag.Set then
+                flag.Set(value)
+            end
+        end
+        
+        self:Notify({
+            Title = "Config Loaded",
+            Content = "Configuration loaded from " .. fileName .. ".json",
+            Type = "Success",
+            Duration = 2
+        })
+        
+        Logger:Success("Configuration loaded: " .. fileName)
+        EventSystem:Fire("ConfigurationLoaded", fileName)
+        return true
+    else
+        self:Notify({
+            Title = "Config Error",
+            Content = "Failed to load configuration!",
+            Type = "Error",
+            Duration = 2
+        })
+        Logger:Error("Failed to decode configuration")
+        return false
+    end
 end
 
 -- ===== GLOBAL FUNCTIONS =====
-function RhyRu9:GetFlag(FlagName)
-    return self.Flags[FlagName]
+function RhyRu9:GetFlag(flagName)
+    return self.Flags[flagName]
 end
 
 function RhyRu9:GetAllFlags()
-    return self.Flags
+    local flags = {}
+    for name, data in pairs(self.Flags) do
+        if data.GetValue then
+            flags[name] = data.GetValue()
+        end
+    end
+    return flags
 end
 
 function RhyRu9:SetDebugMode(enabled)
@@ -1424,7 +1733,6 @@ function RhyRu9:DestroyAllWindows()
     Logger:Success("All windows destroyed")
 end
 
--- ===== EVENT MANAGEMENT =====
 function RhyRu9:On(eventName, callback)
     return EventSystem:Connect(eventName, callback)
 end
@@ -1438,91 +1746,17 @@ function RhyRu9:GetEvents()
     for eventName, eventData in pairs(self.Events) do
         table.insert(events, {
             Name = eventName,
-            Connections = #eventData.Callbacks,
+            Connections = 0,
             Fired = eventData.Fired
         })
+        
+        for _ in pairs(eventData.Callbacks) do
+            events[#events].Connections = events[#events].Connections + 1
+        end
     end
     return events
 end
 
--- ===== UTILITY EXPORTS =====
-function RhyRu9:ExportConfiguration()
-    local export = {
-        Version = self.Version,
-        Timestamp = Utility:Timestamp(),
-        Flags = {},
-        Presets = self.Presets
-    }
-    
-    for flagName, flagData in pairs(self.Flags) do
-        export.Flags[flagName] = {
-            CurrentValue = flagData.CurrentValue,
-            CurrentKeybind = flagData.CurrentKeybind,
-            CurrentOption = flagData.CurrentOption,
-            Color = flagData.Color
-        }
-    end
-    
-    return HttpService:JSONEncode(export)
-end
-
-function RhyRu9:ImportConfiguration(jsonString)
-    local success, data = pcall(function()
-        return HttpService:JSONDecode(jsonString)
-    end)
-    
-    if not success then
-        Logger:Error("Failed to import configuration: Invalid JSON")
-        return false
-    end
-    
-    if data.Flags then
-        for flagName, flagData in pairs(data.Flags) do
-            local flag = self.Flags[flagName]
-            if flag and flag.Set then
-                if flagData.CurrentValue ~= nil then
-                    flag:Set(flagData.CurrentValue)
-                elseif flagData.CurrentKeybind then
-                    flag:Set(flagData.CurrentKeybind)
-                elseif flagData.CurrentOption then
-                    flag:Set(flagData.CurrentOption)
-                elseif flagData.Color then
-                    flag:Set(flagData.Color)
-                end
-            end
-        end
-    end
-    
-    if data.Presets then
-        self.Presets = data.Presets
-    end
-    
-    Logger:Success("Configuration imported")
-    return true
-end
-
--- ===== QUICK ACTIONS =====
-function RhyRu9:QuickToggle(flagName)
-    local flag = self.Flags[flagName]
-    if flag and flag.CurrentValue ~= nil and flag.Set then
-        flag:Set(not flag.CurrentValue)
-        return flag.CurrentValue
-    end
-    return nil
-end
-
-function RhyRu9:QuickSetAll(flagNames, value)
-    for _, flagName in ipairs(flagNames) do
-        local flag = self.Flags[flagName]
-        if flag and flag.Set then
-            flag:Set(value)
-        end
-    end
-    
-    Logger:Success("Quick set " .. #flagNames .. " flags to " .. tostring(value))
-end
-
--- ===== STATISTICS =====
 function RhyRu9:GetStatistics()
     local totalFlags = 0
     for _ in pairs(self.Flags) do
@@ -1545,7 +1779,7 @@ function RhyRu9:GetStatistics()
         TotalFlags = totalFlags,
         TotalPresets = totalPresets,
         TotalEvents = totalEvents,
-        Performance = Performance:GetStats()
+        Uptime = tick() - (self.StartTime or tick())
     }
 end
 
@@ -1553,49 +1787,40 @@ function RhyRu9:PrintStatistics()
     local stats = self:GetStatistics()
     
     print("╔══════════════════════════════════════════╗")
-    print("║        RhyRu9 UI Library Stats          ║")
+    print("║    RhyRu9 UI Library - Pure Standalone  ║")
     print("╠══════════════════════════════════════════╣")
     print(string.format("║  Version: %-27s║", stats.Version))
     print(string.format("║  Windows: %-27d║", stats.Windows))
     print(string.format("║  Flags: %-29d║", stats.TotalFlags))
     print(string.format("║  Presets: %-27d║", stats.TotalPresets))
     print(string.format("║  Events: %-28d║", stats.TotalEvents))
-    print(string.format("║  Elements Created: %-18d║", stats.Performance.ElementsCreated))
-    print(string.format("║  Callbacks Fired: %-19d║", stats.Performance.CallbacksFired))
-    print(string.format("║  Errors: %-28d║", stats.Performance.ErrorsOccurred))
-    print(string.format("║  Uptime: %-24.1fs║", stats.Performance.Uptime))
+    print(string.format("║  Uptime: %-24.1fs║", stats.Uptime))
     print("╚══════════════════════════════════════════╝")
 end
 
 -- ===== INITIALIZATION =====
+RhyRu9.StartTime = tick()
+
+-- Create Events
 EventSystem:Create("WindowCreated")
+EventSystem:Create("WindowDestroyed")
 EventSystem:Create("TabCreated")
-EventSystem:Create("ElementCreated")
+EventSystem:Create("TabSelected")
 EventSystem:Create("ButtonClicked")
 EventSystem:Create("ToggleChanged")
 EventSystem:Create("SliderChanged")
 EventSystem:Create("InputChanged")
 EventSystem:Create("DropdownChanged")
-EventSystem:Create("ColorChanged")
-EventSystem:Create("KeybindPressed")
 EventSystem:Create("PresetSaved")
 EventSystem:Create("PresetLoaded")
-EventSystem:Create("ConfigurationLoaded")
+EventSystem:Create("PresetDeleted")
 EventSystem:Create("ConfigurationSaved")
+EventSystem:Create("ConfigurationLoaded")
 EventSystem:Create("ThemeChanged")
-EventSystem:Create("UpdateAvailable")
-EventSystem:Create("TabHidden")
-EventSystem:Create("TabShown")
-EventSystem:Create("GroupEnabled")
-EventSystem:Create("GroupDisabled")
-EventSystem:Create("AllFlagsReset")
-EventSystem:Create("BulkFlagsSet")
-EventSystem:Create("TabCleared")
-EventSystem:Create("WindowDestroyed")
-EventSystem:Create("VisibilityChanged")
-EventSystem:Create("NotificationSent")
+EventSystem:Create("NotificationShown")
 
-Logger:Success("RhyRu9 UI Library v" .. RhyRu9.Version .. " loaded!")
+Logger:Success("RhyRu9 UI Library v" .. RhyRu9.Version .. " - Pure Standalone Edition")
+Logger:Success("100% Independent - No External Dependencies!")
 
 -- ===== EXPORT =====
 return RhyRu9
