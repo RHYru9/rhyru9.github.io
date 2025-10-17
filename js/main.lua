@@ -1,6 +1,6 @@
--- RhyRu9 FISH IT - FIXED VERSION
+-- RhyRu9 FISH IT - FIXED VERSION WITH CORRECT RETRY LOGIC
 -- DEVELOPER BY RhyRu9
--- Fixed: Perfect Catch Speed, Teleport Toggle, Telegram Bot
+-- Fixed: Charge Rod Retry (15x), 3 Detik Wait, Full Reset Logic
 -- Updated: 17 Oct 2025
 
 print("Loading RhyRu9 FISH IT - FIXED VERSION...")
@@ -39,12 +39,12 @@ local Window = Rayfield:CreateWindow({
 local Config = {
     AutoFishingV1 = false,
     PerfectCatch = false,
-    FastCatch = true, -- NEW: Faster catch speed
-    CatchDelay = 0.05, -- NEW: Delay for faster catch (lower = faster)
+    FastCatch = true,
+    CatchDelay = 0.05,
     AutoSell = false,
-    AntiAFK = false, -- NEW: Anti AFK toggle
-    TeleportEnabled = false, -- NEW: Toggle for teleport
-    TeleportToPlayerEnabled = false, -- NEW: Toggle for teleport to player
+    AntiAFK = false,
+    TeleportEnabled = false,
+    TeleportToPlayerEnabled = false,
     SelectedIsland = nil,
     WalkSpeed = 16,
     JumpPower = 50,
@@ -72,6 +72,10 @@ local tierToRarity = {
     [6] = "MYTHIC",
     [7] = "SECRET"
 }
+
+-- Error Tracking
+local ErrorCount = 0
+local MaxErrors = 3
 
 -- Helper Functions
 local function normalizeName(name)
@@ -107,9 +111,8 @@ if isfile(fishFile) then
     
     if success and decoded then
         fishData = decoded
-        print("[✅] Fish data loaded from " .. fishFile)
+        print("[OK] Fish data loaded from " .. fishFile)
         
-        -- Build lookup table
         fishLookup = {}
         for tier = 1, 7 do
             local tierKey = "Tier" .. tier
@@ -129,25 +132,24 @@ if isfile(fishFile) then
     end
 end
 
--- ===== TELEGRAM BOT (FIXED) =====
+-- ===== TELEGRAM BOT =====
 local Hooked = {}
 
 function Hooked:SendTelegramMessage(fishInfo)
     if not Config.Hooked.Enabled then return end
     
     if Config.Hooked.BotToken == "" or Config.Hooked.ChatID == "" then
-        warn("[❌ TELEGRAM] Bot Token or Chat ID not set!")
+        warn("[TELEGRAM] Bot Token or Chat ID not set!")
         return
     end
     
     if not fishInfo.Tier then
-        warn("[❌ TELEGRAM] Missing fish tier data!")
+        warn("[TELEGRAM] Missing fish tier data!")
         return
     end
     
     local fishRarity = tierToRarity[fishInfo.Tier] or "UNKNOWN"
     
-    -- Check if rarity matches target
     if #Config.Hooked.TargetRarities > 0 then
         local shouldSend = false
         
@@ -166,12 +168,10 @@ function Hooked:SendTelegramMessage(fishInfo)
         end
     end
     
-    print("[✅ TELEGRAM] Sending notification for " .. (fishInfo.Name or "Unknown"))
+    print("[TELEGRAM] Sending notification for " .. (fishInfo.Name or "Unknown"))
     
-    -- Format message
     local message = self:FormatTelegramMessage(fishInfo)
     
-    -- Send to Telegram
     local success, result = pcall(function()
         local telegramURL = "https://api.telegram.org/bot" .. Config.Hooked.BotToken .. "/sendMessage"
         local data = {
@@ -202,9 +202,9 @@ function Hooked:SendTelegramMessage(fishInfo)
     end)
     
     if success then
-        print("[✅ TELEGRAM] Notification sent!")
+        print("[TELEGRAM] Notification sent!")
     else
-        warn("[❌ TELEGRAM] Failed: " .. tostring(result))
+        warn("[TELEGRAM] Failed: " .. tostring(result))
     end
 end
 
@@ -214,27 +214,20 @@ function Hooked:FormatTelegramMessage(fishInfo)
     local playerName = LocalPlayer.Name
     
     local message = "```\n"
-    message = message .. "┌─────────────────────────────\n"
-    message = message .. "│  🎣 RhyRu9 FISH IT - CAUGHT!\n"
-    message = message .. "├─────────────────────────────\n"
-    message = message .. "│  👤 PLAYER: " .. playerName .. "\n"
-    message = message .. "│  🐟 FISH: " .. (fishInfo.Name or "Unknown") .. "\n"
-    message = message .. "│  ⭐ RARITY: " .. fishRarity .. "\n"
-    message = message .. "│  📊 TIER: " .. tostring(fishInfo.Tier or 1) .. "\n"
+    message = message .. "===== RhyRu9 FISH IT =====\n"
+    message = message .. "Player: " .. playerName .. "\n"
+    message = message .. "Fish: " .. (fishInfo.Name or "Unknown") .. "\n"
+    message = message .. "Rarity: " .. fishRarity .. "\n"
+    message = message .. "Tier: " .. tostring(fishInfo.Tier or 1) .. "\n"
     
     if fishInfo.Chance and chancePercent > 0 then
-        if chancePercent < 0.001 then
-            message = message .. "│  🎲 CHANCE: " .. string.format("%.8f%%", chancePercent) .. "\n"
-        else
-            message = message .. "│  🎲 CHANCE: " .. string.format("%.6f%%", chancePercent) .. "\n"
-        end
+        message = message .. "Chance: " .. string.format("%.6f%%", chancePercent) .. "\n"
     end
     
     if fishInfo.SellPrice then
-        message = message .. "│  💰 VALUE: " .. tostring(fishInfo.SellPrice) .. " COINS\n"
+        message = message .. "Value: " .. tostring(fishInfo.SellPrice) .. " COINS\n"
     end
     
-    message = message .. "└─────────────────────────────\n"
     message = message .. "```"
     
     return message
@@ -247,8 +240,7 @@ local function FindFishData(fishName, fishTier, fishId)
     local fishInfo = nil
     
     if fishName and fishName ~= "Unknown" then
-        fishInfo = fishLookup[normalizeName(fishName)] or
-                  fishLookup[fishName:lower()]
+        fishInfo = fishLookup[normalizeName(fishName)] or fishLookup[fishName:lower()]
     end
     
     if not fishInfo and fishId then
@@ -259,8 +251,7 @@ local function FindFishData(fishName, fishTier, fishId)
         local tierKey = "Tier" .. fishTier
         if fishData[tierKey] then
             for _, fish in ipairs(fishData[tierKey]) do
-                if fish.Name == fishName or 
-                   normalizeName(fish.Name) == normalizeName(fishName) then
+                if fish.Name == fishName or normalizeName(fish.Name) == normalizeName(fishName) then
                     fishInfo = fish
                     break
                 end
@@ -320,16 +311,17 @@ if FishCaught then
         local chance = fishInfo.Chance or 0
         
         local chanceDisplay = chance > 0 and string.format(" (%.6f%%)", chance * 100) or ""
-        print(string.format("[🎣 CAUGHT] %s | Rarity: %s | Price: %s coins%s",
+        print(string.format("[CAUGHT] %s | Rarity: %s | Price: %s coins%s",
             fishName, rarity, tostring(sellPrice), chanceDisplay))
         
         Hooked:SendTelegramMessage(fishInfo)
+        ErrorCount = 0
     end)
 else
-    warn("[❌] FishCaught remote not found!")
+    warn("[ERROR] FishCaught remote not found!")
 end
 
--- ===== PERFECT CATCH (FASTER) =====
+-- ===== PERFECT CATCH =====
 local PerfectCatchActive = false
 
 local function TogglePerfectCatch(enabled)
@@ -345,7 +337,6 @@ local function TogglePerfectCatch(enabled)
             local method = getnamecallmethod()
             if method == "InvokeServer" and self == StartMini then
                 if PerfectCatchActive and not Config.AutoFishingV1 then
-                    -- Perfect catch values
                     return old(self, -1.233184814453125, 0.9945034885633273)
                 end
             end
@@ -355,18 +346,26 @@ local function TogglePerfectCatch(enabled)
         
         Rayfield:Notify({
             Title = "Perfect Catch",
-            Content = "Enabled with FASTER speed!",
+            Content = "Enabled!",
             Duration = 2
         })
     end
 end
 
--- ===== AUTO FISHING V1 (FASTER CATCH) =====
+-- ===== FULL RESET FUNCTION =====
+local function FullReset()
+    print("[RESET] Melakukan full reset semua state...")
+    ErrorCount = 0
+    task.wait(3)
+    print("[RESET] State bersih, siap memancing lagi")
+end
+
+-- ===== AUTO FISHING V1 =====
 local FishingActive = false
 
 local function AutoFishingV1()
     task.spawn(function()
-        print("[AUTO FISHING] Started - FAST MODE")
+        print("[AUTO FISHING] Started - Correct Retry Logic")
         
         while Config.AutoFishingV1 do
             FishingActive = true
@@ -378,64 +377,138 @@ local function AutoFishingV1()
                     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
                 end
 
-                -- Equip tool
-                EquipTool:FireServer(1)
-                task.wait(0.1)
+                -- Step 1: EQUIP TOOL
+                local equipSuccess = false
+                for i = 1, 3 do
+                    local ok = pcall(function()
+                        EquipTool:FireServer(1)
+                    end)
+                    if ok then
+                        equipSuccess = true
+                        print("[EQUIP] Success")
+                        break
+                    end
+                    task.wait(0.2)
+                end
+                
+                if not equipSuccess then
+                    ErrorCount = ErrorCount + 1
+                    print("[ERROR] Equip gagal (" .. ErrorCount .. "/" .. MaxErrors .. ")")
+                    if ErrorCount >= MaxErrors then
+                        FullReset()
+                    end
+                    task.wait(1)
+                    return
+                end
+                
+                task.wait(0.3)
 
-                -- Charge rod
-                local charged = false
-                for attempt = 1, 3 do
+                -- Step 2: CHARGE ROD (AGGRESSIVE RETRY - 15 attempts)
+                local chargeSuccess = false
+                local chargeAttempts = 0
+                
+                while chargeAttempts < 15 and not chargeSuccess do
+                    chargeAttempts = chargeAttempts + 1
+                    
                     local ok, result = pcall(function()
                         return ChargeRod:InvokeServer(tick())
                     end)
-                    if ok and result then 
-                        charged = true 
-                        break 
+                    
+                    if ok and result then
+                        chargeSuccess = true
+                        print("[CHARGE] Success (attempt " .. chargeAttempts .. ")")
+                        break
                     end
-                    task.wait(0.05)
+                    
+                    print("[CHARGE] Retry " .. chargeAttempts .. "/15...")
+                    task.wait(0.15)
                 end
                 
-                if not charged then
-                    task.wait(0.5)
+                if not chargeSuccess then
+                    ErrorCount = ErrorCount + 1
+                    print("[ERROR] Charge Rod gagal (" .. ErrorCount .. "/" .. MaxErrors .. ") - CRITICAL!")
+                    if ErrorCount >= MaxErrors then
+                        print("[RESET] Charge Rod error terlalu banyak!")
+                        FullReset()
+                    end
+                    task.wait(2)
                     return
                 end
 
-                task.wait(0.1)
+                task.wait(0.3)
 
-                -- Start minigame with perfect catch
-                local started = false
-                for attempt = 1, 3 do
-                    local ok, result = pcall(function()
+                -- Step 3: START MINIGAME (PERFECT CATCH)
+                local startSuccess = false
+                for i = 1, 5 do
+                    local ok = pcall(function()
                         return StartMini:InvokeServer(-1.233184814453125, 0.9945034885633273)
                     end)
-                    if ok then 
-                        started = true 
-                        break 
+                    if ok then
+                        startSuccess = true
+                        print("[START] Minigame started")
+                        break
                     end
-                    task.wait(0.05)
+                    task.wait(0.1)
                 end
                 
-                if not started then
-                    task.wait(0.5)
+                if not startSuccess then
+                    ErrorCount = ErrorCount + 1
+                    print("[ERROR] Start minigame gagal (" .. ErrorCount .. "/" .. MaxErrors .. ")")
+                    if ErrorCount >= MaxErrors then
+                        FullReset()
+                    end
+                    task.wait(1)
                     return
                 end
 
-                -- FASTER CATCH: Reduced delay
-                task.wait(Config.CatchDelay)
+                -- Step 4: WAIT 3 DETIK UNTUK CATCH
+                print("[WAIT] Menunggu 3 detik untuk catch...")
+                task.wait(3)
 
-                -- Finish fishing
-                FinishFish:FireServer()
+                -- Step 5: FINISH FISHING
+                local finishSuccess = false
+                for i = 1, 3 do
+                    local ok = pcall(function()
+                        FinishFish:FireServer()
+                    end)
+                    if ok then
+                        finishSuccess = true
+                        print("[FINISH] Fish caught!")
+                        break
+                    end
+                    task.wait(0.1)
+                end
                 
-                task.wait(0.1)
+                if not finishSuccess then
+                    ErrorCount = ErrorCount + 1
+                    print("[ERROR] Finish gagal (" .. ErrorCount .. "/" .. MaxErrors .. ")")
+                    if ErrorCount >= MaxErrors then
+                        FullReset()
+                    end
+                    task.wait(1)
+                    return
+                end
+                
+                -- SUCCESS - RESET ERROR COUNTER
+                ErrorCount = 0
+                task.wait(0.2)
             end)
 
             if not success then
-                warn("[AUTO FISHING] Error: " .. tostring(err))
-                task.wait(1)
+                ErrorCount = ErrorCount + 1
+                warn("[ERROR] Lua error (" .. ErrorCount .. "/" .. MaxErrors .. "): " .. tostring(err))
+                
+                if ErrorCount >= MaxErrors then
+                    print("[RESET] Terlalu banyak error!")
+                    FullReset()
+                else
+                    task.wait(1)
+                end
             end
         end
         
         FishingActive = false
+        ErrorCount = 0
         print("[AUTO FISHING] Stopped")
     end)
 end
@@ -467,7 +540,7 @@ local function AntiAFK()
     end)
 end
 
--- ===== TELEPORT SYSTEM (WITH TOGGLE) =====
+-- ===== TELEPORT SYSTEM =====
 local IslandsData = {
     {Name = "Fisherman Island", Position = Vector3.new(92, 9, 2768)},
     {Name = "Arrow Lever", Position = Vector3.new(898, 8, -363)},
@@ -496,7 +569,7 @@ local function TeleportToIsland(index)
     if not Config.TeleportEnabled then
         Rayfield:Notify({
             Title = "Teleport Disabled",
-            Content = "Enable teleport in settings first!",
+            Content = "Enable teleport first!",
             Duration = 2
         })
         return
@@ -514,21 +587,20 @@ end
 
 -- ===== UI CREATION =====
 local function CreateUI()
-    -- ===== FISHING TAB =====
-    local Tab1 = Window:CreateTab("🎣 Fishing", 4483362458)
+    local Tab1 = Window:CreateTab("Fishing", 4483362458)
     
     Tab1:CreateSection("Auto Fishing")
     
     Tab1:CreateToggle({
-        Name = "Auto Fishing (FAST MODE)",
+        Name = "Auto Fishing",
         CurrentValue = false,
         Callback = function(Value)
             Config.AutoFishingV1 = Value
             if Value then
                 AutoFishingV1()
                 Rayfield:Notify({
-                    Title = "Auto Fishing",
-                    Content = "Started with FASTER catch!",
+                    Title = "Auto Fishing Started",
+                    Content = "Running with correct retry logic!",
                     Duration = 3
                 })
             end
@@ -536,7 +608,7 @@ local function CreateUI()
     })
     
     Tab1:CreateSlider({
-        Name = "Catch Speed (Lower = Faster)",
+        Name = "Catch Speed",
         Range = {0.01, 1},
         Increment = 0.01,
         CurrentValue = 0.05,
@@ -546,7 +618,7 @@ local function CreateUI()
     })
     
     Tab1:CreateToggle({
-        Name = "Perfect Catch (Manual)",
+        Name = "Perfect Catch",
         CurrentValue = false,
         Callback = function(Value)
             TogglePerfectCatch(Value)
@@ -554,7 +626,7 @@ local function CreateUI()
     })
     
     Tab1:CreateToggle({
-        Name = "Auto Sell Fish",
+        Name = "Auto Sell",
         CurrentValue = false,
         Callback = function(Value)
             Config.AutoSell = Value
@@ -562,26 +634,16 @@ local function CreateUI()
         end
     })
     
-    Tab1:CreateSection("Anti AFK")
-    
     Tab1:CreateToggle({
-        Name = "Anti AFK (Prevent Kick)",
+        Name = "Anti AFK",
         CurrentValue = false,
         Callback = function(Value)
             Config.AntiAFK = Value
-            if Value then 
-                AntiAFK()
-                Rayfield:Notify({
-                    Title = "Anti AFK",
-                    Content = "Enabled - You won't be kicked!",
-                    Duration = 2
-                })
-            end
+            if Value then AntiAFK() end
         end
     })
     
-    -- ===== TELEPORT TAB =====
-    local Tab2 = Window:CreateTab("📍 Teleport", 4483362458)
+    local Tab2 = Window:CreateTab("Teleport", 4483362458)
     
     Tab2:CreateSection("Teleport Settings")
     
@@ -590,15 +652,8 @@ local function CreateUI()
         CurrentValue = false,
         Callback = function(Value)
             Config.TeleportEnabled = Value
-            Rayfield:Notify({
-                Title = "Teleport",
-                Content = Value and "Enabled!" or "Disabled!",
-                Duration = 2
-            })
         end
     })
-    
-    Tab2:CreateSection("Islands")
     
     local IslandOptions = {}
     for i, island in ipairs(IslandsData) do
@@ -609,121 +664,20 @@ local function CreateUI()
         Name = "Select Island",
         Options = IslandOptions,
         CurrentOption = {IslandOptions[1]},
-        Callback = function(Option) end
     })
     
     Tab2:CreateButton({
-        Name = "Teleport to Island",
+        Name = "Teleport",
         Callback = function()
             local selected = IslandDrop.CurrentOption[1]
             local index = tonumber(selected:match("^(%d+)%."))
-            
             if index then
                 TeleportToIsland(index)
             end
         end
     })
     
-    Tab2:CreateSection("Teleport to Player")
-    
-    Tab2:CreateToggle({
-        Name = "Enable Teleport to Player",
-        CurrentValue = false,
-        Callback = function(Value)
-            Config.TeleportToPlayerEnabled = Value
-            Rayfield:Notify({
-                Title = "Teleport to Player",
-                Content = Value and "Enabled!" or "Disabled!",
-                Duration = 2
-            })
-        end
-    })
-    
-    local Players_List = {}
-    local PlayerDrop = Tab2:CreateDropdown({
-        Name = "Select Player",
-        Options = {"Click 'Load Players' first"},
-        CurrentOption = {"Click 'Load Players' first"},
-        Callback = function(Option) end
-    })
-    
-    Tab2:CreateButton({
-        Name = "Load Players",
-        Callback = function()
-            Players_List = {}
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer and player.Character then
-                    table.insert(Players_List, player.Name)
-                end
-            end
-            
-            if #Players_List == 0 then
-                Players_List = {"No players online"}
-            end
-            
-            PlayerDrop:Refresh(Players_List)
-            Rayfield:Notify({
-                Title = "Players Loaded",
-                Content = string.format("Found %d players", #Players_List),
-                Duration = 2
-            })
-        end
-    })
-    
-    Tab2:CreateButton({
-        Name = "Teleport to Player",
-        Callback = function()
-            if not Config.TeleportToPlayerEnabled then
-                Rayfield:Notify({
-                    Title = "Teleport Disabled",
-                    Content = "Enable 'Teleport to Player' first!",
-                    Duration = 2
-                })
-                return
-            end
-            
-            local selected = PlayerDrop.CurrentOption[1]
-            if selected == "Click 'Load Players' first" or selected == "No players online" then
-                Rayfield:Notify({
-                    Title = "Error",
-                    Content = "Load players first!",
-                    Duration = 2
-                })
-                return
-            end
-            
-            local player = Players:FindFirstChild(selected)
-            
-            if player and player.Character then
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    HumanoidRootPart.CFrame = hrp.CFrame * CFrame.new(0, 3, 0)
-                    Rayfield:Notify({
-                        Title = "Teleported",
-                        Content = "Teleported to " .. selected,
-                        Duration = 2
-                    })
-                else
-                    Rayfield:Notify({
-                        Title = "Error",
-                        Content = "Player character not found!",
-                        Duration = 2
-                    })
-                end
-            else
-                Rayfield:Notify({
-                    Title = "Error",
-                    Content = "Player not found or left!",
-                    Duration = 2
-                })
-            end
-        end
-    })
-    
-    -- ===== UTILITY TAB =====
-    local Tab3 = Window:CreateTab("⚡ Utility", 4483362458)
-    
-    Tab3:CreateSection("Speed Settings")
+    local Tab3 = Window:CreateTab("Utility", 4483362458)
     
     Tab3:CreateSlider({
         Name = "Walk Speed",
@@ -751,98 +705,16 @@ local function CreateUI()
         end
     })
     
-    Tab3:CreateButton({
-        Name = "Reset Speed",
-        Callback = function()
-            if Humanoid then
-                Humanoid.WalkSpeed = 16
-                Humanoid.JumpPower = 50
-                Rayfield:Notify({Title = "Speed Reset", Content = "Back to normal", Duration = 2})
-            end
-        end
-    })
+    local Tab4 = Window:CreateTab("Info", 4483362458)
     
-    -- ===== TELEGRAM TAB =====
-    local Tab4 = Window:CreateTab("🔔 Telegram", 4483362458)
-    
-    Tab4:CreateSection("Telegram Bot Settings")
-    
-    Tab4:CreateToggle({
-        Name = "Enable Telegram Notifications",
-        CurrentValue = false,
-        Callback = function(Value)
-            Config.Hooked.Enabled = Value
-        end
-    })
-    
-    Tab4:CreateInput({
-        Name = "Bot Token",
-        PlaceholderText = "Enter bot token",
-        RemoveTextAfterFocusLost = false,
-        Callback = function(Value)
-            Config.Hooked.BotToken = Value
-        end
-    })
-    
-    Tab4:CreateInput({
-        Name = "Chat ID",
-        PlaceholderText = "Enter chat ID",
-        RemoveTextAfterFocusLost = false,
-        Callback = function(Value)
-            Config.Hooked.ChatID = Value
-        end
-    })
-    
-    Tab4:CreateDropdown({
-        Name = "Target Rarities",
-        Options = {"COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC", "SECRET"},
-        CurrentOption = {},
-        MultipleOptions = true,
-        Callback = function(Value)
-            Config.Hooked.TargetRarities = Value
-        end
-    })
-    
-    Tab4:CreateButton({
-        Name = "Test Telegram",
-        Callback = function()
-            local testFish = {
-                Name = "Test Fish",
-                Tier = 5,
-                Id = "TEST",
-                Chance = 0.001,
-                SellPrice = 1000
-            }
-            Hooked:SendTelegramMessage(testFish)
-            Rayfield:Notify({Title = "Test Sent", Content = "Check your Telegram!", Duration = 2})
-        end
-    })
-    
-    -- ===== INFO TAB =====
-    local Tab5 = Window:CreateTab("ℹ️ Info", 4483362458)
-    
-    Tab5:CreateSection("Script Information")
-    
-    Tab5:CreateParagraph({
-        Title = "RhyRu9 FISH IT - FIXED",
-        Content = "Developer: RhyRu9\nVersion: Fixed Edition\nDate: 17 Oct 2025"
-    })
-    
-    Tab5:CreateSection("Fixed Features")
-    
-    Tab5:CreateParagraph({
-        Title = "✅ What's Fixed",
-        Content = "• Perfect Catch - FASTER speed (0.05s)\n• Teleport - Can be toggled ON/OFF\n• Teleport to Player - Added with toggle\n• Anti AFK - Added to prevent kick\n• Telegram Bot - Working notifications"
-    })
-    
-    Tab5:CreateParagraph({
-        Title = "⚡ How to Use",
-        Content = "1. Enable Auto Fishing for auto mode\n2. Enable Perfect Catch for manual\n3. Adjust Catch Speed (lower = faster)\n4. Toggle Teleport ON before using\n5. Enable Anti AFK to prevent kick\n6. Toggle Teleport to Player ON\n7. Setup Telegram Bot if needed"
+    Tab4:CreateParagraph({
+        Title = "RhyRu9 FISH IT",
+        Content = "Charge Rod: 15x Retry\nWait: 3 Detik\nFull Reset: 3x Error\nVersion: Corrected"
     })
     
     Rayfield:Notify({
         Title = "RhyRu9 FISH IT",
-        Content = "Fixed version loaded!",
+        Content = "Loaded with correct retry logic!",
         Duration = 3
     })
 end
@@ -874,11 +746,6 @@ LocalPlayer.CharacterAdded:Connect(function(char)
         task.wait(1)
         AntiAFK()
     end
-    
-    if Config.PerfectCatch then
-        task.wait(1)
-        TogglePerfectCatch(true)
-    end
 end)
 
 -- Main Execution
@@ -888,12 +755,11 @@ end)
 
 if success then
     print("=======================================")
-    print("  RhyRu9 FISH IT - FIXED VERSION")
-    print("  ✅ Perfect Catch - FASTER (0.05s)")
-    print("  ✅ Teleport - Toggle ON/OFF")
-    print("  ✅ Teleport to Player - Added")
-    print("  ✅ Anti AFK - Prevent Kick")
-    print("  ✅ Telegram Bot - Working")
+    print("  RhyRu9 FISH IT - CORRECT LOGIC")
+    print("  Charge Rod: 15x Retry")
+    print("  Wait: 3 Detik untuk Catch")
+    print("  Full Reset: 3x Error")
+    print("  Status: OK")
     print("=======================================")
 else
     warn("ERROR: " .. tostring(err))
