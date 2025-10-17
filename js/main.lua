@@ -1,6 +1,6 @@
--- RhyRu9 FISH IT - FIXED VERSION WITH AUTO RETRY (NO MENU)
+-- RhyRu9 FISH IT - FIXED VERSION
 -- DEVELOPER BY RhyRu9
--- Auto Retry: Error Detection + Perfect Catch Reset
+-- Fixed: Perfect Catch Speed, Teleport Toggle, Telegram Bot
 -- Updated: 17 Oct 2025
 
 print("Loading RhyRu9 FISH IT - FIXED VERSION...")
@@ -39,20 +39,15 @@ local Window = Rayfield:CreateWindow({
 local Config = {
     AutoFishingV1 = false,
     PerfectCatch = false,
-    FastCatch = true,
-    CatchDelay = 0.05,
+    FastCatch = true, -- NEW: Faster catch speed
+    CatchDelay = 0.05, -- NEW: Delay for faster catch (lower = faster)
     AutoSell = false,
-    AntiAFK = false,
-    TeleportEnabled = false,
-    TeleportToPlayerEnabled = false,
+    AntiAFK = false, -- NEW: Anti AFK toggle
+    TeleportEnabled = false, -- NEW: Toggle for teleport
+    TeleportToPlayerEnabled = false, -- NEW: Toggle for teleport to player
     SelectedIsland = nil,
     WalkSpeed = 16,
     JumpPower = 50,
-    
-    -- Auto Retry Config
-    AutoRetryEnabled = true,
-    ErrorThreshold = 5,
-    ResetInterval = 1800, -- 30 menit
     
     -- Telegram Config
     Hooked = {
@@ -77,11 +72,6 @@ local tierToRarity = {
     [6] = "MYTHIC",
     [7] = "SECRET"
 }
-
--- Auto Retry Tracking
-local ErrorCount = 0
-local LastErrorReset = tick()
-local SessionStartTime = tick()
 
 -- Helper Functions
 local function normalizeName(name)
@@ -334,7 +324,6 @@ if FishCaught then
             fishName, rarity, tostring(sellPrice), chanceDisplay))
         
         Hooked:SendTelegramMessage(fishInfo)
-        ErrorCount = 0
     end)
 else
     warn("[❌] FishCaught remote not found!")
@@ -342,20 +331,6 @@ end
 
 -- ===== PERFECT CATCH (FASTER) =====
 local PerfectCatchActive = false
-
-local function ResetPerfectCatch()
-    print("[⚠️  AUTO RETRY] Mendeteksi ERROR! Reset perfect catch values...")
-    PerfectCatchActive = false
-    task.wait(1)
-    PerfectCatchActive = true
-    print("[✅ AUTO RETRY] Perfect catch direset & diaktifkan kembali")
-    
-    Rayfield:Notify({
-        Title = "⚠️ Auto Retry Triggered",
-        Content = "Perfect catch values reset karena error detected",
-        Duration = 3
-    })
-end
 
 local function TogglePerfectCatch(enabled)
     Config.PerfectCatch = enabled
@@ -370,6 +345,7 @@ local function TogglePerfectCatch(enabled)
             local method = getnamecallmethod()
             if method == "InvokeServer" and self == StartMini then
                 if PerfectCatchActive and not Config.AutoFishingV1 then
+                    -- Perfect catch values
                     return old(self, -1.233184814453125, 0.9945034885633273)
                 end
             end
@@ -385,24 +361,15 @@ local function TogglePerfectCatch(enabled)
     end
 end
 
--- ===== AUTO FISHING V1 (FASTER CATCH) WITH AUTO RETRY =====
+-- ===== AUTO FISHING V1 (FASTER CATCH) =====
 local FishingActive = false
 
 local function AutoFishingV1()
     task.spawn(function()
-        print("[AUTO FISHING] Started - FAST MODE with AUTO RETRY")
+        print("[AUTO FISHING] Started - FAST MODE")
         
         while Config.AutoFishingV1 do
             FishingActive = true
-            
-            local sessionTime = tick() - SessionStartTime
-            
-            -- Check if need reset after 30 minutes
-            if sessionTime > Config.ResetInterval and Config.AutoRetryEnabled then
-                print("[⚠️  AUTO RETRY] 30 menit runtime tercapai! Reset perfect catch...")
-                ResetPerfectCatch()
-                SessionStartTime = tick()
-            end
             
             local success, err = pcall(function()
                 if not LocalPlayer.Character or not HumanoidRootPart then
@@ -412,61 +379,24 @@ local function AutoFishingV1()
                 end
 
                 -- Equip tool
-                local equipOk = pcall(function()
-                    EquipTool:FireServer(1)
-                end)
-                
-                if not equipOk then
-                    ErrorCount = ErrorCount + 1
-                    print("[❌] Gagal equip tool (Error: " .. ErrorCount .. "/" .. Config.ErrorThreshold .. ")")
-                    
-                    if ErrorCount >= Config.ErrorThreshold and Config.AutoRetryEnabled then
-                        ResetPerfectCatch()
-                        ErrorCount = 0
-                    end
-                    task.wait(0.5)
-                    return
-                end
-                
+                EquipTool:FireServer(1)
                 task.wait(0.1)
 
-                -- Charge rod (AGGRESSIVE RETRY)
+                -- Charge rod
                 local charged = false
-                for attempt = 1, 10 do
+                for attempt = 1, 3 do
                     local ok, result = pcall(function()
                         return ChargeRod:InvokeServer(tick())
                     end)
                     if ok and result then 
                         charged = true 
-                        print("[✅] Charge rod OK (attempt " .. attempt .. ")")
                         break 
                     end
-                    print("[⏳] Retry charge rod... (attempt " .. attempt .. "/10)")
-                    task.wait(0.1)
+                    task.wait(0.05)
                 end
                 
                 if not charged then
-                    -- Fallback: Try one more time dengan delay lebih lama
                     task.wait(0.5)
-                    local ok, result = pcall(function()
-                        return ChargeRod:InvokeServer(tick())
-                    end)
-                    if ok and result then
-                        charged = true
-                        print("[✅] Charge rod OK (fallback)")
-                    end
-                end
-                
-                if not charged then
-                    ErrorCount = ErrorCount + 1
-                    print("[❌] Gagal charge rod (Error: " .. ErrorCount .. "/" .. Config.ErrorThreshold .. ")")
-                    
-                    if ErrorCount >= Config.ErrorThreshold and Config.AutoRetryEnabled then
-                        print("[⚠️  CHARGE ROD] Terlalu banyak error! Reset perfect catch...")
-                        ResetPerfectCatch()
-                        ErrorCount = 0
-                    end
-                    task.wait(1)
                     return
                 end
 
@@ -486,13 +416,6 @@ local function AutoFishingV1()
                 end
                 
                 if not started then
-                    ErrorCount = ErrorCount + 1
-                    print("[❌] Gagal start minigame (Error: " .. ErrorCount .. "/" .. Config.ErrorThreshold .. ")")
-                    
-                    if ErrorCount >= Config.ErrorThreshold and Config.AutoRetryEnabled then
-                        ResetPerfectCatch()
-                        ErrorCount = 0
-                    end
                     task.wait(0.5)
                     return
                 end
@@ -501,40 +424,18 @@ local function AutoFishingV1()
                 task.wait(Config.CatchDelay)
 
                 -- Finish fishing
-                local finishOk = pcall(function()
-                    FinishFish:FireServer()
-                end)
-                
-                if not finishOk then
-                    ErrorCount = ErrorCount + 1
-                    print("[❌] Gagal finish fish (Error: " .. ErrorCount .. "/" .. Config.ErrorThreshold .. ")")
-                    
-                    if ErrorCount >= Config.ErrorThreshold and Config.AutoRetryEnabled then
-                        ResetPerfectCatch()
-                        ErrorCount = 0
-                    end
-                    task.wait(0.5)
-                    return
-                end
+                FinishFish:FireServer()
                 
                 task.wait(0.1)
             end)
 
             if not success then
-                ErrorCount = ErrorCount + 1
-                warn("[❌] Error (" .. ErrorCount .. "/" .. Config.ErrorThreshold .. "): " .. tostring(err))
-                
-                if ErrorCount >= Config.ErrorThreshold and Config.AutoRetryEnabled then
-                    ResetPerfectCatch()
-                    ErrorCount = 0
-                else
-                    task.wait(0.5)
-                end
+                warn("[AUTO FISHING] Error: " .. tostring(err))
+                task.wait(1)
             end
         end
         
         FishingActive = false
-        ErrorCount = 0
         print("[AUTO FISHING] Stopped")
     end)
 end
@@ -616,7 +517,7 @@ local function CreateUI()
     -- ===== FISHING TAB =====
     local Tab1 = Window:CreateTab("🎣 Fishing", 4483362458)
     
-    Tab1:CreateSection("Auto Fishing (With Auto Retry)")
+    Tab1:CreateSection("Auto Fishing")
     
     Tab1:CreateToggle({
         Name = "Auto Fishing (FAST MODE)",
@@ -627,7 +528,7 @@ local function CreateUI()
                 AutoFishingV1()
                 Rayfield:Notify({
                     Title = "Auto Fishing",
-                    Content = "Started dengan AUTO RETRY enabled!",
+                    Content = "Started with FASTER catch!",
                     Duration = 3
                 })
             end
@@ -923,31 +824,26 @@ local function CreateUI()
     Tab5:CreateSection("Script Information")
     
     Tab5:CreateParagraph({
-        Title = "RhyRu9 FISH IT - AUTO RETRY",
-        Content = "Developer: RhyRu9\nVersion: Fully Automatic\nDate: 17 Oct 2025"
+        Title = "RhyRu9 FISH IT - FIXED",
+        Content = "Developer: RhyRu9\nVersion: Fixed Edition\nDate: 17 Oct 2025"
     })
     
-    Tab5:CreateSection("🔄 Auto Retry System (OTOMATIS)")
+    Tab5:CreateSection("Fixed Features")
     
     Tab5:CreateParagraph({
-        Title = "✅ Fitur Auto Retry",
-        Content = "• Error Detection - Deteksi error otomatis\n• Perfect Catch Reset - Reset setiap error\n• 30 Menit Reset - Refresh state setiap 30 min\n• Error Threshold - Reset setelah 5 error\n• Fully Automatic - Tidak perlu intervensi!"
-    })
-    
-    Tab5:CreateParagraph({
-        Title = "⚡ Cara Kerja",
-        Content = "1. Jalankan Auto Fishing\n2. System monitor error otomatis\n3. Jika error 5x → Perfect catch reset\n4. Setiap 30 menit → Session reset\n5. Tetap catch terus tanpa gangguan!"
+        Title = "✅ What's Fixed",
+        Content = "• Perfect Catch - FASTER speed (0.05s)\n• Teleport - Can be toggled ON/OFF\n• Teleport to Player - Added with toggle\n• Anti AFK - Added to prevent kick\n• Telegram Bot - Working notifications"
     })
     
     Tab5:CreateParagraph({
-        Title = "📊 Status Monitor",
-        Content = "Error Count: " .. tostring(ErrorCount) .. "/5\nSession Time: " .. string.format("%.0f", tick() - SessionStartTime) .. " detik"
+        Title = "⚡ How to Use",
+        Content = "1. Enable Auto Fishing for auto mode\n2. Enable Perfect Catch for manual\n3. Adjust Catch Speed (lower = faster)\n4. Toggle Teleport ON before using\n5. Enable Anti AFK to prevent kick\n6. Toggle Teleport to Player ON\n7. Setup Telegram Bot if needed"
     })
     
     Rayfield:Notify({
-        Title = "✅ RhyRu9 FISH IT AUTO RETRY",
-        Content = "Fully automatic mode loaded! Tinggal enable Auto Fishing",
-        Duration = 4
+        Title = "RhyRu9 FISH IT",
+        Content = "Fixed version loaded!",
+        Duration = 3
     })
 end
 
@@ -992,13 +888,12 @@ end)
 
 if success then
     print("=======================================")
-    print("  RhyRu9 FISH IT - AUTO RETRY")
+    print("  RhyRu9 FISH IT - FIXED VERSION")
     print("  ✅ Perfect Catch - FASTER (0.05s)")
-    print("  ✅ Error Detection - Otomatis")
-    print("  ✅ Perfect Catch Reset - Auto")
-    print("  ✅ 30 Menit Session Reset - Auto")
+    print("  ✅ Teleport - Toggle ON/OFF")
+    print("  ✅ Teleport to Player - Added")
+    print("  ✅ Anti AFK - Prevent Kick")
     print("  ✅ Telegram Bot - Working")
-    print("  ✅ Anti AFK - Enabled")
     print("=======================================")
 else
     warn("ERROR: " .. tostring(err))
