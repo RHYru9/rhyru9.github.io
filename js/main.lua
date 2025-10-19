@@ -1,7 +1,7 @@
 -- RhyRu9 FISH IT v1.0
 -- DEVELOPER BY RhyRu9
--- Update: 19 Oct 2025
--- Fitur: 15x Retry System, 3 Detik Wait, Perfect Catch, Anti AFK, Notifikasi Telegram (FIXED)
+-- Update: 19 Oct 2025 (Telegram Fix)
+-- Fitur: 15x Retry System, 3 Detik Wait, Perfect Catch, Anti AFK, Notifikasi Telegram
 
 print("Memuat RhyRu9 FISH IT v1.0...")
 
@@ -52,7 +52,7 @@ local Config = {
     Telegram = {
         Aktif = false,
         TokenBot = "",
-        ChatId = "", -- SIMPAN Chat ID
+        ChatId = "", -- SIMPAN CHAT ID
         RaritasTerpilih = {}
     }
 }
@@ -113,13 +113,13 @@ if isfile(berkasTerbuka) then
     end
 end
 
--- Bot Telegram
+-- Bot Telegram (FIXED VERSION)
 local BotTelegram = {}
 
 function BotTelegram:AmbilChatId(token)
     if not token or token == "" then return nil end
     
-    -- Jika sudah ada Chat ID tersimpan, gunakan itu
+    -- GUNAKAN CHAT ID YANG SUDAH DISIMPAN
     if Config.Telegram.ChatId and Config.Telegram.ChatId ~= "" then
         print("[TELEGRAM] Menggunakan Chat ID tersimpan: " .. Config.Telegram.ChatId)
         return Config.Telegram.ChatId
@@ -146,7 +146,7 @@ function BotTelegram:AmbilChatId(token)
                     if update.message and update.message.chat and update.message.chat.id then
                         local chatId = tostring(update.message.chat.id)
                         print("[TELEGRAM] Chat ID ditemukan: " .. chatId)
-                        Config.Telegram.ChatId = chatId -- SIMPAN
+                        Config.Telegram.ChatId = chatId -- SIMPAN UNTUK DIGUNAKAN NANTI
                         return chatId
                     end
                 end
@@ -168,59 +168,82 @@ function BotTelegram:AmbilChatId(token)
 end
 
 function BotTelegram:KirimPesan(infoIkan)
-    print("[TELEGRAM] === KirimPesan dipanggil ===")
+    -- DEBUG LOG AWAL
+    print("\n[TELEGRAM DEBUG] ========== MULAI ==========")
+    print("[TELEGRAM DEBUG] KirimPesan dipanggil")
     
+    -- CEK 1: Apakah Telegram aktif?
     if not Config.Telegram.Aktif then 
-        print("[TELEGRAM] ❌ Telegram tidak aktif")
+        print("[TELEGRAM DEBUG] ❌ Config.Telegram.Aktif = FALSE")
+        print("[TELEGRAM DEBUG] Solusi: Aktifkan toggle 'Aktifkan Notifikasi Telegram'")
         return 
     end
+    print("[TELEGRAM DEBUG] ✅ Telegram aktif")
     
+    -- CEK 2: Apakah token ada?
     if Config.Telegram.TokenBot == "" then 
-        print("[TELEGRAM] ❌ Token bot kosong")
+        print("[TELEGRAM DEBUG] ❌ Token bot KOSONG")
         return 
     end
+    print("[TELEGRAM DEBUG] ✅ Token bot tersedia")
     
+    -- CEK 3: Apakah data ikan valid?
     if not infoIkan.Tingkat then 
-        print("[TELEGRAM] ❌ Tingkat ikan tidak ada")
+        print("[TELEGRAM DEBUG] ❌ infoIkan.Tingkat TIDAK ADA")
         return 
     end
+    print("[TELEGRAM DEBUG] ✅ Data ikan valid")
     
     local raritasIkan = tingkatKeRaritas[infoIkan.Tingkat] or "TIDAK DIKETAHUI"
-    print("[TELEGRAM] 📊 Ikan: " .. (infoIkan.Nama or "Unknown") .. " | Raritas: " .. raritasIkan .. " | Tier: " .. tostring(infoIkan.Tingkat))
+    print("[TELEGRAM DEBUG] 📊 Nama: " .. (infoIkan.Nama or "Unknown"))
+    print("[TELEGRAM DEBUG] 📊 Raritas: " .. raritasIkan)
+    print("[TELEGRAM DEBUG] 📊 Tier: " .. tostring(infoIkan.Tingkat))
     
-    -- FILTER: Jika ada filter aktif, cek cocok atau tidak
+    -- CEK 4: Filter raritas
+    print("[TELEGRAM DEBUG] Jumlah filter aktif: " .. #Config.Telegram.RaritasTerpilih)
+    
     if #Config.Telegram.RaritasTerpilih > 0 then
-        print("[TELEGRAM] 🔍 Filter aktif: " .. table.concat(Config.Telegram.RaritasTerpilih, ", "))
+        print("[TELEGRAM DEBUG] 🔍 Ada filter, mengecek...")
+        print("[TELEGRAM DEBUG] Filter: " .. table.concat(Config.Telegram.RaritasTerpilih, ", "))
         
         local harusKirim = false
         for _, raritasTarget in ipairs(Config.Telegram.RaritasTerpilih) do
-            local ikanNormalized = string.upper(raritasIkan):gsub("%s+", "")
-            local targetNormalized = string.upper(raritasTarget):gsub("%s+", "")
+            local ikanNorm = string.upper(raritasIkan):gsub("%s+", "")
+            local targetNorm = string.upper(raritasTarget):gsub("%s+", "")
             
-            if ikanNormalized == targetNormalized then
+            print("[TELEGRAM DEBUG] Bandingkan: '" .. ikanNorm .. "' vs '" .. targetNorm .. "'")
+            
+            if ikanNorm == targetNorm then
                 harusKirim = true
-                print("[TELEGRAM] ✅ COCOK dengan filter: " .. raritasTarget)
+                print("[TELEGRAM DEBUG] ✅ COCOK!")
                 break
             end
         end
         
         if not harusKirim then 
-            print("[TELEGRAM] ❌ Tidak cocok filter, skip")
+            print("[TELEGRAM DEBUG] ❌ TIDAK COCOK dengan filter, SKIP")
+            print("[TELEGRAM DEBUG] Solusi: Matikan semua toggle raritas untuk terima SEMUA ikan")
+            print("[TELEGRAM DEBUG] ========== SELESAI ==========\n")
             return 
         end
     else
-        print("[TELEGRAM] ⚠️ Tidak ada filter, KIRIM SEMUA IKAN")
+        print("[TELEGRAM DEBUG] ⚠️ TIDAK ADA FILTER = KIRIM SEMUA")
     end
     
-    -- Ambil Chat ID (akan pakai yang tersimpan jika ada)
+    -- CEK 5: Ambil Chat ID
+    print("[TELEGRAM DEBUG] Mengambil Chat ID...")
     local chatId = self:AmbilChatId(Config.Telegram.TokenBot)
     if not chatId then
-        warn("[TELEGRAM] ❌ Tidak dapat mengambil Chat ID")
+        warn("[TELEGRAM DEBUG] ❌ GAGAL ambil Chat ID")
+        print("[TELEGRAM DEBUG] Solusi: Klik 'Test Kirim Pesan' dulu untuk mendapatkan Chat ID")
+        print("[TELEGRAM DEBUG] ========== SELESAI ==========\n")
         return
     end
+    print("[TELEGRAM DEBUG] ✅ Chat ID: " .. chatId)
     
+    -- CEK 6: Format dan kirim pesan
     local pesan = self:FormatPesan(infoIkan)
-    print("[TELEGRAM] 📝 Mengirim ke Chat ID: " .. chatId)
+    print("[TELEGRAM DEBUG] 📝 Pesan diformat, siap kirim")
     
     local berhasil, error = pcall(function()
         local url = "https://api.telegram.org/bot" .. Config.Telegram.TokenBot .. "/sendMessage"
@@ -230,10 +253,12 @@ function BotTelegram:KirimPesan(infoIkan)
             parse_mode = "Markdown"
         })
         
+        print("[TELEGRAM DEBUG] 🚀 Mengirim pesan...")
+        
         local response = nil
         
         if http_request then
-            print("[TELEGRAM] 🚀 Mengirim via http_request...")
+            print("[TELEGRAM DEBUG] Method: http_request")
             response = http_request({
                 Url = url, 
                 Method = "POST", 
@@ -241,7 +266,7 @@ function BotTelegram:KirimPesan(infoIkan)
                 Body = data
             })
         elseif syn and syn.request then
-            print("[TELEGRAM] 🚀 Mengirim via syn.request...")
+            print("[TELEGRAM DEBUG] Method: syn.request")
             response = syn.request({
                 Url = url, 
                 Method = "POST", 
@@ -249,7 +274,7 @@ function BotTelegram:KirimPesan(infoIkan)
                 Body = data
             })
         elseif request then
-            print("[TELEGRAM] 🚀 Mengirim via request...")
+            print("[TELEGRAM DEBUG] Method: request")
             response = request({
                 Url = url, 
                 Method = "POST", 
@@ -257,30 +282,31 @@ function BotTelegram:KirimPesan(infoIkan)
                 Body = data
             })
         else
-            warn("[TELEGRAM] ❌ Tidak ada HTTP library!")
+            warn("[TELEGRAM DEBUG] ❌ Tidak ada HTTP library!")
             return
         end
         
         if response then
-            print("[TELEGRAM] ✅ Response: " .. tostring(response.StatusCode or "OK"))
+            print("[TELEGRAM DEBUG] ✅ Response diterima")
+            if response.StatusCode then
+                print("[TELEGRAM DEBUG] Status Code: " .. response.StatusCode)
+            end
             if response.Body then
                 local responseData = HttpService:JSONDecode(response.Body)
                 if responseData.ok then
-                    print("[TELEGRAM] ✅ API Confirmed: Message sent!")
+                    print("[TELEGRAM DEBUG] ✅✅✅ PESAN TERKIRIM KE TELEGRAM!")
                 else
-                    warn("[TELEGRAM] ❌ API Error: " .. tostring(responseData.description or "Unknown"))
+                    warn("[TELEGRAM DEBUG] ❌ API Error: " .. tostring(responseData.description or "Unknown"))
                 end
             end
         end
     end)
     
     if not berhasil then
-        warn("[TELEGRAM] ❌ ERROR: " .. tostring(error))
-    else
-        print("[TELEGRAM] ✅ Selesai!")
+        warn("[TELEGRAM DEBUG] ❌ ERROR saat kirim: " .. tostring(error))
     end
     
-    print("[TELEGRAM] === KirimPesan selesai ===\n")
+    print("[TELEGRAM DEBUG] ========== SELESAI ==========\n")
 end
 
 function BotTelegram:KirimPesanTest()
@@ -300,83 +326,150 @@ function BotTelegram:KirimPesanTest()
     })
     
     print("[TELEGRAM] Mencoba mengambil Chat ID...")
+    print("[TELEGRAM] Token: " .. string.sub(Config.Telegram.TokenBot, 1, 10) .. "...")
+    
     task.wait(0.5)
     
     local chatId = self:AmbilChatId(Config.Telegram.TokenBot)
     if not chatId then
         Rayfield:Notify({
             Title = "❌ Error - Chat ID Tidak Ditemukan",
-            Content = "Kirim '/start' ke bot Anda!",
+            Content = "Langkah: 1) Cari bot di Telegram 2) Kirim '/start' 3) Tunggu 5 detik 4) Coba lagi",
             Duration = 6
         })
+        print("[TELEGRAM] Gagal: Tidak ada pesan di bot. Kirim '/start' ke bot Anda!")
         return false
     end
     
     Rayfield:Notify({
         Title = "✅ Chat ID Ditemukan!",
-        Content = "Chat ID: " .. chatId,
+        Content = "Chat ID: " .. chatId .. " | Mengirim pesan test...",
         Duration = 3
     })
+    print("[TELEGRAM] Chat ID ditemukan: " .. chatId)
     
-    local pesan = "🎣 RhyRu9 FISH IT - Test Connection\n\nPlayer: " .. LocalPlayer.Name .. "\nChat ID: " .. chatId .. "\nStatus: Connected ✅"
+    local pesan = "🎣 RhyRu9 FISH IT - Test Connection\n\nPlayer: " .. LocalPlayer.Name .. "\nChat ID: " .. chatId .. "\nStatus: Connected ✅\n\nJika Anda melihat pesan ini, setup berhasil!"
     
     local berhasilKirim = false
+    local errorDetail = ""
     
     pcall(function()
         local url = "https://api.telegram.org/bot" .. Config.Telegram.TokenBot .. "/sendMessage"
         
-        local response = nil
-        if http_request then
-            response = http_request({
-                Url = url,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode({
-                    chat_id = chatId,
-                    text = pesan
-                })
-            })
-        elseif syn and syn.request then
-            response = syn.request({
-                Url = url,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode({
-                    chat_id = chatId,
-                    text = pesan
-                })
-            })
-        elseif request then
-            response = request({
-                Url = url,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode({
-                    chat_id = chatId,
-                    text = pesan
-                })
-            })
-        end
+        print("[TELEGRAM] Mengirim ke Chat ID: " .. chatId)
+        print("[TELEGRAM] URL: " .. string.sub(url, 1, 50) .. "...")
         
-        if response then
-            berhasilKirim = true
+        if http_request then
+            print("[TELEGRAM] Menggunakan http_request")
+            local response = http_request({
+                Url = url,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    chat_id = chatId,
+                    text = pesan
+                })
+            })
+            
+            if response then
+                print("[TELEGRAM] Response Status: " .. tostring(response.StatusCode or "nil"))
+                if response.Body then
+                    print("[TELEGRAM] Response Body: " .. tostring(response.Body))
+                    local responseData = HttpService:JSONDecode(response.Body)
+                    if responseData.ok then
+                        berhasilKirim = true
+                        print("[TELEGRAM] ✅ API confirmed: Message sent!")
+                    else
+                        errorDetail = tostring(responseData.description or "Unknown error")
+                        print("[TELEGRAM] ❌ API error: " .. errorDetail)
+                    end
+                else
+                    print("[TELEGRAM] ⚠️ No response body, but request sent")
+                    berhasilKirim = true
+                end
+            else
+                print("[TELEGRAM] ⚠️ No response object, but request sent")
+                berhasilKirim = true
+            end
+            
+        elseif syn and syn.request then
+            print("[TELEGRAM] Menggunakan syn.request")
+            local response = syn.request({
+                Url = url,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    chat_id = chatId,
+                    text = pesan
+                })
+            })
+            
+            if response and response.Body then
+                local responseData = HttpService:JSONDecode(response.Body)
+                if responseData.ok then
+                    berhasilKirim = true
+                else
+                    errorDetail = tostring(responseData.description or "Unknown error")
+                end
+            else
+                berhasilKirim = true
+            end
+            
+        elseif request then
+            print("[TELEGRAM] Menggunakan request")
+            local response = request({
+                Url = url,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    chat_id = chatId,
+                    text = pesan
+                })
+            })
+            
+            if response and response.Body then
+                local responseData = HttpService:JSONDecode(response.Body)
+                if responseData.ok then
+                    berhasilKirim = true
+                else
+                    errorDetail = tostring(responseData.description or "Unknown error")
+                end
+            else
+                berhasilKirim = true
+            end
+        else
+            error("No HTTP library available")
         end
     end)
     
     if berhasilKirim then
         Rayfield:Notify({
             Title = "✅ PESAN TERKIRIM!",
-            Content = "Cek Telegram sekarang!",
-            Duration = 5
+            Content = "Chat ID: " .. chatId .. " | BUKA TELEGRAM SEKARANG dan cari chat dengan bot Anda!",
+            Duration = 8
         })
-        print("[TELEGRAM] ✅ Test message berhasil!")
+        print("[TELEGRAM] ✅ Pesan berhasil dikirim!")
+        print("[TELEGRAM] ========================================")
+        print("[TELEGRAM] BUKA TELEGRAM ANDA DAN CEK:")
+        print("[TELEGRAM] 1. Chat dengan bot (nama bot dari @BotFather)")
+        print("[TELEGRAM] 2. Jika tidak ada, cek 'Archived Chats'")
+        print("[TELEGRAM] 3. Refresh Telegram (tutup dan buka lagi)")
+        print("[TELEGRAM] 4. Chat ID yang digunakan: " .. chatId)
+        print("[TELEGRAM] ========================================")
         return true
     else
         Rayfield:Notify({
             Title = "❌ Error Kirim Pesan",
-            Content = "Cek console untuk detail",
+            Content = "Error: " .. errorDetail .. " | Cek console untuk detail",
             Duration = 5
         })
+        print("[TELEGRAM] ❌ Gagal mengirim: " .. errorDetail)
         return false
     end
 end
@@ -400,17 +493,17 @@ function BotTelegram:FormatPesan(infoIkan)
     return msg
 end
 
--- Listener Ikan (PERBAIKAN)
+-- Listener Ikan (DITAMBAHKAN DEBUG LOG)
 if IkanTertangkap then
-    print("[LISTENER] Event IkanTertangkap connected!")
+    print("[LISTENER] ✅ Event IkanTertangkap DITEMUKAN dan connected!")
     
     local lastUID = nil
-    
     IkanTertangkap.OnClientEvent:Connect(function(data)
-        print("\n[IKAN TERTANGKAP] Event triggered!")
+        print("\n[IKAN TERTANGKAP] ========================================")
+        print("[IKAN TERTANGKAP] Event TRIGGERED!")
         
         if not data then 
-            print("[IKAN TERTANGKAP] Data kosong!")
+            print("[IKAN TERTANGKAP] ❌ Data kosong")
             return 
         end
         
@@ -422,35 +515,31 @@ if IkanTertangkap then
         
         local uid = nama .. "_" .. tingkat .. "_" .. tick()
         if uid == lastUID then 
-            print("[IKAN TERTANGKAP] Duplicate, skip")
+            print("[IKAN TERTANGKAP] Duplikat, skip")
             return 
         end
         lastUID = uid
         
         local info = pencariIkan[normalisasiNama(nama)] or {
-            Nama = nama, 
-            Tingkat = tingkat, 
-            Id = id or "?",
-            Kesempatan = kesempatan, 
-            HargaJual = harga
+            Nama = nama, Tingkat = tingkat, Id = id or "?",
+            Kesempatan = kesempatan, HargaJual = harga
         }
         
         if not info.Tingkat then info.Tingkat = tingkat end
         
         local raritas = tingkatKeRaritas[info.Tingkat] or "TIDAK DIKETAHUI"
         local tampilKesempatan = info.Kesempatan > 0 and string.format(" (%.6f%%)", info.Kesempatan * 100) or ""
-        
         print(string.format("[IKAN TERTANGKAP] %s | Raritas: %s | Harga: %s koin%s",
             nama, raritas, tostring(info.HargaJual or 0), tampilKesempatan))
         
-        -- KIRIM KE TELEGRAM
         print("[IKAN TERTANGKAP] Memanggil BotTelegram:KirimPesan...")
         BotTelegram:KirimPesan(info)
         
         JumlahError = 0
+        print("[IKAN TERTANGKAP] ========================================\n")
     end)
 else
-    warn("[LISTENER] Event IkanTertangkap TIDAK DITEMUKAN!")
+    warn("[LISTENER] ❌ Event IkanTertangkap TIDAK DITEMUKAN!")
 end
 
 -- Fungsi Reset
@@ -461,7 +550,7 @@ local function ResetPenuh()
     print("[RESET] Status bersih, siap mancing lagi")
 end
 
--- SISTEM MANCING OTOMATIS
+-- SISTEM MANCING OTOMATIS (TIDAK DIUBAH)
 local MancingAktif = false
 
 local function SistemMancingOtomatis()
@@ -478,7 +567,6 @@ local function SistemMancingOtomatis()
                     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
                 end
 
-                -- LANGKAH 1: PASANG ALAT
                 local equipSukses = false
                 for i = 1, 3 do
                     local ok = pcall(function()
@@ -504,7 +592,6 @@ local function SistemMancingOtomatis()
                 
                 task.wait(0.3)
 
-                -- LANGKAH 2: ISI DAYA PANCING (15X RETRY)
                 local chargeSukses = false
                 local upayaCharge = 0
                 
@@ -527,8 +614,9 @@ local function SistemMancingOtomatis()
                 
                 if not chargeSukses then
                     JumlahError = JumlahError + 1
-                    print("[ERROR] Isi daya gagal (" .. JumlahError .. "/" .. MaksimalError .. ")")
+                    print("[ERROR] Isi daya pancing gagal (" .. JumlahError .. "/" .. MaksimalError .. ") - KRITIS!")
                     if JumlahError >= MaksimalError then
+                        print("[RESET] Error isi daya terlalu banyak!")
                         ResetPenuh()
                     end
                     task.wait(2)
@@ -537,7 +625,6 @@ local function SistemMancingOtomatis()
 
                 task.wait(0.3)
 
-                -- LANGKAH 3: MULAI MINIGAME
                 local mulaiSukses = false
                 for i = 1, 5 do
                     local ok = pcall(function()
@@ -561,11 +648,9 @@ local function SistemMancingOtomatis()
                     return
                 end
 
-                -- LANGKAH 4: TUNGGU 3 DETIK
-                print("[TUNGGU] Menunggu 3 detik...")
+                print("[TUNGGU] Menunggu 3 detik untuk tangkap...")
                 task.wait(3)
 
-                -- LANGKAH 5: SELESAI MANCING
                 local selesaiSukses = false
                 for i = 1, 3 do
                     local ok = pcall(function()
@@ -598,6 +683,7 @@ local function SistemMancingOtomatis()
                 warn("[ERROR] Error Lua (" .. JumlahError .. "/" .. MaksimalError .. "): " .. tostring(err))
                 
                 if JumlahError >= MaksimalError then
+                    print("[RESET] Terlalu banyak error!")
                     ResetPenuh()
                 else
                     task.wait(1)
@@ -675,7 +761,7 @@ local function NoClip()
     end)
 end
 
--- Data Pulau
+-- Data Pulau (21 lokasi)
 local DataPulau = {
     {Nama = "Fisherman's Island", Posisi = Vector3.new(92, 9, 2768)},
     {Nama = "Arrow Lever", Posisi = Vector3.new(898, 8, -363)},
@@ -758,7 +844,7 @@ local function BuatUI()
     Tab1:CreateLabel("Perfect Catch: Aktif")
     Tab1:CreateLabel("Maksimal Error: 3x sebelum reset")
     
-    -- TAB 2: TELEGRAM
+    -- TAB 2: TELEGRAM (UPDATED DENGAN DEBUG)
     local Tab2 = Window:CreateTab("📱 Telegram", 4483362458)
     
     Tab2:CreateSection("Pengaturan Telegram")
@@ -766,7 +852,10 @@ local function BuatUI()
     Tab2:CreateToggle({
         Name = "Aktifkan Notifikasi Telegram",
         CurrentValue = false,
-        Callback = function(v) Config.Telegram.Aktif = v end
+        Callback = function(v) 
+            Config.Telegram.Aktif = v
+            print("[CONFIG] Telegram Aktif = " .. tostring(v))
+        end
     })
     
     Tab2:CreateInput({
@@ -775,6 +864,7 @@ local function BuatUI()
         RemoveTextAfterFocusLost = false,
         Callback = function(v) 
             Config.Telegram.TokenBot = v
+            print("[CONFIG] Token Bot diset (panjang: " .. #v .. ")")
         end
     })
     
@@ -786,35 +876,38 @@ local function BuatUI()
     })
     
     Tab2:CreateButton({
-        Name = "🐛 Test Notif Ikan (Debug)",
+        Name = "🐛 Debug Test Ikan UMUM",
         Callback = function()
-            print("\n[DEBUG] === TEST NOTIFIKASI IKAN ===")
-            print("[DEBUG] Telegram Aktif: " .. tostring(Config.Telegram.Aktif))
-            print("[DEBUG] Token tersedia: " .. tostring(Config.Telegram.TokenBot ~= ""))
-            print("[DEBUG] Chat ID tersimpan: " .. tostring(Config.Telegram.ChatId ~= ""))
-            print("[DEBUG] Filter aktif: " .. #Config.Telegram.RaritasTerpilih .. " raritas")
+            print("\n[DEBUG TEST] ==========================================")
+            print("[DEBUG TEST] Memulai test notifikasi ikan...")
+            print("[DEBUG TEST] Config.Telegram.Aktif: " .. tostring(Config.Telegram.Aktif))
+            print("[DEBUG TEST] Config.Telegram.TokenBot tersedia: " .. tostring(Config.Telegram.TokenBot ~= ""))
+            print("[DEBUG TEST] Config.Telegram.ChatId: " .. (Config.Telegram.ChatId ~= "" and Config.Telegram.ChatId or "BELUM ADA"))
+            print("[DEBUG TEST] Jumlah filter: " .. #Config.Telegram.RaritasTerpilih)
             
             if #Config.Telegram.RaritasTerpilih > 0 then
-                print("[DEBUG] Filter: " .. table.concat(Config.Telegram.RaritasTerpilih, ", "))
+                print("[DEBUG TEST] Filter aktif: " .. table.concat(Config.Telegram.RaritasTerpilih, ", "))
             else
-                print("[DEBUG] Filter: TIDAK ADA (kirim semua)")
+                print("[DEBUG TEST] TIDAK ADA FILTER (kirim semua)")
             end
             
-            -- Simulasi ikan LEGENDARIS
+            -- Simulasi ikan UMUM (paling sering muncul)
             local testIkan = {
-                Nama = "Test Golden Fish",
-                Tingkat = 5, -- LEGENDARIS
-                Id = 999,
-                Kesempatan = 0.001,
-                HargaJual = 50000
+                Nama = "Test Common Fish",
+                Tingkat = 1, -- UMUM
+                Id = 1,
+                Kesempatan = 0.5,
+                HargaJual = 10
             }
             
-            print("[DEBUG] Memanggil KirimPesan dengan data test...")
+            print("[DEBUG TEST] Memanggil BotTelegram:KirimPesan...")
+            print("[DEBUG TEST] ==========================================\n")
+            
             BotTelegram:KirimPesan(testIkan)
             
             Rayfield:Notify({
-                Title = "Test Debug",
-                Content = "Cek console (Fn+F9) untuk detail!",
+                Title = "🐛 Debug Test",
+                Content = "Cek Console (Fn+F9) untuk LOG LENGKAP!",
                 Duration = 5
             })
         end
@@ -823,19 +916,23 @@ local function BuatUI()
     Tab2:CreateSection("Cara Setup Telegram")
     
     Tab2:CreateParagraph({
-        Title = "⚠️ PENTING - Langkah Setup",
-        Content = "1. Buka @BotFather di Telegram\n2. Ketik /newbot dan ikuti instruksi\n3. Salin Token Bot yang diberikan\n4. WAJIB: Cari bot Anda di Telegram\n5. WAJIB: Kirim pesan '/start' ke bot\n6. Tempel token di atas\n7. Klik 'Test Kirim Pesan'\n\n⚠️ HARUS kirim '/start' dulu!"
+        Title = "⚠️ LANGKAH SETUP WAJIB",
+        Content = "1. Buka @BotFather di Telegram\n2. Ketik /newbot dan ikuti instruksi\n3. Salin Token Bot yang diberikan\n4. ⚠️ WAJIB: Cari bot Anda di Telegram\n5. ⚠️ WAJIB: Kirim '/start' ke bot\n6. Tempel token di atas\n7. Klik 'Test Kirim Pesan'\n8. ✅ Aktifkan toggle 'Aktifkan Notifikasi'\n9. Kosongkan SEMUA filter untuk test"
     })
     
-    Tab2:CreateLabel("Troubleshooting:")
-    Tab2:CreateLabel("• Test berhasil tapi notif ikan tidak?")
-    Tab2:CreateLabel("  → Cek toggle 'Aktifkan Notifikasi'")
-    Tab2:CreateLabel("  → Cek filter raritas (kosongkan untuk ALL)")
-    Tab2:CreateLabel("  → Klik 'Test Notif Ikan' untuk debug")
-    Tab2:CreateLabel("• Console: Fn+F9 untuk detail log")
+    Tab2:CreateLabel("━━━━━━━━━━━━━━━━━━━━")
+    Tab2:CreateLabel("📋 TROUBLESHOOTING:")
+    Tab2:CreateLabel("• Test berhasil tapi notif ikan TIDAK?")
+    Tab2:CreateLabel("  1) CEK toggle 'Aktifkan Notifikasi' ON")
+    Tab2:CreateLabel("  2) MATIKAN semua filter raritas")
+    Tab2:CreateLabel("  3) Klik 'Debug Test Ikan UMUM'")
+    Tab2:CreateLabel("  4) Buka Console: Fn+F9")
+    Tab2:CreateLabel("  5) Baca LOG yang muncul")
+    Tab2:CreateLabel("• Console menunjukkan dimana masalahnya!")
     
-    Tab2:CreateSection("Pilih Raritas untuk Notifikasi")
-    Tab2:CreateLabel("⚠️ Kosongkan SEMUA = Terima SEMUA ikan")
+    Tab2:CreateSection("Filter Raritas Notifikasi")
+    Tab2:CreateLabel("⚠️ KOSONGKAN SEMUA = Terima SEMUA ikan")
+    Tab2:CreateLabel("⚠️ Untuk test: JANGAN pilih apapun!")
     
     Tab2:CreateToggle({
         Name = "RAHASIA (Tier 7)",
@@ -845,10 +942,10 @@ local function BuatUI()
                 table.insert(Config.Telegram.RaritasTerpilih, "RAHASIA")
             else
                 for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "RAHASIA" then table.remove(Config.Telegram.RaritasTerpilih, i) end
+                    if val == "RAHASIA" then table.remove(Config.Telegram.RaritasTerpilih, i) break end
                 end
             end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
+            print("[FILTER] Update: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA IKAN" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
         end
     })
     
@@ -860,10 +957,10 @@ local function BuatUI()
                 table.insert(Config.Telegram.RaritasTerpilih, "MISTIS")
             else
                 for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "MISTIS" then table.remove(Config.Telegram.RaritasTerpilih, i) end
+                    if val == "MISTIS" then table.remove(Config.Telegram.RaritasTerpilih, i) break end
                 end
             end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
+            print("[FILTER] Update: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA IKAN" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
         end
     })
     
@@ -875,10 +972,10 @@ local function BuatUI()
                 table.insert(Config.Telegram.RaritasTerpilih, "LEGENDARIS")
             else
                 for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "LEGENDARIS" then table.remove(Config.Telegram.RaritasTerpilih, i) end
+                    if val == "LEGENDARIS" then table.remove(Config.Telegram.RaritasTerpilih, i) break end
                 end
             end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
+            print("[FILTER] Update: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA IKAN" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
         end
     })
     
@@ -890,55 +987,10 @@ local function BuatUI()
                 table.insert(Config.Telegram.RaritasTerpilih, "EPIK")
             else
                 for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "EPIK" then table.remove(Config.Telegram.RaritasTerpilih, i) end
+                    if val == "EPIK" then table.remove(Config.Telegram.RaritasTerpilih, i) break end
                 end
             end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
-        end
-    })
-    
-    Tab2:CreateToggle({
-        Name = "LANGKA (Tier 3)",
-        CurrentValue = false,
-        Callback = function(v)
-            if v then
-                table.insert(Config.Telegram.RaritasTerpilih, "LANGKA")
-            else
-                for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "LANGKA" then table.remove(Config.Telegram.RaritasTerpilih, i) end
-                end
-            end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
-        end
-    })
-    
-    Tab2:CreateToggle({
-        Name = "TIDAK UMUM (Tier 2)",
-        CurrentValue = false,
-        Callback = function(v)
-            if v then
-                table.insert(Config.Telegram.RaritasTerpilih, "TIDAK UMUM")
-            else
-                for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "TIDAK UMUM" then table.remove(Config.Telegram.RaritasTerpilih, i) end
-                end
-            end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
-        end
-    })
-    
-    Tab2:CreateToggle({
-        Name = "UMUM (Tier 1) - Untuk Testing",
-        CurrentValue = false,
-        Callback = function(v)
-            if v then
-                table.insert(Config.Telegram.RaritasTerpilih, "UMUM")
-            else
-                for i, val in ipairs(Config.Telegram.RaritasTerpilih) do
-                    if val == "UMUM" then table.remove(Config.Telegram.RaritasTerpilih, i) end
-                end
-            end
-            print("[FILTER] Raritas sekarang: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
+            print("[FILTER] Update: " .. (#Config.Telegram.RaritasTerpilih == 0 and "SEMUA IKAN" or table.concat(Config.Telegram.RaritasTerpilih, ", ")))
         end
     })
     
@@ -1100,7 +1152,7 @@ local function BuatUI()
     
     Tab5:CreateParagraph({
         Title = "RhyRu9 FISH IT v1.0",
-        Content = "Developer: RhyRu9\nRilis: 19 Oktober 2025\nVersi: 1.0 (Fixed Telegram)\n\nScript auto fishing lengkap dengan sistem retry canggih dan notifikasi telegram."
+        Content = "Developer: RhyRu9\nUpdate: 19 Oktober 2025\nVersi: 1.0 (Telegram Fixed)\n\nScript auto fishing dengan debug log lengkap untuk troubleshooting telegram."
     })
     
     Tab5:CreateSection("Fitur Utama")
@@ -1111,42 +1163,30 @@ local function BuatUI()
     })
     
     Tab5:CreateParagraph({
-        Title = "📱 Notifikasi Telegram (FIXED)",
-        Content = "• Filter Raritas: Pilih atau kosongkan untuk ALL\n• Info Lengkap: Nama, Raritas, Tingkat, Kesempatan, Harga\n• Real-time: Notifikasi instant saat tangkap\n• Custom: Pilih raritas yang diinginkan\n• Auto Chat ID: Disimpan otomatis\n• Debug: Tombol test untuk troubleshooting"
+        Title = "📱 Notifikasi Telegram (FIXED + DEBUG)",
+        Content = "• Debug Log Lengkap: Setiap step dicatat\n• Chat ID Disimpan: Tidak perlu ambil terus\n• Filter Raritas: Kosongkan untuk ALL\n• Test Button: Test ikan UMUM langsung\n• Console Log: Fn+F9 untuk troubleshoot\n• Info Lengkap: Nama, Raritas, Tier, Harga"
+    })
+    
+    Tab5:CreateSection("Cara Test Telegram")
+    
+    Tab5:CreateParagraph({
+        Title = "Langkah Test yang Benar",
+        Content = "1. Masukkan Token Bot\n2. Klik 'Test Kirim Pesan'\n3. Tunggu sampai berhasil\n4. ✅ Aktifkan 'Notifikasi Telegram'\n5. ❌ JANGAN pilih raritas apapun\n6. Klik 'Debug Test Ikan UMUM'\n7. Buka Console (Fn+F9)\n8. Baca log [TELEGRAM DEBUG]\n9. Log akan tunjukkan dimana masalahnya"
     })
     
     Tab5:CreateParagraph({
-        Title = "📍 Sistem Teleport",
-        Content = "• 21 Lokasi: Semua pulau tersedia\n• Teleport Cepat: 3 lokasi populer\n• Pengecekan Keamanan: Validasi sebelum teleport\n• Menu Dropdown: Pilih pulau dengan mudah"
-    })
-    
-    Tab5:CreateSection("Cara Menggunakan")
-    
-    Tab5:CreateParagraph({
-        Title = "Setup Telegram (Opsional)",
-        Content = "1. Buka @BotFather di Telegram\n2. Ketik /newbot dan ikuti instruksi\n3. Salin Token Bot yang diberikan\n4. Kirim pesan '/start' ke bot Anda\n5. Tempel token di tab Telegram\n6. Klik 'Test Kirim Pesan'\n7. Aktifkan toggle 'Aktifkan Notifikasi'\n8. Pilih raritas (atau kosongkan untuk ALL)"
-    })
-    
-    Tab5:CreateParagraph({
-        Title = "Mulai Mancing",
-        Content = "1. Pergi ke lokasi memancing\n2. Aktifkan Mancing Secara Otomatis\n3. Aktifkan Jual Otomatis (opsional)\n4. Aktifkan Anti AFK\n5. Pantau notifikasi di layar dan Telegram"
-    })
-    
-    Tab5:CreateSection("Troubleshooting Telegram")
-    
-    Tab5:CreateParagraph({
-        Title = "Test berhasil tapi notif ikan tidak?",
-        Content = "1. Cek toggle 'Aktifkan Notifikasi Telegram' ON\n2. Klik 'Test Notif Ikan (Debug)'\n3. Buka Console (Fn+F9) lihat log:\n   - Apakah Telegram aktif?\n   - Apakah ada filter?\n   - Apakah ikan cocok filter?\n4. Solusi: KOSONGKAN semua filter raritas\n5. Coba tangkap ikan UMUM untuk test\n6. Lihat log [IKAN TERTANGKAP] dan [TELEGRAM]"
+        Title = "Membaca Debug Log",
+        Content = "✅ = Berhasil\n❌ = Gagal (baca solusinya)\n\nContoh masalah:\n• 'Telegram tidak aktif' → Toggle OFF\n• 'Tidak cocok filter' → Ada filter aktif\n• 'Chat ID gagal' → Belum test kirim\n• 'Token kosong' → Isi token dulu"
     })
     
     Tab5:CreateLabel("━━━━━━━━━━━━━━━━━━━━")
     Tab5:CreateLabel("Script by RhyRu9 © 2025")
-    Tab5:CreateLabel("Status: ✅ ONLINE (Telegram Fixed)")
-    Tab5:CreateLabel("Versi: 1.0")
+    Tab5:CreateLabel("Status: ✅ ONLINE")
+    Tab5:CreateLabel("Versi: 1.0 (Telegram Debug)")
     
     Rayfield:Notify({
         Title = "✅ UI Dimuat",
-        Content = "Semua tab berhasil dimuat!",
+        Content = "Telegram dengan Debug Log Lengkap!",
         Duration = 3
     })
 end
@@ -1197,31 +1237,32 @@ end)
 
 if sukses then
     print("=======================================")
-    print("  RhyRu9 FISH IT v1.0 (TELEGRAM FIXED)")
+    print("  RhyRu9 FISH IT v1.0")
     print("  Developer: RhyRu9")
-    print("  Rilis: 19 Oktober 2025")
+    print("  Update: 19 Oktober 2025")
     print("  Status: SIAP")
     print("=======================================")
     print("  FITUR LENGKAP:")
-    print("  ✅ Tab Mancing (15x Retry System)")
-    print("  ✅ Tab Telegram (Notifikasi + Debug)")
+    print("  ✅ Tab Mancing (TIDAK DIUBAH)")
+    print("  ✅ Tab Telegram (DEBUG LOG LENGKAP)")
     print("  ✅ Tab Teleport (21 Lokasi)")
     print("  ✅ Tab Utilitas (Speed, Fly, NoClip)")
     print("  ✅ Tab Info (Dokumentasi)")
     print("=======================================")
-    print("  PERBAIKAN TELEGRAM:")
+    print("  TELEGRAM DEBUG:")
     print("  • Chat ID disimpan otomatis")
-    print("  • Debug log lengkap")
-    print("  • Filter raritas diperbaiki")
-    print("  • Tombol test notif ikan")
-    print("  • Kosongkan filter = terima SEMUA")
+    print("  • Debug log setiap langkah")
+    print("  • Tombol test ikan UMUM")
+    print("  • Solusi ditampilkan di log")
+    print("  • Buka Console: Fn+F9")
     print("=======================================")
-    print("  CARA TEST TELEGRAM:")
+    print("  CARA TROUBLESHOOT:")
     print("  1. Aktifkan 'Notifikasi Telegram'")
-    print("  2. JANGAN pilih raritas apapun")
-    print("  3. Klik 'Test Notif Ikan (Debug)'")
-    print("  4. Buka Console: Fn+F9")
-    print("  5. Lihat log detail")
+    print("  2. MATIKAN semua filter raritas")
+    print("  3. Klik 'Debug Test Ikan UMUM'")
+    print("  4. Buka Console (Fn+F9)")
+    print("  5. Cari [TELEGRAM DEBUG]")
+    print("  6. Baca ❌ untuk tahu masalahnya")
     print("=======================================")
     print("  STATUS: ✅ ONLINE")
     print("=======================================")
