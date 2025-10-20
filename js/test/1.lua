@@ -1,385 +1,643 @@
 -- ========================================
--- 🎲 FULL RNG SYSTEM ANALYZER
--- Deep analysis of Roblox RNG mechanics
--- For Hydrogen Executor
+-- 🎲 ULTIMATE RNG SYSTEM ANALYZER V2.0
+-- Comprehensive deep analysis of ANY Roblox game
+-- Universal pattern detection & exploit finder
 -- ========================================
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
+local StarterGui = game:GetService("StarterGui")
+local Workspace = game:GetService("Workspace")
 
 print([[
 ╔═══════════════════════════════════════════╗
-║   🎲 FULL RNG SYSTEM ANALYZER 🎲         ║
-║   Deep Dive into RNG Mechanics           ║
+║  🎲 ULTIMATE RNG ANALYZER V2.0 🎲        ║
+║  Universal Game Analysis Engine          ║
+║  No Limits • No Boundaries               ║
 ╚═══════════════════════════════════════════╝
 ]])
 
 -- ========================================
--- UTILITY FUNCTIONS
+-- CONFIGURATION
+-- ========================================
+
+local Config = {
+    maxDepth = 10,                    -- Maximum recursion depth
+    maxTableSize = 1000,              -- Max items to analyze per table
+    scanAllServices = true,           -- Scan ALL game services
+    deepFunctionAnalysis = true,      -- Analyze function bytecode
+    detectPatterns = true,            -- Auto-detect game patterns
+    extractConstants = true,          -- Find all numeric constants
+    hookFunctions = true,             -- Hook detected RNG functions
+    monitorRemotes = true,            -- Track RemoteEvents/Functions
+    analyzeLocalScripts = true,       -- Try to analyze LocalScripts
+    extractStrings = true,            -- Extract all string patterns
+    findHiddenModules = true,         -- Search for hidden modules
+    debugMode = false                 -- Verbose output
+}
+
+-- ========================================
+-- ADVANCED UTILITIES
 -- ========================================
 
 local Utils = {}
 
-function Utils:DeepCopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[Utils:DeepCopy(orig_key)] = Utils:DeepCopy(orig_value)
-        end
-        setmetatable(copy, Utils:DeepCopy(getmetatable(orig)))
-    else
-        copy = orig
+function Utils:DeepCopy(orig, seen)
+    seen = seen or {}
+    if type(orig) ~= 'table' then return orig end
+    if seen[orig] then return seen[orig] end
+    
+    local copy = {}
+    seen[orig] = copy
+    
+    for k, v in next, orig, nil do
+        copy[Utils:DeepCopy(k, seen)] = Utils:DeepCopy(v, seen)
     end
-    return copy
+    
+    return setmetatable(copy, Utils:DeepCopy(getmetatable(orig), seen))
 end
 
 function Utils:SafeRequire(module)
-    if not module then return nil end
-    local success, result = pcall(require, module)
-    return success and result or nil
+    if not module or not module:IsA("ModuleScript") then return nil end
+    
+    local success, result = pcall(function()
+        return require(module)
+    end)
+    
+    if success and result then
+        return result
+    end
+    return nil
 end
 
-function Utils:GetFunctionInfo(func)
+function Utils:GetFunctionSource(func)
+    if not func or type(func) ~= "function" then return nil end
+    
     local info = debug.getinfo(func)
     return {
         source = info.source or "Unknown",
+        short_src = info.short_src or "Unknown",
         linedefined = info.linedefined or 0,
         lastlinedefined = info.lastlinedefined or 0,
         numparams = info.nparams or 0,
-        isvararg = info.isvararg or false
+        isvararg = info.isvararg or false,
+        what = info.what or "Lua",
+        name = info.name or "anonymous"
     }
 end
 
-function Utils:AnalyzeFunction(func, name)
-    local info = self:GetFunctionInfo(func)
+function Utils:ExtractUpvalues(func)
     local upvalues = {}
-    
     local i = 1
+    
     while true do
-        local n, v = debug.getupvalue(func, i)
-        if not n then break end
-        upvalues[n] = {
-            type = type(v),
-            value = type(v) == "number" and v or (type(v) == "string" and v:sub(1, 50)) or tostring(v):sub(1, 50)
+        local name, value = debug.getupvalue(func, i)
+        if not name then break end
+        
+        upvalues[name] = {
+            type = type(value),
+            value = self:SerializeValue(value, 1)
         }
         i = i + 1
     end
     
-    return {
-        name = name,
-        info = info,
-        upvalues = upvalues,
-        paramCount = info.numparams
-    }
+    return upvalues
 end
 
-function Utils:SerializeValue(value, depth)
+function Utils:ExtractConstants(func)
+    local constants = {}
+    local info = debug.getinfo(func)
+    
+    if info and info.func then
+        local i = 1
+        while true do
+            local success, constant = pcall(debug.getconstant, func, i)
+            if not success then break end
+            
+            if constant ~= nil then
+                table.insert(constants, {
+                    index = i,
+                    type = type(constant),
+                    value = self:SerializeValue(constant, 0)
+                })
+            end
+            i = i + 1
+        end
+    end
+    
+    return constants
+end
+
+function Utils:AnalyzeFunctionBytecode(func)
+    local analysis = {
+        source = self:GetFunctionSource(func),
+        upvalues = self:ExtractUpvalues(func),
+        constants = Config.extractConstants and self:ExtractConstants(func) or {},
+        callsRandom = false,
+        callsRemote = false,
+        modifiesGlobals = false,
+        complexity = 0
+    }
+    
+    -- Pattern detection in constants
+    for _, constant in ipairs(analysis.constants) do
+        if type(constant.value) == "string" then
+            local str = constant.value:lower()
+            if str:find("random") or str:find("rng") or str:find("roll") then
+                analysis.callsRandom = true
+            end
+            if str:find("remote") or str:find("invoke") or str:find("fire") then
+                analysis.callsRemote = true
+            end
+        end
+    end
+    
+    -- Calculate complexity
+    analysis.complexity = #analysis.constants + #analysis.upvalues
+    
+    return analysis
+end
+
+function Utils:SerializeValue(value, depth, seen)
     depth = depth or 0
-    if depth > 4 then return "..." end
+    seen = seen or {}
+    
+    if depth > Config.maxDepth then return "MAX_DEPTH" end
+    if seen[value] then return "CIRCULAR_REF" end
     
     local vtype = type(value)
     
     if vtype == "table" then
+        seen[value] = true
         local items = {}
         local count = 0
+        
         for k, v in pairs(value) do
             count = count + 1
-            if count > 20 then
-                items["..."] = "truncated"
+            if count > Config.maxTableSize then
+                items["__TRUNCATED__"] = "..."
                 break
             end
-            items[tostring(k)] = self:SerializeValue(v, depth + 1)
+            
+            local key = tostring(k)
+            items[key] = self:SerializeValue(v, depth + 1, seen)
         end
+        
         return items
     elseif vtype == "function" then
-        return {
-            type = "function",
-            analysis = self:AnalyzeFunction(value, "anonymous")
-        }
+        if Config.deepFunctionAnalysis then
+            return self:AnalyzeFunctionBytecode(value)
+        else
+            return {type = "function", name = tostring(value)}
+        end
+    elseif vtype == "userdata" then
+        local success, str = pcall(tostring, value)
+        return {type = "userdata", value = success and str or "Unknown"}
     elseif vtype == "number" or vtype == "boolean" then
         return value
     elseif vtype == "string" then
-        return value:sub(1, 100)
+        return value:sub(1, 200)
     else
-        return tostring(value):sub(1, 50)
+        return tostring(value)
     end
 end
 
--- ========================================
--- MODULE FINDER
--- ========================================
-
-local ModuleFinder = {}
-
-function ModuleFinder:FindAllModules()
-    print("\n🔍 Scanning for modules...\n")
+function Utils:GetInstancePath(instance)
+    local path = {}
+    local current = instance
     
-    local modules = {}
-    local keywords = {
-        "RNG", "Random", "Roll", "Luck", "Weight", "Chance", "Probability",
-        "Gacha", "Drop", "Loot", "Reward", "Fish", "Catch", "Enchant",
-        "Modifier", "Buff", "Potion", "Boost", "Multiplier"
+    while current and current ~= game do
+        table.insert(path, 1, current.Name)
+        current = current.Parent
+    end
+    
+    return table.concat(path, ".")
+end
+
+-- ========================================
+-- UNIVERSAL MODULE SCANNER
+-- ========================================
+
+local ModuleScanner = {}
+
+function ModuleScanner:ScanAllServices()
+    print("\n🌐 Scanning ALL game services...\n")
+    
+    local services = {
+        game.ReplicatedStorage,
+        game.ReplicatedFirst,
+        game.ServerStorage,
+        game.ServerScriptService,
+        game.StarterGui,
+        game.StarterPack,
+        game.StarterPlayer,
+        game.Lighting,
+        game.Workspace
     }
     
-    local function scanContainer(container, path)
-        for _, child in ipairs(container:GetDescendants()) do
-            if child:IsA("ModuleScript") then
-                local childName = child.Name
-                local shouldAnalyze = false
-                
-                -- Check if name matches keywords
-                for _, keyword in ipairs(keywords) do
-                    if childName:lower():find(keyword:lower()) then
-                        shouldAnalyze = true
-                        break
-                    end
-                end
-                
-                if shouldAnalyze then
-                    local module = Utils:SafeRequire(child)
+    local modules = {}
+    
+    for _, service in ipairs(services) do
+        local serviceName = service.Name
+        local success = pcall(function()
+            for _, descendant in ipairs(service:GetDescendants()) do
+                if descendant:IsA("ModuleScript") then
+                    local module = Utils:SafeRequire(descendant)
                     if module then
-                        modules[childName] = {
+                        modules[descendant.Name] = {
                             module = module,
-                            path = path .. "." .. childName,
-                            instance = child
+                            instance = descendant,
+                            service = serviceName,
+                            path = Utils:GetInstancePath(descendant)
                         }
-                        print(string.format("  [✓] Found: %s", childName))
+                        print(string.format("  [✓] %s: %s", serviceName, descendant.Name))
                     end
                 end
             end
-        end
+        end)
     end
-    
-    scanContainer(ReplicatedStorage, "ReplicatedStorage")
-    
-    print(string.format("\n✅ Found %d relevant modules\n", self:CountTable(modules)))
     
     return modules
 end
 
-function ModuleFinder:CountTable(tbl)
-    local count = 0
-    for _ in pairs(tbl) do count = count + 1 end
-    return count
+function ModuleScanner:FindByPattern(pattern)
+    print(string.format("\n🔍 Searching for pattern: %s\n", pattern))
+    
+    local results = {}
+    
+    for _, service in ipairs(game:GetChildren()) do
+        pcall(function()
+            for _, descendant in ipairs(service:GetDescendants()) do
+                if descendant:IsA("ModuleScript") and descendant.Name:lower():find(pattern:lower()) then
+                    local module = Utils:SafeRequire(descendant)
+                    if module then
+                        results[descendant.Name] = {
+                            module = module,
+                            instance = descendant,
+                            path = Utils:GetInstancePath(descendant)
+                        }
+                        print(string.format("  [✓] Found: %s", descendant.Name))
+                    end
+                end
+            end
+        end)
+    end
+    
+    return results
+end
+
+function ModuleScanner:ScanRemoteEvents()
+    print("\n📡 Scanning RemoteEvents/Functions...\n")
+    
+    local remotes = {
+        events = {},
+        functions = {}
+    }
+    
+    for _, service in ipairs({game.ReplicatedStorage, game.Workspace}) do
+        pcall(function()
+            for _, descendant in ipairs(service:GetDescendants()) do
+                if descendant:IsA("RemoteEvent") then
+                    remotes.events[descendant.Name] = {
+                        path = Utils:GetInstancePath(descendant),
+                        instance = descendant
+                    }
+                    print(string.format("  [📤] RemoteEvent: %s", descendant.Name))
+                elseif descendant:IsA("RemoteFunction") then
+                    remotes.functions[descendant.Name] = {
+                        path = Utils:GetInstancePath(descendant),
+                        instance = descendant
+                    }
+                    print(string.format("  [🔄] RemoteFunction: %s", descendant.Name))
+                end
+            end
+        end)
+    end
+    
+    return remotes
 end
 
 -- ========================================
--- RNG ANALYZER
+-- ADVANCED RNG ANALYZER
 -- ========================================
 
 local RNGAnalyzer = {}
 
-function RNGAnalyzer:AnalyzeWeightSystem(module, name)
-    print(string.format("📊 Analyzing: %s", name))
+function RNGAnalyzer:DeepAnalyze(module, name, depth)
+    depth = depth or 0
+    if depth > 3 then return {} end
+    
+    print(string.format("%s📊 Deep analyzing: %s (depth: %d)", string.rep("  ", depth), name, depth))
     
     local analysis = {
         name = name,
+        depth = depth,
         functions = {},
-        weights = {},
-        randomCalls = {},
-        constants = {},
-        logic = {}
+        tables = {},
+        numbers = {},
+        strings = {},
+        patterns = {},
+        references = {},
+        metadata = {}
     }
     
-    -- Analyze all functions
     for key, value in pairs(module) do
-        if type(value) == "function" then
-            analysis.functions[key] = Utils:AnalyzeFunction(value, key)
+        local vtype = type(value)
+        
+        if vtype == "function" then
+            analysis.functions[key] = Utils:AnalyzeFunctionBytecode(value)
+        elseif vtype == "table" then
+            -- Detect table patterns
+            local tableAnalysis = self:AnalyzeTable(value, key, depth + 1)
+            analysis.tables[key] = tableAnalysis
+        elseif vtype == "number" then
+            analysis.numbers[key] = value
+        elseif vtype == "string" then
+            analysis.strings[key] = value
             
-            -- Detect RNG patterns
-            local funcInfo = analysis.functions[key]
-            if key:lower():find("random") or key:lower():find("roll") or key:lower():find("weight") then
-                table.insert(analysis.randomCalls, {
-                    name = key,
-                    upvalues = funcInfo.upvalues,
-                    params = funcInfo.paramCount
-                })
+            -- Pattern detection
+            if value:lower():find("weight") then
+                analysis.patterns.hasWeights = true
             end
-        elseif type(value) == "table" then
-            -- Check if it's a weight table
-            local hasWeights = false
-            for k, v in pairs(value) do
-                if type(v) == "number" or (type(v) == "table" and (v.Weight or v.Chance or v.Probability)) then
-                    hasWeights = true
-                    break
-                end
+            if value:lower():find("luck") then
+                analysis.patterns.hasLuck = true
             end
-            
-            if hasWeights then
-                analysis.weights[key] = Utils:SerializeValue(value, 0)
+            if value:lower():find("rare") or value:lower():find("legendary") then
+                analysis.patterns.hasRarity = true
             end
-        elseif type(value) == "number" then
-            analysis.constants[key] = value
         end
     end
     
     return analysis
 end
 
-function RNGAnalyzer:FindRNGLogic(module, name)
-    print(string.format("🔬 Deep diving: %s", name))
+function RNGAnalyzer:AnalyzeTable(tbl, name, depth)
+    depth = depth or 0
+    if depth > Config.maxDepth then return {truncated = true} end
     
-    local logic = {
+    local analysis = {
         name = name,
-        rngMethods = {},
-        mathRandomCalls = false,
-        customRNG = false,
-        seedDetected = false,
-        weightAlgorithm = "Unknown"
+        size = 0,
+        hasWeights = false,
+        hasMultipliers = false,
+        hasProbabilities = false,
+        isArray = true,
+        isWeightTable = false,
+        keys = {},
+        values = {},
+        patterns = {}
     }
     
-    -- Check for Random.new usage
+    local arrayIndex = 1
+    
+    for k, v in pairs(tbl) do
+        analysis.size = analysis.size + 1
+        
+        if k ~= arrayIndex then
+            analysis.isArray = false
+        end
+        arrayIndex = arrayIndex + 1
+        
+        -- Detect weight patterns
+        local keyLower = tostring(k):lower()
+        if keyLower:find("weight") or keyLower == "w" then
+            analysis.hasWeights = true
+            analysis.isWeightTable = true
+        end
+        if keyLower:find("chance") or keyLower:find("probability") then
+            analysis.hasProbabilities = true
+            analysis.isWeightTable = true
+        end
+        if keyLower:find("multiplier") or keyLower:find("mult") or keyLower:find("modifier") then
+            analysis.hasMultipliers = true
+        end
+        
+        table.insert(analysis.keys, tostring(k))
+        
+        -- Analyze values
+        if type(v) == "number" then
+            table.insert(analysis.values, {key = k, value = v, type = "number"})
+        elseif type(v) == "table" then
+            -- Recursive analysis for nested tables
+            local nested = self:AnalyzeTable(v, tostring(k), depth + 1)
+            if nested.isWeightTable then
+                analysis.isWeightTable = true
+            end
+        end
+    end
+    
+    return analysis
+end
+
+function RNGAnalyzer:FindRNGPatterns(module, name)
+    print(string.format("🎲 Finding RNG patterns in: %s", name))
+    
+    local patterns = {
+        name = name,
+        usesRandom = false,
+        usesRandomNew = false,
+        usesMathRandom = false,
+        usesWeights = false,
+        usesSeeds = false,
+        rngFunctions = {},
+        weightTables = {},
+        seedVariables = {},
+        randomCalls = []
+    }
+    
     for key, value in pairs(module) do
         if type(value) == "function" then
-            local success, result = pcall(function()
-                local info = debug.getinfo(value)
-                if info.source then
-                    if info.source:find("Random.new") then
-                        logic.customRNG = true
-                    end
-                    if info.source:find("math.random") then
-                        logic.mathRandomCalls = true
-                    end
-                end
-            end)
-        end
-        
-        -- Detect weight algorithms
-        if key:lower():find("weight") then
-            logic.rngMethods[key] = {
-                type = type(value),
-                callable = type(value) == "function"
-            }
+            local analysis = Utils:AnalyzeFunctionBytecode(value)
             
-            if type(value) == "function" then
-                local funcAnalysis = Utils:AnalyzeFunction(value, key)
-                if funcAnalysis.upvalues then
-                    for upname, upvalue in pairs(funcAnalysis.upvalues) do
-                        if upname:lower():find("seed") then
-                            logic.seedDetected = true
-                        end
+            -- Check for RNG patterns in constants
+            for _, constant in ipairs(analysis.constants) do
+                if type(constant.value) == "string" then
+                    local str = constant.value:lower()
+                    
+                    if str:find("random%.new") then
+                        patterns.usesRandomNew = true
+                        table.insert(patterns.rngFunctions, {
+                            name = key,
+                            type = "Random.new",
+                            analysis = analysis
+                        })
+                    elseif str:find("math%.random") then
+                        patterns.usesMathRandom = true
+                        table.insert(patterns.rngFunctions, {
+                            name = key,
+                            type = "math.random",
+                            analysis = analysis
+                        })
+                    end
+                    
+                    if str:find("seed") then
+                        patterns.usesSeeds = true
+                        table.insert(patterns.seedVariables, key)
                     end
                 end
+            end
+            
+            -- Check upvalues for Random objects
+            for upname, upval in pairs(analysis.upvalues) do
+                if upname:lower():find("random") or upname:lower():find("rng") then
+                    patterns.usesRandom = true
+                end
+                if upname:lower():find("seed") then
+                    patterns.usesSeeds = true
+                end
+            end
+        elseif type(value) == "table" then
+            local tableAnalysis = self:AnalyzeTable(value, key)
+            if tableAnalysis.isWeightTable then
+                patterns.usesWeights = true
+                patterns.weightTables[key] = tableAnalysis
             end
         end
     end
     
-    return logic
+    return patterns
 end
 
-function RNGAnalyzer:AnalyzeLuckModifiers(module, name)
-    print(string.format("🍀 Analyzing luck: %s", name))
+-- ========================================
+-- PATTERN DETECTOR
+-- ========================================
+
+local PatternDetector = {}
+
+function PatternDetector:DetectGameType(allModules)
+    print("\n🎮 Detecting game type...\n")
     
-    local modifiers = {
-        name = name,
-        luckValues = {},
-        multipliers = {},
-        bonuses = {},
-        stackable = false,
-        maxLuck = nil
+    local patterns = {
+        fishing = 0,
+        gacha = 0,
+        simulator = 0,
+        tycoon = 0,
+        rpg = 0,
+        tower_defense = 0,
+        obby = 0
     }
     
-    for key, value in pairs(module) do
-        local keyLower = tostring(key):lower()
+    local keywords = {
+        fishing = {"fish", "rod", "bait", "catch", "reel", "aqua"},
+        gacha = {"summon", "pull", "banner", "rate", "pity", "wish"},
+        simulator = {"rebirth", "pet", "egg", "hatch", "upgrade", "auto"},
+        tycoon = {"cash", "income", "purchase", "unlock", "dropper"},
+        rpg = {"quest", "level", "exp", "skill", "stat", "class"},
+        tower_defense = {"tower", "enemy", "wave", "defense", "upgrade"},
+        obby = {"checkpoint", "stage", "jump", "obstacle"}
+    }
+    
+    for moduleName, _ in pairs(allModules) do
+        local nameLower = moduleName:lower()
         
-        -- Detect luck-related values
-        if keyLower:find("luck") or keyLower:find("modifier") or keyLower:find("boost") then
-            if type(value) == "number" then
-                modifiers.luckValues[key] = value
-                if value > (modifiers.maxLuck or 0) then
-                    modifiers.maxLuck = value
-                end
-            elseif type(value) == "table" then
-                modifiers.multipliers[key] = Utils:SerializeValue(value, 1)
-                
-                -- Check if luck stacks
-                if value.Stackable ~= nil then
-                    modifiers.stackable = value.Stackable
+        for gameType, wordList in pairs(keywords) do
+            for _, keyword in ipairs(wordList) do
+                if nameLower:find(keyword) then
+                    patterns[gameType] = patterns[gameType] + 1
                 end
             end
         end
-        
-        -- Detect multiplier patterns
-        if type(value) == "table" and (value.Multiplier or value.Value or value.Modifier) then
-            modifiers.bonuses[key] = {
-                multiplier = value.Multiplier,
-                value = value.Value,
-                modifier = value.Modifier,
-                duration = value.Duration,
-                stackable = value.Stackable
-            }
+    end
+    
+    -- Find dominant pattern
+    local maxScore = 0
+    local gameType = "unknown"
+    
+    for gtype, score in pairs(patterns) do
+        if score > maxScore then
+            maxScore = score
+            gameType = gtype
         end
     end
     
-    return modifiers
+    print(string.format("  [🎯] Detected: %s (confidence: %d)", gameType, maxScore))
+    
+    return {
+        type = gameType,
+        confidence = maxScore,
+        allScores = patterns
+    }
 end
 
--- ========================================
--- EXPLOIT FINDER
--- ========================================
-
-local ExploitFinder = {}
-
-function ExploitFinder:FindVulnerabilities(analysisData)
-    print("\n🔓 Searching for exploitable patterns...\n")
+function PatternDetector:FindExploitPatterns(analysisData)
+    print("\n🔓 Finding exploit patterns...\n")
     
     local exploits = {
         clientSideRNG = {},
         predictableSeeds = {},
         manipulableWeights = {},
-        bypassableLimits = {},
+        unprotectedRemotes = {},
+        exposedConstants = {},
+        weakValidation = {},
+        timingVulnerabilities = {},
         recommendations = {}
     }
     
-    -- Check for client-side RNG
-    for moduleName, data in pairs(analysisData) do
-        if data.logic then
-            if data.logic.mathRandomCalls and not data.logic.customRNG then
+    for moduleName, data in pairs(analysisData.modules or {}) do
+        -- Check for client-side RNG
+        if data.patterns then
+            if data.patterns.usesMathRandom then
                 table.insert(exploits.clientSideRNG, {
                     module = moduleName,
-                    risk = "HIGH",
-                    reason = "Uses math.random without custom seed - predictable"
+                    risk = "CRITICAL",
+                    reason = "Uses math.random - completely predictable",
+                    exploit = "Can be predicted and manipulated"
                 })
-                print(string.format("  [!] %s: Client-side math.random detected", moduleName))
+                print(string.format("  [🔴] CRITICAL: %s uses math.random", moduleName))
             end
             
-            if data.logic.seedDetected then
+            if data.patterns.usesSeeds then
                 table.insert(exploits.predictableSeeds, {
                     module = moduleName,
-                    risk = "MEDIUM",
-                    reason = "Custom seed detected - may be predictable"
+                    risk = "HIGH",
+                    reason = "Uses seed-based RNG",
+                    exploit = "Seed can be predicted if algorithm is known"
                 })
-                print(string.format("  [!] %s: Seed-based RNG detected", moduleName))
+                print(string.format("  [🟠] HIGH: %s uses seeds", moduleName))
+            end
+            
+            if data.patterns.usesWeights and #data.patterns.weightTables > 0 then
+                table.insert(exploits.manipulableWeights, {
+                    module = moduleName,
+                    risk = "MEDIUM",
+                    reason = "Weight tables accessible from client",
+                    tables = data.patterns.weightTables,
+                    exploit = "Can modify weights before calculation"
+                })
+                print(string.format("  [🟡] MEDIUM: %s has exposed weights", moduleName))
             end
         end
         
-        -- Check for weight manipulation
-        if data.weights then
-            for weightName, weightData in pairs(data.weights) do
-                table.insert(exploits.manipulableWeights, {
-                    module = moduleName,
-                    weight = weightName,
-                    risk = "MEDIUM",
-                    reason = "Weight table accessible - may be modifiable"
-                })
+        -- Check for exposed constants
+        if data.numbers then
+            for key, value in pairs(data.numbers) do
+                if value >= 0.01 and value <= 100 then
+                    table.insert(exploits.exposedConstants, {
+                        module = moduleName,
+                        constant = key,
+                        value = value,
+                        risk = "LOW",
+                        reason = "Numeric constant (potential rate/multiplier)"
+                    })
+                end
             end
         end
     end
     
-    -- Generate recommendations
-    table.insert(exploits.recommendations, "Use server-side RNG for critical rolls")
-    table.insert(exploits.recommendations, "Implement Random.new with secure seeds")
-    table.insert(exploits.recommendations, "Validate all luck modifiers server-side")
-    table.insert(exploits.recommendations, "Add rate limiting for roll attempts")
+    -- Recommendations
+    table.insert(exploits.recommendations, "Move ALL RNG calculations to server-side")
+    table.insert(exploits.recommendations, "Use cryptographically secure RNG (Random.new)")
+    table.insert(exploits.recommendations, "Never expose weight tables to client")
+    table.insert(exploits.recommendations, "Validate ALL user inputs server-side")
+    table.insert(exploits.recommendations, "Implement rate limiting on critical actions")
+    table.insert(exploits.recommendations, "Add server-side sanity checks")
     
     return exploits
 end
 
 -- ========================================
--- FILE MANAGER
+-- ADVANCED FILE MANAGER
 -- ========================================
 
 local FileManager = {}
@@ -387,216 +645,421 @@ local FileManager = {}
 function FileManager:Init()
     self.canWrite = writefile ~= nil
     self.canMakeFolder = makefolder ~= nil
+    self.canList = listfiles ~= nil
     
     if not self.canWrite then
         warn("⚠️ writefile() not supported!")
         return false
     end
     
-    print("✅ File system ready\n")
+    print("✅ Advanced file system ready\n")
     return true
 end
 
-function FileManager:CreateFolder(folderName)
-    if not self.canMakeFolder then return false end
-    pcall(function() makefolder(folderName) end)
-    return true
-end
-
-function FileManager:WriteFile(fileName, content)
-    if not self.canWrite then return false end
+function FileManager:CreateStructure()
+    local folders = {
+        "UltimateAnalysis",
+        "UltimateAnalysis/Modules",
+        "UltimateAnalysis/Functions",
+        "UltimateAnalysis/Tables",
+        "UltimateAnalysis/Patterns",
+        "UltimateAnalysis/Exploits",
+        "UltimateAnalysis/Remotes",
+        "UltimateAnalysis/Reports"
+    }
     
-    local success = pcall(function()
-        writefile(fileName, content)
-    end)
-    
-    if success then
-        print(string.format("💾 Saved: %s", fileName))
+    for _, folder in ipairs(folders) do
+        pcall(function() makefolder(folder) end)
     end
-    
-    return success
 end
 
--- ========================================
--- OUTPUT FORMATTER
--- ========================================
-
-local OutputFormatter = {}
-
-function OutputFormatter:ToJSON(data)
+function FileManager:WriteJSON(path, data)
     local success, json = pcall(function()
         return HttpService:JSONEncode(data)
     end)
-    return success and json or "{}"
+    
+    if success then
+        pcall(function()
+            writefile(path, json)
+            print(string.format("💾 %s", path))
+        end)
+    end
 end
 
-function OutputFormatter:ToDetailedReport(fullAnalysis)
-    local lines = {
-        "════════════════════════════════════════════════════════",
-        "         🎲 FULL RNG SYSTEM ANALYSIS REPORT 🎲         ",
-        "════════════════════════════════════════════════════════",
-        "",
-        string.format("Generated: %s", os.date("%Y-%m-%d %H:%M:%S")),
-        string.format("Executor: %s", tostring(identifyexecutor and identifyexecutor() or "Hydrogen")),
-        string.format("Total Modules Analyzed: %d", fullAnalysis.totalModules or 0),
-        "",
-        "════════════════════════════════════════════════════════",
-        "📊 RNG SYSTEM BREAKDOWN",
-        "════════════════════════════════════════════════════════",
-        ""
-    }
+function FileManager:WriteLua(path, data, varName)
+    varName = varName or "Data"
     
-    -- Module summaries
-    for moduleName, analysis in pairs(fullAnalysis.modules or {}) do
-        table.insert(lines, string.format("## %s", moduleName))
+    local function serialize(tbl, indent)
+        indent = indent or 0
+        local s = string.rep("  ", indent)
+        local lines = {"{"}
         
-        if analysis.functions then
-            local funcCount = 0
-            for _ in pairs(analysis.functions) do funcCount = funcCount + 1 end
-            table.insert(lines, string.format("   Functions: %d", funcCount))
-        end
-        
-        if analysis.weights then
-            local weightCount = 0
-            for _ in pairs(analysis.weights) do weightCount = weightCount + 1 end
-            table.insert(lines, string.format("   Weight Tables: %d", weightCount))
-        end
-        
-        if analysis.randomCalls then
-            table.insert(lines, string.format("   RNG Calls: %d", #analysis.randomCalls))
-        end
-        
-        table.insert(lines, "")
-    end
-    
-    -- Exploits section
-    if fullAnalysis.exploits then
-        table.insert(lines, "════════════════════════════════════════════════════════")
-        table.insert(lines, "🔓 POTENTIAL VULNERABILITIES")
-        table.insert(lines, "════════════════════════════════════════════════════════")
-        table.insert(lines, "")
-        
-        if fullAnalysis.exploits.clientSideRNG then
-            for _, exploit in ipairs(fullAnalysis.exploits.clientSideRNG) do
-                table.insert(lines, string.format("[%s] %s: %s", exploit.risk, exploit.module, exploit.reason))
+        local count = 0
+        for k, v in pairs(tbl) do
+            count = count + 1
+            if count > 100 then
+                table.insert(lines, s .. '  ["__TRUNCATED__"] = true,')
+                break
             end
+            
+            local key = type(k) == "string" and string.format('["%s"]', k) or string.format("[%s]", k)
+            local value
+            
+            if type(v) == "table" then
+                value = serialize(v, indent + 1)
+            elseif type(v) == "string" then
+                value = string.format('"%s"', v:gsub('"', '\\"'))
+            else
+                value = tostring(v)
+            end
+            
+            table.insert(lines, string.format("%s  %s = %s,", s, key, value))
         end
         
-        table.insert(lines, "")
+        table.insert(lines, s .. "}")
+        return table.concat(lines, "\n")
     end
     
-    table.insert(lines, "════════════════════════════════════════════════════════")
-    table.insert(lines, "✅ ANALYSIS COMPLETE")
-    table.insert(lines, "════════════════════════════════════════════════════════")
+    local content = string.format("local %s = %s\n\nreturn %s", varName, serialize(data), varName)
     
-    return table.concat(lines, "\n")
+    pcall(function()
+        writefile(path, content)
+        print(string.format("💾 %s", path))
+    end)
 end
 
 -- ========================================
--- MAIN EXECUTION
+-- MAIN EXECUTION ENGINE
 -- ========================================
 
-local function Main()
-    print("\n🚀 Starting full analysis...\n")
+local function ExecuteAnalysis()
+    print("\n🚀 Starting ULTIMATE analysis...\n")
+    
+    local startTime = tick()
     
     -- Initialize
     if not FileManager:Init() then
-        warn("Cannot save files - continuing anyway...")
+        warn("Cannot save files - analysis will continue anyway")
+    else
+        FileManager:CreateStructure()
     end
     
-    FileManager:CreateFolder("RNGAnalysis")
-    FileManager:CreateFolder("RNGAnalysis/Modules")
-    FileManager:CreateFolder("RNGAnalysis/Exploits")
+    -- Scan everything
+    print(string.rep("=", 60))
+    print("PHASE 1: COMPREHENSIVE SCANNING")
+    print(string.rep("=", 60))
     
-    -- Find all modules
-    local allModules = ModuleFinder:FindAllModules()
+    local allModules = ModuleScanner:ScanAllServices()
+    local remotes = Config.monitorRemotes and ModuleScanner:ScanRemoteEvents() or {}
     
-    -- Full analysis
+    print(string.format("\n✅ Found %d modules, %d remotes\n", 
+        Utils:CountTable(allModules), 
+        Utils:CountTable(remotes.events) + Utils:CountTable(remotes.functions)))
+    
+    -- Detect game type
+    local gameType = PatternDetector:DetectGameType(allModules)
+    
+    -- Deep analysis
+    print("\n" .. string.rep("=", 60))
+    print("PHASE 2: DEEP ANALYSIS")
+    print(string.rep("=", 60) .. "\n")
+    
     local fullAnalysis = {
-        timestamp = os.date("%Y-%m-%d %H:%M:%S"),
-        executor = tostring(identifyexecutor and identifyexecutor() or "Hydrogen"),
-        totalModules = ModuleFinder:CountTable(allModules),
+        metadata = {
+            timestamp = os.date("%Y-%m-%d %H:%M:%S"),
+            executor = tostring(identifyexecutor and identifyexecutor() or "Unknown"),
+            gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,
+            placeId = game.PlaceId,
+            gameType = gameType,
+            analysisTime = 0
+        },
         modules = {},
-        luckSystems = {},
-        rngLogic = {},
-        exploits = {}
+        patterns = {},
+        remotes = remotes,
+        exploits = {},
+        statistics = {
+            totalModules = 0,
+            totalFunctions = 0,
+            totalTables = 0,
+            totalRemotes = 0
+        }
     }
     
     -- Analyze each module
-    print("\n" .. string.rep("=", 60))
-    print("DEEP ANALYSIS PHASE")
-    print(string.rep("=", 60) .. "\n")
-    
     for moduleName, moduleData in pairs(allModules) do
-        -- Weight system analysis
-        fullAnalysis.modules[moduleName] = RNGAnalyzer:AnalyzeWeightSystem(moduleData.module, moduleName)
+        fullAnalysis.modules[moduleName] = RNGAnalyzer:DeepAnalyze(moduleData.module, moduleName)
+        fullAnalysis.patterns[moduleName] = RNGAnalyzer:FindRNGPatterns(moduleData.module, moduleName)
         
-        -- RNG logic analysis
-        fullAnalysis.rngLogic[moduleName] = RNGAnalyzer:FindRNGLogic(moduleData.module, moduleName)
+        -- Update statistics
+        fullAnalysis.statistics.totalModules = fullAnalysis.statistics.totalModules + 1
         
-        -- Luck modifier analysis
-        if moduleName:lower():find("luck") or moduleName:lower():find("modifier") or 
-           moduleName:lower():find("enchant") or moduleName:lower():find("potion") then
-            fullAnalysis.luckSystems[moduleName] = RNGAnalyzer:AnalyzeLuckModifiers(moduleData.module, moduleName)
+        if fullAnalysis.modules[moduleName].functions then
+            for _ in pairs(fullAnalysis.modules[moduleName].functions) do
+                fullAnalysis.statistics.totalFunctions = fullAnalysis.statistics.totalFunctions + 1
+            end
         end
     end
     
+    fullAnalysis.statistics.totalRemotes = Utils:CountTable(remotes.events) + Utils:CountTable(remotes.functions)
+    
     -- Find exploits
-    fullAnalysis.exploits = ExploitFinder:FindVulnerabilities(fullAnalysis)
+    print("\n" .. string.rep("=", 60))
+    print("PHASE 3: EXPLOIT DETECTION")
+    print(string.rep("=", 60))
+    
+    fullAnalysis.exploits = PatternDetector:FindExploitPatterns(fullAnalysis)
+    
+    -- Calculate analysis time
+    fullAnalysis.metadata.analysisTime = math.floor((tick() - startTime) * 1000) / 1000
     
     -- Save everything
     print("\n" .. string.rep("=", 60))
-    print("SAVING RESULTS")
+    print("PHASE 4: SAVING RESULTS")
     print(string.rep("=", 60) .. "\n")
     
-    -- Save full JSON
-    FileManager:WriteFile("RNGAnalysis/full_analysis.json", OutputFormatter:ToJSON(fullAnalysis))
-    
-    -- Save detailed report
-    FileManager:WriteFile("RNGAnalysis/detailed_report.txt", OutputFormatter:ToDetailedReport(fullAnalysis))
-    
-    -- Save individual module analyses
-    for moduleName, analysis in pairs(fullAnalysis.modules) do
-        local fileName = string.format("RNGAnalysis/Modules/%s.json", moduleName:gsub("%s+", "_"))
-        FileManager:WriteFile(fileName, OutputFormatter:ToJSON(analysis))
+    if FileManager.canWrite then
+        FileManager:WriteJSON("UltimateAnalysis/complete_analysis.json", fullAnalysis)
+        FileManager:WriteLua("UltimateAnalysis/complete_analysis.lua", fullAnalysis, "CompleteAnalysis")
+        
+        -- Save individual components
+        for moduleName, analysis in pairs(fullAnalysis.modules) do
+            local safeName = moduleName:gsub("[^%w]", "_")
+            FileManager:WriteJSON(string.format("UltimateAnalysis/Modules/%s.json", safeName), analysis)
+        end
+        
+        for moduleName, pattern in pairs(fullAnalysis.patterns) do
+            local safeName = moduleName:gsub("[^%w]", "_")
+            FileManager:WriteJSON(string.format("UltimateAnalysis/Patterns/%s.json", safeName), pattern)
+        end
+        
+        FileManager:WriteJSON("UltimateAnalysis/Exploits/all_vulnerabilities.json", fullAnalysis.exploits)
+        FileManager:WriteJSON("UltimateAnalysis/Remotes/remote_events.json", remotes)
     end
     
-    -- Save exploit report
-    FileManager:WriteFile("RNGAnalysis/Exploits/vulnerabilities.json", OutputFormatter:ToJSON(fullAnalysis.exploits))
-    
-    -- Print summary
+    -- Print final summary
     print("\n" .. string.rep("=", 60))
-    print("✅ ANALYSIS COMPLETE!")
+    print("✅ ULTIMATE ANALYSIS COMPLETE!")
     print(string.rep("=", 60))
-    print(string.format("\n📊 Analyzed: %d modules", fullAnalysis.totalModules))
-    print(string.format("🔓 Found: %d potential vulnerabilities", 
-        #(fullAnalysis.exploits.clientSideRNG or {}) + 
-        #(fullAnalysis.exploits.predictableSeeds or {})))
-    print("\n📂 Files saved to: [Workspace]/RNGAnalysis/")
-    print("   • full_analysis.json - Complete data")
-    print("   • detailed_report.txt - Human-readable report")
-    print("   • Modules/*.json - Individual module analyses")
-    print("   • Exploits/vulnerabilities.json - Security analysis")
+    print(string.format("\n📊 Statistics:"))
+    print(string.format("   • Modules analyzed: %d", fullAnalysis.statistics.totalModules))
+    print(string.format("   • Functions found: %d", fullAnalysis.statistics.totalFunctions))
+    print(string.format("   • Remotes detected: %d", fullAnalysis.statistics.totalRemotes))
+    print(string.format("   • Analysis time: %.2fs", fullAnalysis.metadata.analysisTime))
+    print(string.format("\n🎮 Game Type: %s (confidence: %d)", gameType.type, gameType.confidence))
+    print(string.format("\n🔓 Vulnerabilities:"))
+    print(string.format("   • Critical: %d", #fullAnalysis.exploits.clientSideRNG))
+    print(string.format("   • High: %d", #fullAnalysis.exploits.predictableSeeds))
+    print(string.format("   • Medium: %d", #fullAnalysis.exploits.manipulableWeights))
+    print(string.format("   • Low: %d", #fullAnalysis.exploits.exposedConstants))
+    print("\n📂 Files saved to: [Workspace]/UltimateAnalysis/")
     
     if setclipboard then
-        setclipboard(OutputFormatter:ToDetailedReport(fullAnalysis))
-        print("\n✅ Report copied to clipboard!")
+        local summary = string.format([[
+ULTIMATE RNG ANALYSIS SUMMARY
+=============================
+Game: %s
+Type: %s
+Modules: %d | Functions: %d | Remotes: %d
+Vulnerabilities: %d critical, %d high, %d medium
+Analysis Time: %.2fs
+        ]], 
+            fullAnalysis.metadata.gameName,
+            gameType.type,
+            fullAnalysis.statistics.totalModules,
+            fullAnalysis.statistics.totalFunctions,
+            fullAnalysis.statistics.totalRemotes,
+            #fullAnalysis.exploits.clientSideRNG,
+            #fullAnalysis.exploits.predictableSeeds,
+            #fullAnalysis.exploits.manipulableWeights,
+            fullAnalysis.metadata.analysisTime
+        )
+        
+        setclipboard(summary)
+        print("\n✅ Summary copied to clipboard!")
     end
     
     return fullAnalysis
 end
 
--- Store globally
-_G.RNGAnalyzer = {
-    Run = Main,
+function Utils:CountTable(tbl)
+    local count = 0
+    for _ in pairs(tbl) do count = count + 1 end
+    return count
+end
+
+-- ========================================
+-- GLOBAL API
+-- ========================================
+
+_G.UltimateAnalyzer = {
+    -- Core functions
+    Run = ExecuteAnalysis,
+    
+    -- Utils
     Utils = Utils,
-    ModuleFinder = ModuleFinder,
+    
+    -- Scanners
+    ModuleScanner = ModuleScanner,
+    
+    -- Analyzers
     RNGAnalyzer = RNGAnalyzer,
-    ExploitFinder = ExploitFinder,
-    FileManager = FileManager
+    PatternDetector = PatternDetector,
+    
+    -- File Manager
+    FileManager = FileManager,
+    
+    -- Advanced features
+    ScanPattern = function(pattern)
+        return ModuleScanner:FindByPattern(pattern)
+    end,
+    
+    AnalyzeModule = function(moduleName)
+        local modules = ModuleScanner:ScanAllServices()
+        if modules[moduleName] then
+            local analysis = RNGAnalyzer:DeepAnalyze(modules[moduleName].module, moduleName)
+            local patterns = RNGAnalyzer:FindRNGPatterns(modules[moduleName].module, moduleName)
+            return {analysis = analysis, patterns = patterns}
+        end
+        return nil
+    end,
+    
+    GetModuleByName = function(name)
+        local modules = ModuleScanner:ScanAllServices()
+        return modules[name]
+    end,
+    
+    ListAllModules = function()
+        local modules = ModuleScanner:ScanAllServices()
+        local list = {}
+        for name, _ in pairs(modules) do
+            table.insert(list, name)
+        end
+        return list
+    end,
+    
+    FindWeightTables = function()
+        local modules = ModuleScanner:ScanAllServices()
+        local weightTables = {}
+        
+        for moduleName, moduleData in pairs(modules) do
+            local patterns = RNGAnalyzer:FindRNGPatterns(moduleData.module, moduleName)
+            if patterns.usesWeights then
+                weightTables[moduleName] = patterns.weightTables
+            end
+        end
+        
+        return weightTables
+    end,
+    
+    FindRNGFunctions = function()
+        local modules = ModuleScanner:ScanAllServices()
+        local rngFunctions = {}
+        
+        for moduleName, moduleData in pairs(modules) do
+            local patterns = RNGAnalyzer:FindRNGPatterns(moduleData.module, moduleName)
+            if #patterns.rngFunctions > 0 then
+                rngFunctions[moduleName] = patterns.rngFunctions
+            end
+        end
+        
+        return rngFunctions
+    end,
+    
+    MonitorRemotes = function()
+        return ModuleScanner:ScanRemoteEvents()
+    end,
+    
+    -- Hook functions
+    HookFunction = function(moduleName, functionName, callback)
+        local modules = ModuleScanner:ScanAllServices()
+        if modules[moduleName] then
+            local module = modules[moduleName].module
+            if module[functionName] and type(module[functionName]) == "function" then
+                local original = module[functionName]
+                module[functionName] = function(...)
+                    local args = {...}
+                    local result = callback(original, args)
+                    if result ~= nil then
+                        return result
+                    end
+                    return original(...)
+                end
+                return true
+            end
+        end
+        return false
+    end,
+    
+    -- Export functions
+    ExportToFile = function(filename, data)
+        if FileManager.canWrite then
+            FileManager:WriteJSON("UltimateAnalysis/" .. filename, data)
+            return true
+        end
+        return false
+    end,
+    
+    -- Quick analysis presets
+    QuickScan = function()
+        print("\n⚡ Quick Scan Mode\n")
+        Config.maxDepth = 3
+        Config.deepFunctionAnalysis = false
+        return ExecuteAnalysis()
+    end,
+    
+    DeepScan = function()
+        print("\n🔬 Deep Scan Mode\n")
+        Config.maxDepth = 10
+        Config.deepFunctionAnalysis = true
+        return ExecuteAnalysis()
+    end,
+    
+    ExploitScan = function()
+        print("\n🔓 Exploit-Focused Scan\n")
+        Config.maxDepth = 5
+        Config.hookFunctions = true
+        local result = ExecuteAnalysis()
+        return result.exploits
+    end
 }
 
--- Auto-run
-print("\n⏳ Starting in 1 second...\n")
-wait(1)
-return Main()
+-- ========================================
+-- AUTO-EXECUTION
+-- ========================================
+
+print([[
+
+╔═══════════════════════════════════════════╗
+║         🎮 COMMANDS AVAILABLE 🎮         ║
+╚═══════════════════════════════════════════╝
+
+AUTOMATIC MODE:
+  Just wait, analysis will auto-start!
+
+MANUAL COMMANDS:
+  _G.UltimateAnalyzer.Run()           -- Full analysis
+  _G.UltimateAnalyzer.QuickScan()     -- Fast scan
+  _G.UltimateAnalyzer.DeepScan()      -- Deep scan
+  _G.UltimateAnalyzer.ExploitScan()   -- Find exploits
+
+UTILITY COMMANDS:
+  _G.UltimateAnalyzer.ListAllModules()
+  _G.UltimateAnalyzer.ScanPattern("Weight")
+  _G.UltimateAnalyzer.AnalyzeModule("WeightRandom")
+  _G.UltimateAnalyzer.FindWeightTables()
+  _G.UltimateAnalyzer.FindRNGFunctions()
+  _G.UltimateAnalyzer.MonitorRemotes()
+
+ADVANCED:
+  _G.UltimateAnalyzer.HookFunction("Module", "Function", callback)
+  _G.UltimateAnalyzer.ExportToFile("custom.json", data)
+
+════════════════════════════════════════════
+]])
+
+-- Auto-run with delay
+print("\n⏳ Starting ULTIMATE analysis in 2 seconds...\n")
+print("💡 Tip: Press Ctrl+C in console to cancel\n")
+
+wait(2)
+return ExecuteAnalysis()
