@@ -1,0 +1,1330 @@
+ 2025-10-20T07:50:32.118Z,607.118774,6e73b000,6 [FLog::Output] ╔═══════════════════════════════════════════╗
+ ║ 🎲 ULTIMATE RNG ANALYZER V2.0 🎲 ║
+ ║ Hydrogen App Compatible Edition ║
+ ║ Auto-dumps to Hydrogen/dump/ ║
+ ╚═══════════════════════════════════════════╝
+ 2025-10-20T07:50:32.118Z,607.118835,6e73b000,6 [FLog::Output]
+ ╔═══════════════════════════════════════════╗
+ ║ 🎮 COMMANDS AVAILABLE 🎮 ║
+ ╚═══════════════════════════════════════════╝
+ AUTOMATIC MODE:
+ Just wait, analysis will auto-start!
+ MANUAL COMMANDS:
+ _G.UltimateAnalyzer.Run() -- Full analysis
+ _G.UltimateAnalyzer.QuickScan() -- Fast scan
+ _G.UltimateAnalyzer.DeepScan() -- Deep scan
+ _G.UltimateAnalyzer.ExploitScan() -- Find exploits only
+ UTILITY COMMANDS:
+ _G.UltimateAnalyzer.ListAllModules()
+ _G.UltimateAnalyzer.AnalyzeModule("WeightRandom")
+ _G.UltimateAnalyzer.FindWeightTables()
+ _G.UltimateAnalyzer.FindRNGFunctions()
+ _G.UltimateAnalyzer.MonitorRemotes()
+ ADVANCED:
+ _G.UltimateAnalyzer.GetConfig()
+ _G.UltimateAnalyzer.SetConfig("maxDepth", 5)
+ _G.UltimateAnalyze
+ 2025-10-20T07:50:32.118Z,607.118835,6e73b000,6 [FLog::Output]
+ ⏳ Starting ULTIMATE analysis in 3 seconds...
+ 2025-10-20T07:50:32.118Z,607.118896,6e73b000,6 [FLog::Output] 💡 Tip: You can cancel and run manually with _G.UltimateAnalyzer.Run()
+ 🚀 Starting ULTIMATE analysis...
+ 2025-10-20T07:50:35.128Z,610.128967,6e73b000,6 [FLog::Output] 📂 Dumping to: Hydrogen/dump/
+ 2025-10-20T07:50:35.129Z,610.129028,6e73b000,6 [FLog::Output] ✅ Hydrogen file system initialized
+ 2025-10-20T07:50:35.129Z,610.129028,6e73b000,6 [FLog::Output] 📂 Dump location: Hydrogen/dump/
+ 2025-10-20T07:50:35.129Z,610.129456,6e73b000,6 [FLog::Output] 📁 Created: dump/Modules/
+ 2025-10-20T07:50:35.129Z,610.129517,6e73b000,6 [FLog::Output] 📁 Created: dump/Patterns/
+ 2025-10-20T07:50:35.129Z,610.129578,6e73b000,6 [FLog::Output] 📁 Created: dump/Functions/
+ 2025-10-20T07:50:35.129Z,610.129578,6e73b000,6 [FLog::Output] 📁 Created: dump/Reports/
+ 2025-10-20T07:50:35.129Z,610.129639,6e73b000,6 [FLog::Output] 📁 Created: dump/Remotes/
+ 2025-10-20T07:50:35.129Z,610.129700,6e73b000,6 [FLog::Output] 📁 Created: dump/Exploits/
+ 2025-10-20T07:50:35.129Z,610.129700,6e73b000,6 [FLog::Output] 📁 Created: dump/Tables/
+ 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ✅ Folder structure created
+ 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ============================================================
+ 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] PHASE 1: COMPREHENSIVE SCANNING
+ 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ============================================================
+ 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output]
+ 🌐 Scanning ALL game services...
+ 2025-10-20T07:50:35.138Z,610.138489,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ModelProvider
+ 2025-10-20T07:50:35.138Z,610.138611,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ReclassFishProjectile
+ 2025-10-20T07:50:35.138Z,610.138672,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ReclassGenericModel
+ 2025-10-20T07:50:35.138Z,610.138672,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ReclassTool
+ 2025-10-20T07:50:35.138Z,610.138733,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Potions
+ 2025-10-20T07:50:35.138Z,610.138794,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luck I Potion
+ 2025-10-20T07:50:35.138Z,610.138794,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Coin I Potion
+ 2025-10-20T07:50:35.138Z,610.138855,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Extra Luck
+ 2025-10-20T07:50:35.138Z,610.138855,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutation I Potion
+ 2025-10-20T07:50:35.138Z,610.138916,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Small Luck
+ 2025-10-20T07:50:35.138Z,610.138916,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luck II Potion
+ 2025-10-20T07:50:35.138Z,610.138977,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: More Mutations
+ 2025-10-20T07:50:35.138Z,610.138977,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VIP Luck
+ 2025-10-20T07:50:35.139Z,610.139038,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Advanced Luck
+ 2025-10-20T07:50:35.139Z,610.139038,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Double XP
+ 2025-10-20T07:50:35.139Z,610.139099,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luck Totem
+ 2025-10-20T07:50:35.139Z,610.139099,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutation Totem
+ 2025-10-20T07:50:35.139Z,610.139160,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Shiny Totem
+ 2025-10-20T07:50:35.139Z,610.139221,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin Luck I Potion
+ 2025-10-20T07:50:35.139Z,610.139221,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin Luck I Potion
+ 2025-10-20T07:50:35.139Z,610.139282,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Baits
+ 2025-10-20T07:50:35.139Z,610.139282,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Starter Bait
+ 2025-10-20T07:50:35.139Z,610.139343,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Chroma Bait
+ 2025-10-20T07:50:35.139Z,610.139343,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gold Bait
+ 2025-10-20T07:50:35.139Z,610.139404,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hyper Bait
+ 2025-10-20T07:50:35.139Z,610.139465,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luck Bait
+ 2025-10-20T07:50:35.139Z,610.139526,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Midnight Bait
+ 2025-10-20T07:50:35.139Z,610.139526,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Bag-O-Gold
+ 2025-10-20T07:50:35.139Z,610.139587,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Beach Ball Bait
+ 2025-10-20T07:50:35.139Z,610.139648,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Topwater Bait
+ 2025-10-20T07:50:35.139Z,610.139648,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Anchor Bait
+ 2025-10-20T07:50:35.139Z,610.139709,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ornament Bait
+ 2025-10-20T07:50:35.139Z,610.139771,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Jolly Bait
+ 2025-10-20T07:50:35.139Z,610.139771,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frozen Bait
+ 2025-10-20T07:50:35.139Z,610.139832,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dark Matter Bait
+ 2025-10-20T07:50:35.139Z,610.139893,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Nature Bait
+ 2025-10-20T07:50:35.139Z,610.139954,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Aether Bait
+ 2025-10-20T07:50:35.140Z,610.140015,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Corrupt Bait
+ 2025-10-20T07:50:35.140Z,610.140015,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Singularity Bait
+ 2025-10-20T07:50:35.140Z,610.140076,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Royal Bait
+ 2025-10-20T07:50:35.140Z,610.140137,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Floral Bait
+ 2025-10-20T07:50:35.140Z,610.140198,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Radioactive Bait
+ 2025-10-20T07:50:35.140Z,610.140259,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Root Bait
+ 2025-10-20T07:50:35.140Z,610.140320,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Delayed Orb Bait
+ 2025-10-20T07:50:35.140Z,610.140381,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Bait
+ 2025-10-20T07:50:35.140Z,610.140442,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Areas
+ 2025-10-20T07:50:35.140Z,610.140442,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Tiers
+ 2025-10-20T07:50:35.140Z,610.140503,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Events
+ 2025-10-20T07:50:35.140Z,610.140503,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Day
+ 2025-10-20T07:50:35.140Z,610.140564,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Cloudy
+ 2025-10-20T07:50:35.140Z,610.140564,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutated
+ 2025-10-20T07:50:35.140Z,610.140625,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Wind
+ 2025-10-20T07:50:35.140Z,610.140625,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Storm
+ 2025-10-20T07:50:35.140Z,610.140686,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Night
+ 2025-10-20T07:50:35.140Z,610.140686,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Increased Luck
+ 2025-10-20T07:50:35.140Z,610.140747,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Shark Hunt
+ 2025-10-20T07:50:35.140Z,610.140747,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost Shark Hunt
+ 2025-10-20T07:50:35.140Z,610.140808,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sparkling Cove
+ 2025-10-20T07:50:35.140Z,610.140808,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Snow
+ 2025-10-20T07:50:35.140Z,610.140869,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Worm Hunt
+ 2025-10-20T07:50:35.140Z,610.140930,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Shocked
+ 2025-10-20T07:50:35.140Z,610.140930,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Black Hole
+ 2025-10-20T07:50:35.140Z,610.140991,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Ghost Worm
+ 2025-10-20T07:50:35.140Z,610.140991,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Meteor Rain
+ 2025-10-20T07:50:35.141Z,610.141052,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Super Mutated
+ 2025-10-20T07:50:35.141Z,610.141052,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Radiant
+ 2025-10-20T07:50:35.141Z,610.141113,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Admin - Super Luck
+ 2025-10-20T07:50:35.141Z,610.141113,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Megalodon Hunt
+ 2025-10-20T07:50:35.141Z,610.141174,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Enchants
+ 2025-10-20T07:50:35.141Z,610.141174,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: XPerienced I
+ 2025-10-20T07:50:35.141Z,610.141235,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Stormhunter I
+ 2025-10-20T07:50:35.141Z,610.141235,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Stargazer I
+ 2025-10-20T07:50:35.141Z,610.141296,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Reeler I
+ 2025-10-20T07:50:35.141Z,610.141296,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Prismatic I
+ 2025-10-20T07:50:35.141Z,610.141357,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutation Hunter I
+ 2025-10-20T07:50:35.141Z,610.141357,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Leprechaun I
+ 2025-10-20T07:50:35.141Z,610.141418,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Leprechaun II
+ 2025-10-20T07:50:35.141Z,610.141418,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gold Digger I
+ 2025-10-20T07:50:35.141Z,610.141479,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Glistening I
+ 2025-10-20T07:50:35.141Z,610.141479,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Empowered I
+ 2025-10-20T07:50:35.141Z,610.141541,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Cursed I
+ 2025-10-20T07:50:35.141Z,610.141541,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Big Hunter I
+ 2025-10-20T07:50:35.141Z,610.141602,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutation Hunter II
+ 2025-10-20T07:50:35.141Z,610.141602,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Perfection
+ 2025-10-20T07:50:35.141Z,610.141663,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Variants
+ 2025-10-20T07:50:35.141Z,610.141663,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Corrupt
+ 2025-10-20T07:50:35.141Z,610.141724,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fairy Dust
+ 2025-10-20T07:50:35.141Z,610.141785,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Festive
+ 2025-10-20T07:50:35.141Z,610.141846,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frozen
+ 2025-10-20T07:50:35.141Z,610.141907,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Galaxy
+ 2025-10-20T07:50:35.141Z,610.141968,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gemstone
+ 2025-10-20T07:50:35.142Z,610.142029,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost
+ 2025-10-20T07:50:35.142Z,610.142090,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gold
+ 2025-10-20T07:50:35.142Z,610.142151,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lightning
+ 2025-10-20T07:50:35.142Z,610.142212,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Midnight
+ 2025-10-20T07:50:35.142Z,610.142273,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Radioactive
+ 2025-10-20T07:50:35.142Z,610.142273,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Stone
+ 2025-10-20T07:50:35.142Z,610.142334,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Holographic
+ 2025-10-20T07:50:35.142Z,610.142395,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Albino
+ 2025-10-20T07:50:35.142Z,610.142456,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Color Burn
+ 2025-10-20T07:50:35.142Z,610.142456,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Items
+ 2025-10-20T07:50:35.142Z,610.142517,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Chrome Rod
+ 2025-10-20T07:50:35.142Z,610.142578,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Lucky Rod
+ 2025-10-20T07:50:35.142Z,610.142639,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Magma Rod
+ 2025-10-20T07:50:35.142Z,610.142761,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Starter Rod
+ 2025-10-20T07:50:35.142Z,610.142822,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Steampunk Rod
+ 2025-10-20T07:50:35.142Z,610.142883,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Hyper Rod
+ 2025-10-20T07:50:35.142Z,610.142944,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Gold Rod
+ 2025-10-20T07:50:35.143Z,610.143005,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Super Enchant Stone
+ 2025-10-20T07:50:35.143Z,610.143066,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Lava Rod
+ 2025-10-20T07:50:35.143Z,610.143127,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Reef Chromis
+ 2025-10-20T07:50:35.143Z,610.143188,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Abyss Seahorse
+ 2025-10-20T07:50:35.143Z,610.143188,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ash Basslet
+ 2025-10-20T07:50:35.143Z,610.143250,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Astra Damsel
+ 2025-10-20T07:50:35.143Z,610.143311,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Azure Damsel
+ 2025-10-20T07:50:35.143Z,610.143372,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Banded Butterfly
+ 2025-10-20T07:50:35.143Z,610.143372,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blue Lobster
+ 2025-10-20T07:50:35.143Z,610.143433,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blueflame Ray
+ 2025-10-20T07:50:35.143Z,610.143494,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Boa Angelfish
+ 2025-10-20T07:50:35.143Z,610.143555,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Bumblebee Grouper
+ 2025-10-20T07:50:35.143Z,610.143616,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Candy Butterfly
+ 2025-10-20T07:50:35.143Z,610.143677,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Charmed Tang
+ 2025-10-20T07:50:35.143Z,610.143677,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Chrome Tuna
+ 2025-10-20T07:50:35.143Z,610.143738,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Clownfish
+ 2025-10-20T07:50:35.143Z,610.143799,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Coal Tang
+ 2025-10-20T07:50:35.143Z,610.143799,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Copperband Butterfly
+ 2025-10-20T07:50:35.143Z,610.143860,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Corazon Damsel
+ 2025-10-20T07:50:35.143Z,610.143921,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Cow Clownfish
+ 2025-10-20T07:50:35.143Z,610.143982,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Darwin Clownfish
+ 2025-10-20T07:50:35.144Z,610.144043,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Domino Damsel
+ 2025-10-20T07:50:35.144Z,610.144043,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dorhey Tang
+ 2025-10-20T07:50:35.144Z,610.144104,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dotted Stingray
+ 2025-10-20T07:50:35.144Z,610.144165,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Enchant Stone
+ 2025-10-20T07:50:35.144Z,610.144226,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Enchanted Angelfish
+ 2025-10-20T07:50:35.144Z,610.144226,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fire Goby
+ 2025-10-20T07:50:35.144Z,610.144287,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Firecoal Damsel
+ 2025-10-20T07:50:35.144Z,610.144348,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Flame Angelfish
+ 2025-10-20T07:50:35.144Z,610.144409,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Greenbee Grouper
+ 2025-10-20T07:50:35.144Z,610.144409,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hammerhead Shark
+ 2025-10-20T07:50:35.144Z,610.144470,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hawks Turtle
+ 2025-10-20T07:50:35.144Z,610.144531,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Starjam Tang
+ 2025-10-20T07:50:35.144Z,610.144592,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Jennifer Dottyback
+ 2025-10-20T07:50:35.144Z,610.144653,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Jewel Tang
+ 2025-10-20T07:50:35.144Z,610.144653,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Kau Cardinal
+ 2025-10-20T07:50:35.144Z,610.144714,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Korean Angelfish
+ 2025-10-20T07:50:35.144Z,610.144775,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lavafin Tuna
+ 2025-10-20T07:50:35.144Z,610.144836,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lobster
+ 2025-10-20T07:50:35.144Z,610.144897,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Loggerhead Turtle
+ 2025-10-20T07:50:35.144Z,610.144958,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Longnose Butterfly
+ 2025-10-20T07:50:35.145Z,610.145020,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Magic Tang
+ 2025-10-20T07:50:35.145Z,610.145020,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Magma Goby
+ 2025-10-20T07:50:35.145Z,610.145081,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Manta Ray
+ 2025-10-20T07:50:35.145Z,610.145142,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Maroon Butterfly
+ 2025-10-20T07:50:35.145Z,610.145203,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Maze Angelfish
+ 2025-10-20T07:50:35.145Z,610.145203,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Moorish Idol
+ 2025-10-20T07:50:35.145Z,610.145264,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DEC24 - Wood Plaque
+ 2025-10-20T07:50:35.145Z,610.145325,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Bandit Angelfish
+ 2025-10-20T07:50:35.145Z,610.145386,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Zoster Butterfly
+ 2025-10-20T07:50:35.145Z,610.145447,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Orangy Goby
+ 2025-10-20T07:50:35.145Z,610.145447,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Panther Grouper
+ 2025-10-20T07:50:35.145Z,610.145508,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Prismy Seahorse
+ 2025-10-20T07:50:35.145Z,610.145569,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Scissortail Dartfish
+ 2025-10-20T07:50:35.145Z,610.145569,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Shrimp Goby
+ 2025-10-20T07:50:35.145Z,610.145630,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Skunk Tilefish
+ 2025-10-20T07:50:35.145Z,610.145691,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Specked Butterfly
+ 2025-10-20T07:50:35.145Z,610.145752,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Strawberry Dotty
+ 2025-10-20T07:50:35.145Z,610.145752,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sushi Cardinal
+ 2025-10-20T07:50:35.145Z,610.145813,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Tricolore Butterfly
+ 2025-10-20T07:50:35.145Z,610.145874,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Unicorn Tang
+ 2025-10-20T07:50:35.145Z,610.145935,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Vintage Blue Tang
+ 2025-10-20T07:50:35.145Z,610.145996,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Vintage Damsel
+ 2025-10-20T07:50:35.145Z,610.145996,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Volcanic Basslet
+ 2025-10-20T07:50:35.146Z,610.146057,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: White Clownfish
+ 2025-10-20T07:50:35.146Z,610.146118,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Yello Damselfish
+ 2025-10-20T07:50:35.146Z,610.146179,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Yellowfin Tuna
+ 2025-10-20T07:50:35.146Z,610.146179,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Yellowstate Angelfish
+ 2025-10-20T07:50:35.146Z,610.146240,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Carbon Rod
+ 2025-10-20T07:50:35.146Z,610.146301,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Gingerbread Rod
+ 2025-10-20T07:50:35.146Z,610.146362,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Ice Rod
+ 2025-10-20T07:50:35.146Z,610.146423,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Luck Rod
+ 2025-10-20T07:50:35.146Z,610.146484,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Midnight Rod
+ 2025-10-20T07:50:35.146Z,610.146545,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fishing Radar
+ 2025-10-20T07:50:35.146Z,610.146606,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Salmon
+ 2025-10-20T07:50:35.146Z,610.146729,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blob Shark
+ 2025-10-20T07:50:35.146Z,610.146790,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Toy Rod
+ 2025-10-20T07:50:35.146Z,610.146851,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Grass Rod
+ 2025-10-20T07:50:35.146Z,610.146912,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Volsail Tang
+ 2025-10-20T07:50:35.146Z,610.146912,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Rockform Cardianl
+ 2025-10-20T07:50:35.146Z,610.146973,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lava Butterfly
+ 2025-10-20T07:50:35.147Z,610.147034,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Slurpfish Chromis
+ 2025-10-20T07:50:35.147Z,610.147095,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Festive Goby
+ 2025-10-20T07:50:35.147Z,610.147156,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mistletoe Damsel
+ 2025-10-20T07:50:35.147Z,610.147156,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gingerbread Tang
+ 2025-10-20T07:50:35.147Z,610.147217,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Great Christmas Whale
+ 2025-10-20T07:50:35.147Z,610.147339,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gingerbread Clownfish
+ 2025-10-20T07:50:35.147Z,610.147400,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gingerbread Turtle
+ 2025-10-20T07:50:35.147Z,610.147461,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gingerbread Shark
+ 2025-10-20T07:50:35.147Z,610.147583,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Christmastree Longnose
+ 2025-10-20T07:50:35.147Z,610.147644,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Candycane Lobster
+ 2025-10-20T07:50:35.147Z,610.147705,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Festive Pufferfish
+ 2025-10-20T07:50:35.147Z,610.147705,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Candy Cane Rod
+ 2025-10-20T07:50:35.147Z,610.147827,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Christmas Tree Rod
+ 2025-10-20T07:50:35.147Z,610.147888,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Demascus Rod
+ 2025-10-20T07:50:35.147Z,610.147949,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Frozen Rod
+ 2025-10-20T07:50:35.148Z,610.148010,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Christmas Trophy 2024
+ 2025-10-20T07:50:35.148Z,610.148132,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Cursed Soul
+ 2025-10-20T07:50:35.148Z,610.148315,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blue-Banded Goby
+ 2025-10-20T07:50:35.148Z,610.148315,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blumato Clownfish
+ 2025-10-20T07:50:35.148Z,610.148376,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Conspi Angelfish
+ 2025-10-20T07:50:35.148Z,610.148438,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fade Tang
+ 2025-10-20T07:50:35.148Z,610.148438,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lined Cardinal Fish
+ 2025-10-20T07:50:35.148Z,610.148499,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Masked Angelfish
+ 2025-10-20T07:50:35.148Z,610.148560,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pygmy Goby
+ 2025-10-20T07:50:35.148Z,610.148560,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sail Tang
+ 2025-10-20T07:50:35.148Z,610.148621,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Watanabei Angelfish
+ 2025-10-20T07:50:35.148Z,610.148682,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: White Tang
+ 2025-10-20T07:50:35.148Z,610.148743,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DEC24 - Sapphire Plaque
+ 2025-10-20T07:50:35.148Z,610.148804,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DEC24 - Silver Plaque
+ 2025-10-20T07:50:35.148Z,610.148865,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DEC24 - Golden Plaque
+ 2025-10-20T07:50:35.148Z,610.148926,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ballina Angelfish
+ 2025-10-20T07:50:35.148Z,610.148926,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Cute Rod
+ 2025-10-20T07:50:35.148Z,610.148987,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Bleekers Damsel
+ 2025-10-20T07:50:35.149Z,610.149048,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Loving Shark
+ 2025-10-20T07:50:35.149Z,610.149109,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pink Smith Damsel
+ 2025-10-20T07:50:35.149Z,610.149170,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Angelic Rod
+ 2025-10-20T07:50:35.149Z,610.149231,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Astral Rod
+ 2025-10-20T07:50:35.149Z,610.149414,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Ares Rod
+ 2025-10-20T07:50:35.149Z,610.149475,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Ghoul Rod
+ 2025-10-20T07:50:35.149Z,610.149536,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Forsaken
+ 2025-10-20T07:50:35.149Z,610.149597,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Red Matter
+ 2025-10-20T07:50:35.149Z,610.149780,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Lightsaber
+ 2025-10-20T07:50:35.149Z,610.149841,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Crystalized
+ 2025-10-20T07:50:35.150Z,610.150024,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Earthly
+ 2025-10-20T07:50:35.150Z,610.150085,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Neptune's Trident
+ 2025-10-20T07:50:35.150Z,610.150269,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Polarized
+ 2025-10-20T07:50:35.150Z,610.150330,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Axolotl
+ 2025-10-20T07:50:35.150Z,610.150391,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Silver Tuna
+ 2025-10-20T07:50:35.150Z,610.150452,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pilot Fish
+ 2025-10-20T07:50:35.150Z,610.150574,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Patriot Tang
+ 2025-10-20T07:50:35.150Z,610.150635,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frostborn Shark
+ 2025-10-20T07:50:35.150Z,610.150696,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Plasma Shark
+ 2025-10-20T07:50:35.150Z,610.150879,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pufferfish
+ 2025-10-20T07:50:35.150Z,610.150940,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Racoon Butterfly Fish
+ 2025-10-20T07:50:35.150Z,610.150940,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Orange Basslet
+ 2025-10-20T07:50:35.151Z,610.151001,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Strippled Seahorse
+ 2025-10-20T07:50:35.151Z,610.151062,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Thresher Shark
+ 2025-10-20T07:50:35.151Z,610.151062,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Great Whale
+ 2025-10-20T07:50:35.151Z,610.151123,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Monochrome
+ 2025-10-20T07:50:35.151Z,610.151245,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Mammoth
+ 2025-10-20T07:50:35.151Z,610.151367,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Viperfish
+ 2025-10-20T07:50:35.151Z,610.151489,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Deep Sea Crab
+ 2025-10-20T07:50:35.151Z,610.151672,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spotted Lantern Fish
+ 2025-10-20T07:50:35.151Z,610.151733,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Robot Kraken
+ 2025-10-20T07:50:35.151Z,610.151978,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Monk Fish
+ 2025-10-20T07:50:35.152Z,610.152161,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: King Crab
+ 2025-10-20T07:50:35.152Z,610.152344,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Jellyfish
+ 2025-10-20T07:50:35.152Z,610.152405,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Giant Squid
+ 2025-10-20T07:50:35.152Z,610.152527,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fangtooth
+ 2025-10-20T07:50:35.152Z,610.152649,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Electric Eel
+ 2025-10-20T07:50:35.152Z,610.152710,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Vampire Squid
+ 2025-10-20T07:50:35.152Z,610.152832,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dark Eel
+ 2025-10-20T07:50:35.152Z,610.152893,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Boar Fish
+ 2025-10-20T07:50:35.152Z,610.152954,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blob Fish
+ 2025-10-20T07:50:35.153Z,610.153015,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Angler Fish
+ 2025-10-20T07:50:35.153Z,610.153137,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dead Fish
+ 2025-10-20T07:50:35.153Z,610.153137,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Skeleton Fish
+ 2025-10-20T07:50:35.153Z,610.153320,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Swordfish
+ 2025-10-20T07:50:35.153Z,610.153381,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Lightning
+ 2025-10-20T07:50:35.153Z,610.153687,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Loving
+ 2025-10-20T07:50:35.153Z,610.153809,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Aqua Prism
+ 2025-10-20T07:50:35.153Z,610.153992,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Aquatic
+ 2025-10-20T07:50:35.154Z,610.154175,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Blossom
+ 2025-10-20T07:50:35.154Z,610.154358,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Heavenly
+ 2025-10-20T07:50:35.154Z,610.154602,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Diving Gear
+ 2025-10-20T07:50:35.154Z,610.154602,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Angler Rod
+ 2025-10-20T07:50:35.154Z,610.154724,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Megalofriend
+ 2025-10-20T07:50:35.154Z,610.154846,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Worm Fish
+ 2025-10-20T07:50:35.154Z,610.154907,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Rockfish
+ 2025-10-20T07:50:35.154Z,610.154968,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Aether Shard
+ 2025-10-20T07:50:35.155Z,610.155029,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Flower Garden
+ 2025-10-20T07:50:35.155Z,610.155090,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sheepshead Fish
+ 2025-10-20T07:50:35.155Z,610.155212,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Amber
+ 2025-10-20T07:50:35.155Z,610.155273,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Blackcap Basslet
+ 2025-10-20T07:50:35.155Z,610.155396,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Catfish
+ 2025-10-20T07:50:35.155Z,610.155457,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Coney Fish
+ 2025-10-20T07:50:35.155Z,610.155518,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hermit Crab
+ 2025-10-20T07:50:35.155Z,610.155640,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Parrot Fish
+ 2025-10-20T07:50:35.155Z,610.155701,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Queen Crab
+ 2025-10-20T07:50:35.155Z,610.155945,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Red Snapper
+ 2025-10-20T07:50:35.156Z,610.156067,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Jelly
+ 2025-10-20T07:50:35.156Z,610.156189,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Ghostfinn Rod
+ 2025-10-20T07:50:35.156Z,610.156372,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Cursed
+ 2025-10-20T07:50:35.156Z,610.156555,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lake Sturgeon
+ 2025-10-20T07:50:35.156Z,610.156677,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Orca
+ 2025-10-20T07:50:35.156Z,610.156738,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Barracuda Fish
+ 2025-10-20T07:50:35.156Z,610.156799,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Crystal Crab
+ 2025-10-20T07:50:35.156Z,610.156921,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frog
+ 2025-10-20T07:50:35.157Z,610.157043,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gar Fish
+ 2025-10-20T07:50:35.157Z,610.157104,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Herring Fish
+ 2025-10-20T07:50:35.157Z,610.157166,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Galactic
+ 2025-10-20T07:50:35.157Z,610.157288,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Enlightened
+ 2025-10-20T07:50:35.157Z,610.157593,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dark Tentacle
+ 2025-10-20T07:50:35.157Z,610.157593,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Abyssal Chroma
+ 2025-10-20T07:50:35.157Z,610.157837,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Flat Fish
+ 2025-10-20T07:50:35.157Z,610.157898,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Flying Fish
+ 2025-10-20T07:50:35.157Z,610.157959,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lion Fish
+ 2025-10-20T07:50:35.158Z,610.158020,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Fiery
+ 2025-10-20T07:50:35.158Z,610.158142,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Pirate Octopus
+ 2025-10-20T07:50:35.158Z,610.158325,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Pinata
+ 2025-10-20T07:50:35.158Z,610.158386,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Purple Saber
+ 2025-10-20T07:50:35.158Z,610.158447,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Starfish
+ 2025-10-20T07:50:35.158Z,610.158508,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Wahoo
+ 2025-10-20T07:50:35.158Z,610.158630,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Saw Fish
+ 2025-10-20T07:50:35.158Z,610.158691,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pink Dolphin
+ 2025-10-20T07:50:35.158Z,610.158691,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Monster Shark
+ 2025-10-20T07:50:35.158Z,610.158936,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luminous Fish
+ 2025-10-20T07:50:35.158Z,610.158997,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Eerie Shark
+ 2025-10-20T07:50:35.159Z,610.159119,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Abyssfire
+ 2025-10-20T07:50:35.159Z,610.159241,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Planetary
+ 2025-10-20T07:50:35.159Z,610.159424,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Scare
+ 2025-10-20T07:50:35.159Z,610.159607,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Synodontis
+ 2025-10-20T07:50:35.159Z,610.159729,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Soulreaver
+ 2025-10-20T07:50:35.159Z,610.159912,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Armor Catfish
+ 2025-10-20T07:50:35.159Z,610.159973,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Thin Armor Shark
+ 2025-10-20T07:50:35.160Z,610.160034,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Disco
+ 2025-10-20T07:50:35.160Z,610.160156,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Timeless
+ 2025-10-20T07:50:35.160Z,610.160400,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Narwhal
+ 2025-10-20T07:50:35.160Z,610.160461,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lochness Monster
+ 2025-10-20T07:50:35.160Z,610.160583,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Continuum
+ 2025-10-20T07:50:35.160Z,610.160828,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Worm Friend
+ 2025-10-20T07:50:35.160Z,610.160889,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Antique Cup
+ 2025-10-20T07:50:35.160Z,610.160950,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Antique Watch
+ 2025-10-20T07:50:35.160Z,610.160950,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sea Shell
+ 2025-10-20T07:50:35.161Z,610.161011,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pearl
+ 2025-10-20T07:50:35.161Z,610.161011,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Old Boot
+ 2025-10-20T07:50:35.161Z,610.161072,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Expensive Chain
+ 2025-10-20T07:50:35.161Z,610.161072,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Diamond Ring
+ 2025-10-20T07:50:35.161Z,610.161133,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Conch Shell
+ 2025-10-20T07:50:35.161Z,610.161133,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Megalodon
+ 2025-10-20T07:50:35.161Z,610.161255,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Skeletal
+ 2025-10-20T07:50:35.161Z,610.161377,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Arowana
+ 2025-10-20T07:50:35.161Z,610.161499,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: King Mackerel
+ 2025-10-20T07:50:35.161Z,610.161560,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Magma Shark
+ 2025-10-20T07:50:35.161Z,610.161621,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ruby
+ 2025-10-20T07:50:35.161Z,610.161682,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Deep Conjurer
+ 2025-10-20T07:50:35.161Z,610.161865,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Holy Trident
+ 2025-10-20T07:50:35.162Z,610.162109,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Abyshorn Fish
+ 2025-10-20T07:50:35.162Z,610.162170,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sharp One
+ 2025-10-20T07:50:35.162Z,610.162231,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hybodus Shark
+ 2025-10-20T07:50:35.162Z,610.162292,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Panther Eel
+ 2025-10-20T07:50:35.162Z,610.162354,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Amethyst
+ 2025-10-20T07:50:35.162Z,610.162476,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Crescendo
+ 2025-10-20T07:50:35.162Z,610.162598,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Electric Guitar
+ 2025-10-20T07:50:35.162Z,610.162781,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Element Rod
+ 2025-10-20T07:50:35.162Z,610.162842,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost Shark
+ 2025-10-20T07:50:35.162Z,610.162903,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost Worm Fish
+ 2025-10-20T07:50:35.163Z,610.163025,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Hazmat Rod
+ 2025-10-20T07:50:35.163Z,610.163086,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Fluorescent Rod
+ 2025-10-20T07:50:35.163Z,610.163086,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Bamboo Rod
+ 2025-10-20T07:50:35.163Z,610.163147,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Lantern
+ 2025-10-20T07:50:35.163Z,610.163208,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Wild Jungle
+ 2025-10-20T07:50:35.163Z,610.163269,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Shard
+ 2025-10-20T07:50:35.163Z,610.163391,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: OCT25 - Jungle Plaque
+ 2025-10-20T07:50:35.163Z,610.163391,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Crescent Artifact
+ 2025-10-20T07:50:35.163Z,610.163452,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Diamond Artifact
+ 2025-10-20T07:50:35.163Z,610.163452,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hourglass Diamond Artifact
+ 2025-10-20T07:50:35.163Z,610.163513,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Arrow Artifact
+ 2025-10-20T07:50:35.163Z,610.163513,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Zebra Snakehead
+ 2025-10-20T07:50:35.163Z,610.163574,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Waveback Fish
+ 2025-10-20T07:50:35.163Z,610.163635,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Crocodile
+ 2025-10-20T07:50:35.163Z,610.163757,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Viperangler Fish
+ 2025-10-20T07:50:35.163Z,610.163757,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Temple Spokes Tuna
+ 2025-10-20T07:50:35.163Z,610.163818,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spear Guardian
+ 2025-10-20T07:50:35.163Z,610.163879,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Skeleton Angler Fish
+ 2025-10-20T07:50:35.163Z,610.163879,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sail Fish
+ 2025-10-20T07:50:35.163Z,610.163940,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sacred Guardian Squid
+ 2025-10-20T07:50:35.164Z,610.164001,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Runic Wispeye
+ 2025-10-20T07:50:35.164Z,610.164001,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Red Goatfish
+ 2025-10-20T07:50:35.164Z,610.164062,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Parrot Fish
+ 2025-10-20T07:50:35.164Z,610.164124,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mossy Fishlet
+ 2025-10-20T07:50:35.164Z,610.164124,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ancient Arapaima
+ 2025-10-20T07:50:35.164Z,610.164185,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Manoai Statue Fish
+ 2025-10-20T07:50:35.164Z,610.164246,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mammoth Appafish
+ 2025-10-20T07:50:35.164Z,610.164307,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Goliath Tiger
+ 2025-10-20T07:50:35.164Z,610.164368,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Freshwater Piranha
+ 2025-10-20T07:50:35.164Z,610.164429,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Transcended Stone
+ 2025-10-20T07:50:35.164Z,610.164490,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Drippy Tucanare
+ 2025-10-20T07:50:35.164Z,610.164551,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: King Jelly
+ 2025-10-20T07:50:35.164Z,610.164673,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Beanie Leedsicheye
+ 2025-10-20T07:50:35.164Z,610.164673,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ancient Relic Crocodile
+ 2025-10-20T07:50:35.164Z,610.164734,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Bone Whale
+ 2025-10-20T07:50:35.164Z,610.164795,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mosasaur Shark
+ 2025-10-20T07:50:35.164Z,610.164917,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Elshark Gran Maja
+ 2025-10-20T07:50:35.165Z,610.165039,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Water Snake
+ 2025-10-20T07:50:35.165Z,610.165100,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Oceanic Harpoon
+ 2025-10-20T07:50:35.165Z,610.165344,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ancient Whale
+ 2025-10-20T07:50:35.165Z,610.165466,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Crystal Salamander
+ 2025-10-20T07:50:35.165Z,610.165527,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dead Scary Clownfish
+ 2025-10-20T07:50:35.165Z,610.165588,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dead Spooky Koi Fish
+ 2025-10-20T07:50:35.165Z,610.165649,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dead Zombie Shark
+ 2025-10-20T07:50:35.165Z,610.165710,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Jellyfish
+ 2025-10-20T07:50:35.165Z,610.165771,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Scary Clownfish
+ 2025-10-20T07:50:35.165Z,610.165833,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spooky Koi Fish
+ 2025-10-20T07:50:35.165Z,610.165894,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Toxic Jellyfish
+ 2025-10-20T07:50:35.165Z,610.165955,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Zombie Shark
+ 2025-10-20T07:50:35.166Z,610.166138,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Baby Pumpkin Shark
+ 2025-10-20T07:50:35.166Z,610.166138,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dark Pumpkin Appafish
+ 2025-10-20T07:50:35.166Z,610.166199,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frankenstein Longsnapper
+ 2025-10-20T07:50:35.166Z,610.166260,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost Spiralfish
+ 2025-10-20T07:50:35.166Z,610.166321,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mossy Vampire Fish
+ 2025-10-20T07:50:35.166Z,610.166382,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Angler Fish
+ 2025-10-20T07:50:35.166Z,610.166382,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Butterfly Fish
+ 2025-10-20T07:50:35.166Z,610.166443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Carved Shark
+ 2025-10-20T07:50:35.166Z,610.166443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Hermit Crab
+ 2025-10-20T07:50:35.166Z,610.166504,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin Ray
+ 2025-10-20T07:50:35.166Z,610.166565,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Pumpkin StoneTurtle
+ 2025-10-20T07:50:35.166Z,610.166565,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spooky Peafish
+ 2025-10-20T07:50:35.166Z,610.166626,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Witch Fish
+ 2025-10-20T07:50:35.166Z,610.166687,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Wizard Stingray
+ 2025-10-20T07:50:35.166Z,610.166687,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Zombie Megalodon
+ 2025-10-20T07:50:35.166Z,610.166931,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Bat Knight
+ 2025-10-20T07:50:35.166Z,610.166992,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Eerie Bat
+ 2025-10-20T07:50:35.167Z,610.167053,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Gravedigger
+ 2025-10-20T07:50:35.167Z,610.167114,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Midnight Pumpkin
+ 2025-10-20T07:50:35.167Z,610.167175,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Reaver Scythe
+ 2025-10-20T07:50:35.167Z,610.167297,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Soul Scythe
+ 2025-10-20T07:50:35.167Z,610.167480,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Spirit Staff
+ 2025-10-20T07:50:35.167Z,610.167664,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Trick O' Treat
+ 2025-10-20T07:50:35.167Z,610.167725,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Royal Spider
+ 2025-10-20T07:50:35.167Z,610.167908,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: !!! Undead Guitar
+ 2025-10-20T07:50:35.168Z,610.168030,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Boats
+ 2025-10-20T07:50:35.168Z,610.168091,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Small Boat
+ 2025-10-20T07:50:35.168Z,610.168152,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Kayak
+ 2025-10-20T07:50:35.168Z,610.168213,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Jetski
+ 2025-10-20T07:50:35.168Z,610.168335,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Highfield Boat
+ 2025-10-20T07:50:35.168Z,610.168396,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fishing Boat
+ 2025-10-20T07:50:35.168Z,610.168518,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Raft
+ 2025-10-20T07:50:35.168Z,610.168579,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Alpha Floaty
+ 2025-10-20T07:50:35.168Z,610.168640,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DEV Evil Duck 9000
+ 2025-10-20T07:50:35.168Z,610.168701,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Speed Boat
+ 2025-10-20T07:50:35.168Z,610.168884,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Festive Duck
+ 2025-10-20T07:50:35.168Z,610.168945,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Frozen Boat
+ 2025-10-20T07:50:35.169Z,610.169006,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Santa Sleigh
+ 2025-10-20T07:50:35.169Z,610.169128,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mini Yacht
+ 2025-10-20T07:50:35.169Z,610.169250,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Cruiser Boat
+ 2025-10-20T07:50:35.169Z,610.169312,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mini Hoverboat
+ 2025-10-20T07:50:35.169Z,610.169373,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Rubber Ducky
+ 2025-10-20T07:50:35.169Z,610.169434,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Aura Boat
+ 2025-10-20T07:50:35.169Z,610.169739,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mega Hovercraft
+ 2025-10-20T07:50:35.169Z,610.169861,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Burger Boat
+ 2025-10-20T07:50:35.169Z,610.169922,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dinky Fishing Boat
+ 2025-10-20T07:50:35.170Z,610.170044,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ancient Ship
+ 2025-10-20T07:50:35.170Z,610.170227,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hyper Boat
+ 2025-10-20T07:50:35.170Z,610.170288,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Sharki
+ 2025-10-20T07:50:35.170Z,610.170471,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Flying Dutchman
+ 2025-10-20T07:50:35.170Z,610.170959,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SkinCrates
+ 2025-10-20T07:50:35.170Z,610.170959,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Totems
+ 2025-10-20T07:50:35.171Z,610.171021,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Luck Totem
+ 2025-10-20T07:50:35.171Z,610.171143,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mutation Totem
+ 2025-10-20T07:50:35.171Z,610.171204,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Shiny Totem
+ 2025-10-20T07:50:35.171Z,610.171326,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CmdrClient
+ 2025-10-20T07:50:35.171Z,610.171387,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CmdrInterface
+ 2025-10-20T07:50:35.171Z,610.171387,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Window
+ 2025-10-20T07:50:35.171Z,610.171387,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AutoComplete
+ 2025-10-20T07:50:35.171Z,610.171448,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DefaultEventHandlers
+ 2025-10-20T07:50:35.171Z,610.171448,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Argument
+ 2025-10-20T07:50:35.171Z,610.171448,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Command
+ 2025-10-20T07:50:35.171Z,610.171509,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dispatcher
+ 2025-10-20T07:50:35.171Z,610.171509,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Registry
+ 2025-10-20T07:50:35.171Z,610.171509,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Util
+ 2025-10-20T07:50:35.171Z,610.171570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BindableResource
+ 2025-10-20T07:50:35.171Z,610.171570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BrickColor
+ 2025-10-20T07:50:35.171Z,610.171570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Color3
+ 2025-10-20T07:50:35.171Z,610.171631,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Command
+ 2025-10-20T07:50:35.171Z,610.171631,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ConditionFunction
+ 2025-10-20T07:50:35.171Z,610.171631,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Duration
+ 2025-10-20T07:50:35.171Z,610.171692,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Player
+ 2025-10-20T07:50:35.171Z,610.171692,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PlayerId
+ 2025-10-20T07:50:35.171Z,610.171692,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Primitives
+ 2025-10-20T07:50:35.171Z,610.171753,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: StoredKey
+ 2025-10-20T07:50:35.171Z,610.171753,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Team
+ 2025-10-20T07:50:35.171Z,610.171753,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Type
+ 2025-10-20T07:50:35.171Z,610.171814,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: URL
+ 2025-10-20T07:50:35.171Z,610.171814,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: UserInput
+ 2025-10-20T07:50:35.171Z,610.171814,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Vector
+ 2025-10-20T07:50:35.171Z,610.171875,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DefaultAdmin
+ 2025-10-20T07:50:35.171Z,610.171875,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DefaultDeveloper
+ 2025-10-20T07:50:35.171Z,610.171875,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DefaultSeniorStaff
+ 2025-10-20T07:50:35.171Z,610.171936,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DefaultStaff
+ 2025-10-20T07:50:35.171Z,610.171936,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: help
+ 2025-10-20T07:50:35.171Z,610.171997,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: giverods
+ 2025-10-20T07:50:35.171Z,610.171997,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: setfishtier
+ 2025-10-20T07:50:35.171Z,610.171997,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wiperods
+ 2025-10-20T07:50:35.172Z,610.172058,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wipegifts
+ 2025-10-20T07:50:35.172Z,610.172058,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: addcoins
+ 2025-10-20T07:50:35.172Z,610.172058,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: addevent
+ 2025-10-20T07:50:35.172Z,610.172058,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: setlevel
+ 2025-10-20T07:50:35.172Z,610.172119,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: giveboats
+ 2025-10-20T07:50:35.172Z,610.172119,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: additem
+ 2025-10-20T07:50:35.172Z,610.172180,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: settime
+ 2025-10-20T07:50:35.172Z,610.172180,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ban
+ 2025-10-20T07:50:35.172Z,610.172180,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: unban
+ 2025-10-20T07:50:35.172Z,610.172241,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: globalevent
+ 2025-10-20T07:50:35.172Z,610.172241,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: globalmessage
+ 2025-10-20T07:50:35.172Z,610.172241,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: secretawardtier
+ 2025-10-20T07:50:35.172Z,610.172302,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: location
+ 2025-10-20T07:50:35.172Z,610.172302,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: givegift
+ 2025-10-20T07:50:35.172Z,610.172302,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: serverluck
+ 2025-10-20T07:50:35.172Z,610.172363,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: resetinventory
+ 2025-10-20T07:50:35.172Z,610.172363,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: givebaits
+ 2025-10-20T07:50:35.172Z,610.172363,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wipewheeldata
+ 2025-10-20T07:50:35.172Z,610.172424,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: teleport
+ 2025-10-20T07:50:35.172Z,610.172424,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wipebattlepass
+ 2025-10-20T07:50:35.172Z,610.172424,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: addcandy
+ 2025-10-20T07:50:35.172Z,610.172485,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: WeightRandom
+ 2025-10-20T07:50:35.172Z,610.172485,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Balance
+ 2025-10-20T07:50:35.172Z,610.172485,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TimeConfiguration
+ 2025-10-20T07:50:35.172Z,610.172546,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SystemMessage
+ 2025-10-20T07:50:35.172Z,610.172607,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamePass
+ 2025-10-20T07:50:35.172Z,610.172607,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamePassUtility
+ 2025-10-20T07:50:35.172Z,610.172607,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GiftProducts
+ 2025-10-20T07:50:35.172Z,610.172668,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ChatTags
+ 2025-10-20T07:50:35.172Z,610.172668,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AuthorizedUserIds
+ 2025-10-20T07:50:35.172Z,610.172668,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ValidEventNames
+ 2025-10-20T07:50:35.172Z,610.172729,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PlayerStatsUtility
+ 2025-10-20T07:50:35.172Z,610.172729,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RollData
+ 2025-10-20T07:50:35.172Z,610.172729,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ItemUtility
+ 2025-10-20T07:50:35.172Z,610.172791,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VariantPool
+ 2025-10-20T07:50:35.172Z,610.172791,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: XPUtility
+ 2025-10-20T07:50:35.172Z,610.172791,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Soundbook
+ 2025-10-20T07:50:35.172Z,610.172852,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dump
+ 2025-10-20T07:50:35.172Z,610.172852,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PlayerEvents
+ 2025-10-20T07:50:35.172Z,610.172852,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PlayerTroves
+ 2025-10-20T07:50:35.172Z,610.172913,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CharacterUtility
+ 2025-10-20T07:50:35.172Z,610.172913,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VFXUtility
+ 2025-10-20T07:50:35.172Z,610.172913,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Constants
+ 2025-10-20T07:50:35.172Z,610.172974,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EventUtility
+ 2025-10-20T07:50:35.172Z,610.172974,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AreaUtility
+ 2025-10-20T07:50:35.172Z,610.172974,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SpecialItems
+ 2025-10-20T07:50:35.172Z,610.172974,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TierUtility
+ 2025-10-20T07:50:35.173Z,610.173035,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DrawSeatUtility
+ 2025-10-20T07:50:35.173Z,610.173035,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: StringLibrary
+ 2025-10-20T07:50:35.173Z,610.173035,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Leaderboards
+ 2025-10-20T07:50:35.173Z,610.173096,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FishingRodModifiers
+ 2025-10-20T07:50:35.173Z,610.173096,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Effects
+ 2025-10-20T07:50:35.173Z,610.173096,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FishingCastText
+ 2025-10-20T07:50:35.173Z,610.173157,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Types
+ 2025-10-20T07:50:35.173Z,610.173157,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Settings
+ 2025-10-20T07:50:35.173Z,610.173218,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BoatsHandlingData
+ 2025-10-20T07:50:35.173Z,610.173218,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VendorUtility
+ 2025-10-20T07:50:35.173Z,610.173218,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BlockedHumanoidStates
+ 2025-10-20T07:50:35.173Z,610.173279,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FishWeightChances
+ 2025-10-20T07:50:35.173Z,610.173279,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ChristmasEventEndTime
+ 2025-10-20T07:50:35.173Z,610.173279,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SoldItemTypes
+ 2025-10-20T07:50:35.173Z,610.173279,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PolicyWrapper
+ 2025-10-20T07:50:35.173Z,610.173340,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: UserPriority
+ 2025-10-20T07:50:35.173Z,610.173340,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RaycastUtility
+ 2025-10-20T07:50:35.173Z,610.173401,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CutsceneUtility
+ 2025-10-20T07:50:35.173Z,610.173401,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mythic
+ 2025-10-20T07:50:35.173Z,610.173401,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SECRET
+ 2025-10-20T07:50:35.173Z,610.173462,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Legendary
+ 2025-10-20T07:50:35.173Z,610.173462,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SpinWheelPrizes
+ 2025-10-20T07:50:35.173Z,610.173462,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DailyRewardsUtility
+ 2025-10-20T07:50:35.173Z,610.173523,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RewardInfo
+ 2025-10-20T07:50:35.173Z,610.173523,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: InventoryMapping
+ 2025-10-20T07:50:35.173Z,610.173523,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EquippedTypes
+ 2025-10-20T07:50:35.173Z,610.173584,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MarketItemData
+ 2025-10-20T07:50:35.173Z,610.173584,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BattlepassEvent
+ 2025-10-20T07:50:35.173Z,610.173584,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Types
+ 2025-10-20T07:50:35.173Z,610.173645,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: QuestUtility
+ 2025-10-20T07:50:35.173Z,610.173645,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: QuestList
+ 2025-10-20T07:50:35.173Z,610.173645,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PassivesRunner
+ 2025-10-20T07:50:35.173Z,610.173706,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PassivesUtility
+ 2025-10-20T07:50:35.173Z,610.173706,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PassivesTypes
+ 2025-10-20T07:50:35.173Z,610.173706,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CoinProducts
+ 2025-10-20T07:50:35.173Z,610.173767,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ItemProducts
+ 2025-10-20T07:50:35.173Z,610.173767,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ChristmasRewards
+ 2025-10-20T07:50:35.173Z,610.173828,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DoubleLuckProducts
+ 2025-10-20T07:50:35.173Z,610.173828,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CandyCaneProducts
+ 2025-10-20T07:50:35.173Z,610.173828,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LimitedProducts
+ 2025-10-20T07:50:35.173Z,610.173889,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FishBonesProducts
+ 2025-10-20T07:50:35.173Z,610.173889,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CandyCornProducts
+ 2025-10-20T07:50:35.173Z,610.173889,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Loader
+ 2025-10-20T07:50:35.173Z,610.173950,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Net
+ 2025-10-20T07:50:35.173Z,610.173950,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Replion
+ 2025-10-20T07:50:35.173Z,610.173950,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Signal
+ 2025-10-20T07:50:35.174Z,610.174011,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Trove
+ 2025-10-20T07:50:35.174Z,610.174011,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FastCastRedux
+ 2025-10-20T07:50:35.174Z,610.174011,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: spr
+ 2025-10-20T07:50:35.174Z,610.174072,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MarketplaceService
+ 2025-10-20T07:50:35.174Z,610.174072,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Promise
+ 2025-10-20T07:50:35.174Z,610.174072,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: NumberSpinner
+ 2025-10-20T07:50:35.174Z,610.174133,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Digit
+ 2025-10-20T07:50:35.174Z,610.174133,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Thread
+ 2025-10-20T07:50:35.174Z,610.174133,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LightningBolt
+ 2025-10-20T07:50:35.174Z,610.174194,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Class
+ 2025-10-20T07:50:35.174Z,610.174194,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MersenneTwister
+ 2025-10-20T07:50:35.174Z,610.174194,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Icon
+ 2025-10-20T07:50:35.174Z,610.174255,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Attribute
+ 2025-10-20T07:50:35.174Z,610.174255,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Reference
+ 2025-10-20T07:50:35.174Z,610.174255,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VERSION
+ 2025-10-20T07:50:35.174Z,610.174316,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Utility
+ 2025-10-20T07:50:35.174Z,610.174316,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Caption
+ 2025-10-20T07:50:35.174Z,610.174316,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Container
+ 2025-10-20T07:50:35.174Z,610.174377,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dropdown
+ 2025-10-20T07:50:35.174Z,610.174377,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Indicator
+ 2025-10-20T07:50:35.174Z,610.174438,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Menu
+ 2025-10-20T07:50:35.174Z,610.174438,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Selection
+ 2025-10-20T07:50:35.174Z,610.174438,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Widget
+ 2025-10-20T07:50:35.174Z,610.174500,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Notice
+ 2025-10-20T07:50:35.174Z,610.174500,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Gamepad
+ 2025-10-20T07:50:35.174Z,610.174500,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Overflow
+ 2025-10-20T07:50:35.174Z,610.174561,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Themes
+ 2025-10-20T07:50:35.174Z,610.174561,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Classic
+ 2025-10-20T07:50:35.174Z,610.174561,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Default
+ 2025-10-20T07:50:35.174Z,610.174622,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GoodSignal
+ 2025-10-20T07:50:35.174Z,610.174622,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Janitor
+ 2025-10-20T07:50:35.174Z,610.174622,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Observers
+ 2025-10-20T07:50:35.174Z,610.174683,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: trove
+ 2025-10-20T07:50:35.174Z,610.174683,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: init.spec
+ 2025-10-20T07:50:35.174Z,610.174744,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wally
+ 2025-10-20T07:50:35.174Z,610.174744,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: signal
+ 2025-10-20T07:50:35.174Z,610.174744,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: init.spec
+ 2025-10-20T07:50:35.174Z,610.174805,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wally
+ 2025-10-20T07:50:35.174Z,610.174805,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: net
+ 2025-10-20T07:50:35.174Z,610.174805,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wally
+ 2025-10-20T07:50:35.174Z,610.174927,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: loader
+ 2025-10-20T07:50:35.174Z,610.174988,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: wally
+ 2025-10-20T07:50:35.174Z,610.174988,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Freeze
+ 2025-10-20T07:50:35.174Z,610.174988,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Signal
+ 2025-10-20T07:50:35.175Z,610.175049,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: replion
+ 2025-10-20T07:50:35.175Z,610.175049,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Client
+ 2025-10-20T07:50:35.175Z,610.175110,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ClientReplion
+ 2025-10-20T07:50:35.175Z,610.175110,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Server
+ 2025-10-20T07:50:35.175Z,610.175110,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ServerReplion
+ 2025-10-20T07:50:35.175Z,610.175171,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Network
+ 2025-10-20T07:50:35.175Z,610.175171,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Signals
+ 2025-10-20T07:50:35.175Z,610.175232,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Utils
+ 2025-10-20T07:50:35.175Z,610.175232,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: testez
+ 2025-10-20T07:50:35.175Z,610.175293,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Context
+ 2025-10-20T07:50:35.175Z,610.175293,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Expectation
+ 2025-10-20T07:50:35.175Z,610.175293,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ExpectationContext
+ 2025-10-20T07:50:35.175Z,610.175354,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LifecycleHooks
+ 2025-10-20T07:50:35.175Z,610.175354,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestBootstrap
+ 2025-10-20T07:50:35.175Z,610.175415,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestEnum
+ 2025-10-20T07:50:35.175Z,610.175415,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestPlan
+ 2025-10-20T07:50:35.175Z,610.175415,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestPlanner
+ 2025-10-20T07:50:35.175Z,610.175476,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestResults
+ 2025-10-20T07:50:35.175Z,610.175476,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestRunner
+ 2025-10-20T07:50:35.175Z,610.175537,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestSession
+ 2025-10-20T07:50:35.175Z,610.175537,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TeamCityReporter
+ 2025-10-20T07:50:35.175Z,610.175537,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TextReporter
+ 2025-10-20T07:50:35.175Z,610.175598,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TextReporterQuiet
+ 2025-10-20T07:50:35.175Z,610.175598,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: fastcastredux
+ 2025-10-20T07:50:35.175Z,610.175598,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Table
+ 2025-10-20T07:50:35.175Z,610.175659,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ActiveCast
+ 2025-10-20T07:50:35.175Z,610.175659,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Signal
+ 2025-10-20T07:50:35.175Z,610.175720,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TypeDefinitions
+ 2025-10-20T07:50:35.175Z,610.175720,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TypeMarshaller
+ 2025-10-20T07:50:35.175Z,610.175720,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TestEZ
+ 2025-10-20T07:50:35.175Z,610.175781,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: freeze
+ 2025-10-20T07:50:35.175Z,610.175781,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dictionary
+ 2025-10-20T07:50:35.175Z,610.175781,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: count
+ 2025-10-20T07:50:35.175Z,610.175842,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: equals
+ 2025-10-20T07:50:35.175Z,610.175842,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: every
+ 2025-10-20T07:50:35.175Z,610.175903,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: filter
+ 2025-10-20T07:50:35.175Z,610.175903,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: filterNot
+ 2025-10-20T07:50:35.175Z,610.175903,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: find
+ 2025-10-20T07:50:35.175Z,610.175964,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findKey
+ 2025-10-20T07:50:35.175Z,610.175964,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findPair
+ 2025-10-20T07:50:35.176Z,610.176025,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: flatten
+ 2025-10-20T07:50:35.176Z,610.176025,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: flip
+ 2025-10-20T07:50:35.176Z,610.176086,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: forEach
+ 2025-10-20T07:50:35.176Z,610.176086,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: get
+ 2025-10-20T07:50:35.176Z,610.176086,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: getIn
+ 2025-10-20T07:50:35.176Z,610.176147,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: has
+ 2025-10-20T07:50:35.176Z,610.176147,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: hasIn
+ 2025-10-20T07:50:35.176Z,610.176208,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: includes
+ 2025-10-20T07:50:35.176Z,610.176208,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: joinAsString
+ 2025-10-20T07:50:35.176Z,610.176208,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: keys
+ 2025-10-20T07:50:35.176Z,610.176270,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: map
+ 2025-10-20T07:50:35.176Z,610.176270,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: max
+ 2025-10-20T07:50:35.176Z,610.176331,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: merge
+ 2025-10-20T07:50:35.176Z,610.176331,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: mergeIn
+ 2025-10-20T07:50:35.176Z,610.176331,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: min
+ 2025-10-20T07:50:35.176Z,610.176392,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: remove
+ 2025-10-20T07:50:35.176Z,610.176392,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeIn
+ 2025-10-20T07:50:35.176Z,610.176453,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeValue
+ 2025-10-20T07:50:35.176Z,610.176453,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: set
+ 2025-10-20T07:50:35.176Z,610.176514,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: setIn
+ 2025-10-20T07:50:35.176Z,610.176514,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: some
+ 2025-10-20T07:50:35.176Z,610.176514,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: update
+ 2025-10-20T07:50:35.176Z,610.176575,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: updateIn
+ 2025-10-20T07:50:35.176Z,610.176575,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: values
+ 2025-10-20T07:50:35.176Z,610.176636,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: join
+ 2025-10-20T07:50:35.176Z,610.176636,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeKey
+ 2025-10-20T07:50:35.176Z,610.176636,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeKeys
+ 2025-10-20T07:50:35.176Z,610.176697,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeValues
+ 2025-10-20T07:50:35.176Z,610.176697,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: toArray
+ 2025-10-20T07:50:35.176Z,610.176758,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: List
+ 2025-10-20T07:50:35.176Z,610.176758,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: butLast
+ 2025-10-20T07:50:35.176Z,610.176819,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: concat
+ 2025-10-20T07:50:35.176Z,610.176819,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: count
+ 2025-10-20T07:50:35.176Z,610.176819,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: equals
+ 2025-10-20T07:50:35.176Z,610.176880,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: every
+ 2025-10-20T07:50:35.176Z,610.176880,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: filter
+ 2025-10-20T07:50:35.176Z,610.176941,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: filterNot
+ 2025-10-20T07:50:35.176Z,610.176941,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: find
+ 2025-10-20T07:50:35.177Z,610.177002,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findIndex
+ 2025-10-20T07:50:35.177Z,610.177002,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findPair
+ 2025-10-20T07:50:35.177Z,610.177002,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: first
+ 2025-10-20T07:50:35.177Z,610.177063,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: flatten
+ 2025-10-20T07:50:35.177Z,610.177063,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: forEach
+ 2025-10-20T07:50:35.177Z,610.177124,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: get
+ 2025-10-20T07:50:35.177Z,610.177124,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: has
+ 2025-10-20T07:50:35.177Z,610.177124,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: includes
+ 2025-10-20T07:50:35.177Z,610.177185,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: indexOf
+ 2025-10-20T07:50:35.177Z,610.177185,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: insert
+ 2025-10-20T07:50:35.177Z,610.177246,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: joinAsString
+ 2025-10-20T07:50:35.177Z,610.177246,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: last
+ 2025-10-20T07:50:35.177Z,610.177307,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: map
+ 2025-10-20T07:50:35.177Z,610.177307,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: max
+ 2025-10-20T07:50:35.177Z,610.177307,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: merge
+ 2025-10-20T07:50:35.177Z,610.177368,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: min
+ 2025-10-20T07:50:35.177Z,610.177368,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: pop
+ 2025-10-20T07:50:35.177Z,610.177429,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: push
+ 2025-10-20T07:50:35.177Z,610.177429,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reduce
+ 2025-10-20T07:50:35.177Z,610.177429,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reduceRight
+ 2025-10-20T07:50:35.177Z,610.177490,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: remove
+ 2025-10-20T07:50:35.177Z,610.177490,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeValue
+ 2025-10-20T07:50:35.177Z,610.177551,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: rest
+ 2025-10-20T07:50:35.177Z,610.177551,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reverse
+ 2025-10-20T07:50:35.177Z,610.177612,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: set
+ 2025-10-20T07:50:35.177Z,610.177612,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: shift
+ 2025-10-20T07:50:35.177Z,610.177612,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: skip
+ 2025-10-20T07:50:35.177Z,610.177673,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: slice
+ 2025-10-20T07:50:35.177Z,610.177673,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: some
+ 2025-10-20T07:50:35.177Z,610.177734,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: sort
+ 2025-10-20T07:50:35.177Z,610.177734,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: take
+ 2025-10-20T07:50:35.177Z,610.177795,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: takeLast
+ 2025-10-20T07:50:35.177Z,610.177795,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: toSet
+ 2025-10-20T07:50:35.177Z,610.177795,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: unshift
+ 2025-10-20T07:50:35.177Z,610.177856,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: update
+ 2025-10-20T07:50:35.177Z,610.177856,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: updateIn
+ 2025-10-20T07:50:35.177Z,610.177917,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: zip
+ 2025-10-20T07:50:35.177Z,610.177917,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: append
+ 2025-10-20T07:50:35.177Z,610.177979,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: create
+ 2025-10-20T07:50:35.177Z,610.177979,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findWhere
+ 2025-10-20T07:50:35.177Z,610.177979,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findWhereLast
+ 2025-10-20T07:50:35.178Z,610.178040,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: join
+ 2025-10-20T07:50:35.178Z,610.178040,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeIndex
+ 2025-10-20T07:50:35.178Z,610.178101,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeIndices
+ 2025-10-20T07:50:35.178Z,610.178101,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeValues
+ 2025-10-20T07:50:35.178Z,610.178162,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: None
+ 2025-10-20T07:50:35.178Z,610.178162,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isEmpty
+ 2025-10-20T07:50:35.178Z,610.178162,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: count
+ 2025-10-20T07:50:35.178Z,610.178223,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: deprecationWarning
+ 2025-10-20T07:50:35.178Z,610.178223,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: equalObjects
+ 2025-10-20T07:50:35.178Z,610.178284,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: equals
+ 2025-10-20T07:50:35.178Z,610.178284,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: equalsDeep
+ 2025-10-20T07:50:35.178Z,610.178284,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: every
+ 2025-10-20T07:50:35.178Z,610.178345,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findKey
+ 2025-10-20T07:50:35.178Z,610.178345,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findPair
+ 2025-10-20T07:50:35.178Z,610.178406,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: forEach
+ 2025-10-20T07:50:35.178Z,610.178406,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: get
+ 2025-10-20T07:50:35.178Z,610.178467,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: getIn
+ 2025-10-20T07:50:35.178Z,610.178467,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: has
+ 2025-10-20T07:50:35.178Z,610.178467,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: includes
+ 2025-10-20T07:50:35.178Z,610.178528,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: is
+ 2025-10-20T07:50:35.178Z,610.178528,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isDataStructure
+ 2025-10-20T07:50:35.178Z,610.178528,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isImmutable
+ 2025-10-20T07:50:35.178Z,610.178589,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isValueObject
+ 2025-10-20T07:50:35.178Z,610.178589,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: keyOf
+ 2025-10-20T07:50:35.178Z,610.178650,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: map
+ 2025-10-20T07:50:35.178Z,610.178711,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: max
+ 2025-10-20T07:50:35.178Z,610.178711,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: maybeFreeze
+ 2025-10-20T07:50:35.178Z,610.178711,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: merge
+ 2025-10-20T07:50:35.178Z,610.178772,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: mergeIn
+ 2025-10-20T07:50:35.178Z,610.178772,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: min
+ 2025-10-20T07:50:35.178Z,610.178772,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reduce
+ 2025-10-20T07:50:35.178Z,610.178833,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: remove
+ 2025-10-20T07:50:35.178Z,610.178833,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeIn
+ 2025-10-20T07:50:35.178Z,610.178894,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: set
+ 2025-10-20T07:50:35.178Z,610.178894,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: setIn
+ 2025-10-20T07:50:35.178Z,610.178894,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: shallowCopy
+ 2025-10-20T07:50:35.178Z,610.178955,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: slice
+ 2025-10-20T07:50:35.178Z,610.178955,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: some
+ 2025-10-20T07:50:35.179Z,610.179016,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: update
+ 2025-10-20T07:50:35.179Z,610.179016,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: updateIn
+ 2025-10-20T07:50:35.179Z,610.179077,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: spr
+ 2025-10-20T07:50:35.179Z,610.179077,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: marketplaceservice
+ 2025-10-20T07:50:35.179Z,610.179138,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Cache
+ 2025-10-20T07:50:35.179Z,610.179138,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: promise
+ 2025-10-20T07:50:35.179Z,610.179138,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: init.spec
+ 2025-10-20T07:50:35.179Z,610.179199,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observers
+ 2025-10-20T07:50:35.179Z,610.179199,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observeTag
+ 2025-10-20T07:50:35.179Z,610.179199,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observeAttribute
+ 2025-10-20T07:50:35.179Z,610.179260,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observeProperty
+ 2025-10-20T07:50:35.179Z,610.179260,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observePlayer
+ 2025-10-20T07:50:35.179Z,610.179260,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: observeCharacter
+ 2025-10-20T07:50:35.179Z,610.179321,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PurchaseScreenBlackoutController
+ 2025-10-20T07:50:35.179Z,610.179321,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ClientTimeController
+ 2025-10-20T07:50:35.179Z,610.179321,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FishingController
+ 2025-10-20T07:50:35.179Z,610.179382,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: InputStates
+ 2025-10-20T07:50:35.179Z,610.179382,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: WeightRanges
+ 2025-10-20T07:50:35.179Z,610.179382,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamepadStates
+ 2025-10-20T07:50:35.179Z,610.179443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fishing Radar
+ 2025-10-20T07:50:35.179Z,610.179443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Diving Gear
+ 2025-10-20T07:50:35.179Z,610.179443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: animateBobber
+ 2025-10-20T07:50:35.179Z,610.179443,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DailyLoginController
+ 2025-10-20T07:50:35.179Z,610.179504,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ChatController
+ 2025-10-20T07:50:35.179Z,610.179504,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LevelController
+ 2025-10-20T07:50:35.179Z,610.179504,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BackpackController
+ 2025-10-20T07:50:35.179Z,610.179565,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: NotificationController
+ 2025-10-20T07:50:35.179Z,610.179626,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VFXController
+ 2025-10-20T07:50:35.179Z,610.179626,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CFrameTranslations
+ 2025-10-20T07:50:35.179Z,610.179626,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SupportedInstances
+ 2025-10-20T07:50:35.179Z,610.179688,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Shark Obtained
+ 2025-10-20T07:50:35.179Z,610.179688,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghost Shark Obtained
+ 2025-10-20T07:50:35.179Z,610.179688,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AnimationController
+ 2025-10-20T07:50:35.179Z,610.179688,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PotionController
+ 2025-10-20T07:50:35.179Z,610.179749,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Tooltip
+ 2025-10-20T07:50:35.179Z,610.179810,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: InventoryController
+ 2025-10-20T07:50:35.179Z,610.179810,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RodShopController
+ 2025-10-20T07:50:35.179Z,610.179810,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EventController
+ 2025-10-20T07:50:35.179Z,610.179871,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: OnEventAdded
+ 2025-10-20T07:50:35.179Z,610.179871,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: OnEventRemoved
+ 2025-10-20T07:50:35.179Z,610.179871,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: WeatherState
+ 2025-10-20T07:50:35.179Z,610.179932,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: HUDController
+ 2025-10-20T07:50:35.179Z,610.179932,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SettingsController
+ 2025-10-20T07:50:35.179Z,610.179932,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SettingsListener
+ 2025-10-20T07:50:35.179Z,610.179932,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MasteryController
+ 2025-10-20T07:50:35.179Z,610.179993,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PromptController
+ 2025-10-20T07:50:35.179Z,610.179993,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SpinWheelController
+ 2025-10-20T07:50:35.179Z,610.179993,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BaitShopController
+ 2025-10-20T07:50:35.180Z,610.180054,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TextNotificationController
+ 2025-10-20T07:50:35.180Z,610.180054,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SpinController
+ 2025-10-20T07:50:35.180Z,610.180054,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AreaController
+ 2025-10-20T07:50:35.180Z,610.180054,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BoatShopController
+ 2025-10-20T07:50:35.180Z,610.180115,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VendorController
+ 2025-10-20T07:50:35.180Z,610.180115,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: QuestController
+ 2025-10-20T07:50:35.180Z,610.180115,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EnchantingController
+ 2025-10-20T07:50:35.180Z,610.180115,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ElevatorController
+ 2025-10-20T07:50:35.180Z,610.180176,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AutoFishingController
+ 2025-10-20T07:50:35.180Z,610.180176,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FireflyController
+ 2025-10-20T07:50:35.180Z,610.180176,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Firefly
+ 2025-10-20T07:50:35.180Z,610.180237,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GroupRewardController
+ 2025-10-20T07:50:35.180Z,610.180237,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PotionShopController
+ 2025-10-20T07:50:35.180Z,610.180237,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AFKController
+ 2025-10-20T07:50:35.180Z,610.180237,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DoubleLuckController
+ 2025-10-20T07:50:35.180Z,610.180298,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CodeController
+ 2025-10-20T07:50:35.180Z,610.180298,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SwimController
+ 2025-10-20T07:50:35.180Z,610.180298,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TopBarController
+ 2025-10-20T07:50:35.180Z,610.180359,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ItemTradingController
+ 2025-10-20T07:50:35.180Z,610.180359,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: WeatherMachineController
+ 2025-10-20T07:50:35.180Z,610.180359,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: StarterPackController
+ 2025-10-20T07:50:35.180Z,610.180359,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LootboxController
+ 2025-10-20T07:50:35.180Z,610.180420,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DialogueController
+ 2025-10-20T07:50:35.180Z,610.180420,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DialogueTree
+ 2025-10-20T07:50:35.180Z,610.180420,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Types
+ 2025-10-20T07:50:35.180Z,610.180481,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Dialogue
+ 2025-10-20T07:50:35.180Z,610.180481,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CutsceneController
+ 2025-10-20T07:50:35.180Z,610.180542,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Mythic
+ 2025-10-20T07:50:35.180Z,610.180542,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SECRET
+ 2025-10-20T07:50:35.180Z,610.180542,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Legendary
+ 2025-10-20T07:50:35.180Z,610.180603,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Types
+ 2025-10-20T07:50:35.180Z,610.180603,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Original
+ 2025-10-20T07:50:35.180Z,610.180603,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Transition
+ 2025-10-20T07:50:35.180Z,610.180664,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GiftingController
+ 2025-10-20T07:50:35.180Z,610.180664,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TotemController
+ 2025-10-20T07:50:35.180Z,610.180664,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TravelingMerchantController
+ 2025-10-20T07:50:35.180Z,610.180664,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EventBattlePassController
+ 2025-10-20T07:50:35.180Z,610.180725,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Modifiers
+ 2025-10-20T07:50:35.180Z,610.180725,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Fishing
+ 2025-10-20T07:50:35.180Z,610.180725,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Enchanting
+ 2025-10-20T07:50:35.180Z,610.180786,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Teleport
+ 2025-10-20T07:50:35.180Z,610.180786,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GuiControl
+ 2025-10-20T07:50:35.180Z,610.180786,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Components
+ 2025-10-20T07:50:35.180Z,610.180786,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Hold Button
+ 2025-10-20T07:50:35.180Z,610.180847,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ValidInputTypes
+ 2025-10-20T07:50:35.180Z,610.180847,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Loading Spinner
+ 2025-10-20T07:50:35.180Z,610.180908,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Left Hold Button
+ 2025-10-20T07:50:35.180Z,610.180908,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Click
+ 2025-10-20T07:50:35.180Z,610.180908,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Animate
+ 2025-10-20T07:50:35.180Z,610.180908,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ItemStringUtility
+ 2025-10-20T07:50:35.180Z,610.180969,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Animations
+ 2025-10-20T07:50:35.181Z,610.181030,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CoreCall
+ 2025-10-20T07:50:35.181Z,610.181030,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FootstepSounds
+ 2025-10-20T07:50:35.181Z,610.181030,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: NPC
+ 2025-10-20T07:50:35.181Z,610.181091,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RegisterButtonTooltip
+ 2025-10-20T07:50:35.181Z,610.181091,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CameraShaker
+ 2025-10-20T07:50:35.181Z,610.181091,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CameraShakeInstance
+ 2025-10-20T07:50:35.181Z,610.181091,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CameraShakePresets
+ 2025-10-20T07:50:35.181Z,610.181152,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TweenAsync
+ 2025-10-20T07:50:35.181Z,610.181152,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CoinProductsUtility
+ 2025-10-20T07:50:35.181Z,610.181152,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CurrencyUtility
+ 2025-10-20T07:50:35.181Z,610.181213,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Currency
+ 2025-10-20T07:50:35.181Z,610.181213,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: InputControl
+ 2025-10-20T07:50:35.181Z,610.181213,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spring
+ 2025-10-20T07:50:35.182Z,610.182190,6e73b000,6 [FLog::Warning] Warning: Requested module experienced an error while loading
+ 2025-10-20T07:50:35.182Z,610.182190,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FieldOfViewModifier
+ 2025-10-20T07:50:35.182Z,610.182251,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: SebasUtil
+ 2025-10-20T07:50:35.182Z,610.182251,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Spring
+ 2025-10-20T07:50:35.182Z,610.182251,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TagEffect
+ 2025-10-20T07:50:35.182Z,610.182312,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TagConfiguration
+ 2025-10-20T07:50:35.182Z,610.182312,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: createTagEffect
+ 2025-10-20T07:50:35.182Z,610.182312,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: validation
+ 2025-10-20T07:50:35.182Z,610.182373,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Disk
+ 2025-10-20T07:50:35.182Z,610.182373,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: None
+ 2025-10-20T07:50:35.182Z,610.182434,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: WeakMap
+ 2025-10-20T07:50:35.182Z,610.182495,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: all
+ 2025-10-20T07:50:35.182Z,610.182556,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: alternate
+ 2025-10-20T07:50:35.182Z,610.182556,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: any
+ 2025-10-20T07:50:35.182Z,610.182617,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: average
+ 2025-10-20T07:50:35.182Z,610.182678,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: averageBy
+ 2025-10-20T07:50:35.182Z,610.182678,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: concat
+ 2025-10-20T07:50:35.182Z,610.182800,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: contains
+ 2025-10-20T07:50:35.182Z,610.182861,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: copy
+ 2025-10-20T07:50:35.182Z,610.182983,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: deduplicate
+ 2025-10-20T07:50:35.182Z,610.182983,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: deduplicateByKey
+ 2025-10-20T07:50:35.183Z,610.183044,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: filter
+ 2025-10-20T07:50:35.183Z,610.183105,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: find
+ 2025-10-20T07:50:35.183Z,610.183228,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findIndex
+ 2025-10-20T07:50:35.183Z,610.183350,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findIndexByValue
+ 2025-10-20T07:50:35.183Z,610.183411,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: findMap
+ 2025-10-20T07:50:35.183Z,610.183411,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: flatMap
+ 2025-10-20T07:50:35.183Z,610.183533,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: flatten
+ 2025-10-20T07:50:35.183Z,610.183533,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: fromFn
+ 2025-10-20T07:50:35.183Z,610.183533,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: fromTryFn
+ 2025-10-20T07:50:35.183Z,610.183594,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isArray
+ 2025-10-20T07:50:35.183Z,610.183655,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isEmpty
+ 2025-10-20T07:50:35.183Z,610.183655,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: map
+ 2025-10-20T07:50:35.183Z,610.183716,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: maximum
+ 2025-10-20T07:50:35.183Z,610.183716,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: maximumBy
+ 2025-10-20T07:50:35.183Z,610.183777,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: minimum
+ 2025-10-20T07:50:35.183Z,610.183777,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: minimumBy
+ 2025-10-20T07:50:35.183Z,610.183838,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: partition
+ 2025-10-20T07:50:35.183Z,610.183838,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: pop
+ 2025-10-20T07:50:35.183Z,610.183838,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: popFirst
+ 2025-10-20T07:50:35.183Z,610.183899,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: product
+ 2025-10-20T07:50:35.183Z,610.183899,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: productBy
+ 2025-10-20T07:50:35.183Z,610.183960,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: push
+ 2025-10-20T07:50:35.183Z,610.183960,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: range
+ 2025-10-20T07:50:35.184Z,610.184021,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reduce
+ 2025-10-20T07:50:35.184Z,610.184143,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeIndexes
+ 2025-10-20T07:50:35.184Z,610.184143,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeSortedIndexes
+ 2025-10-20T07:50:35.184Z,610.184204,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: removeValues
+ 2025-10-20T07:50:35.184Z,610.184204,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: reverse
+ 2025-10-20T07:50:35.184Z,610.184265,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: sort
+ 2025-10-20T07:50:35.184Z,610.184265,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: sortByKey
+ 2025-10-20T07:50:35.184Z,610.184326,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: stepBy
+ 2025-10-20T07:50:35.184Z,610.184326,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: sum
+ 2025-10-20T07:50:35.184Z,610.184387,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: sumBy
+ 2025-10-20T07:50:35.184Z,610.184448,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: takeWhile
+ 2025-10-20T07:50:35.184Z,610.184570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: zip
+ 2025-10-20T07:50:35.184Z,610.184570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: copy
+ 2025-10-20T07:50:35.184Z,610.184570,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: count
+ 2025-10-20T07:50:35.184Z,610.184631,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: entries
+ 2025-10-20T07:50:35.184Z,610.184814,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: invert
+ 2025-10-20T07:50:35.184Z,610.184875,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: isEmpty
+ 2025-10-20T07:50:35.184Z,610.184937,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: keys
+ 2025-10-20T07:50:35.184Z,610.184937,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: mapEntries
+ 2025-10-20T07:50:35.184Z,610.184998,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: mapValues
+ 2025-10-20T07:50:35.184Z,610.184998,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: merge
+ 2025-10-20T07:50:35.185Z,610.185059,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: remove
+ 2025-10-20T07:50:35.185Z,610.185059,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: values
+ 2025-10-20T07:50:35.185Z,610.185059,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: fromArray
+ 2025-10-20T07:50:35.185Z,610.185120,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Teardown
+ 2025-10-20T07:50:35.185Z,610.185120,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: createFn
+ 2025-10-20T07:50:35.185Z,610.185181,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: join
+ 2025-10-20T07:50:35.185Z,610.185181,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: teardown
+ 2025-10-20T07:50:35.185Z,610.185242,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: typeof
+ 2025-10-20T07:50:35.185Z,610.185303,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Instances
+ 2025-10-20T07:50:35.185Z,610.185364,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VIP
+ 2025-10-20T07:50:35.185Z,610.185425,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Ghoul Rod
+ 2025-10-20T07:50:35.185Z,610.185486,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Oceanic Harpoon
+ 2025-10-20T07:50:35.194Z,610.194458,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ClickSound
+ 2025-10-20T07:50:35.194Z,610.194580,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CurrencyCounter
+ 2025-10-20T07:50:35.194Z,610.194702,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MenuRing
+ 2025-10-20T07:50:35.194Z,610.194763,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: MenuPrompt
+ 2025-10-20T07:50:35.194Z,610.194946,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: AutomaticallyCloseButton
+ 2025-10-20T07:50:35.194Z,610.194946,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Propeller
+ 2025-10-20T07:50:35.195Z,610.195129,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Seat
+ 2025-10-20T07:50:35.195Z,610.195312,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: VehicleSeat
+ 2025-10-20T07:50:35.195Z,610.195435,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamePassPurchase
+ 2025-10-20T07:50:35.195Z,610.195496,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: EnchantAltarAttachment
+ 2025-10-20T07:50:35.195Z,610.195679,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: HUDButton
+ 2025-10-20T07:50:35.195Z,610.195862,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CoralLight
+ 2025-10-20T07:50:35.195Z,610.195923,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamePassPrompt
+ 2025-10-20T07:50:35.196Z,610.196045,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Leaderboard
+ 2025-10-20T07:50:35.196Z,610.196228,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: UserInfo
+ 2025-10-20T07:50:35.196Z,610.196472,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: PerfectArea
+ 2025-10-20T07:50:35.196Z,610.196594,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BoostedRegion
+ 2025-10-20T07:50:35.196Z,610.196716,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ShopPurchasePrompt
+ 2025-10-20T07:50:35.196Z,610.196838,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DevProductPurchase
+ 2025-10-20T07:50:35.196Z,610.196899,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: RenderTextEffect
+ 2025-10-20T07:50:35.197Z,610.197144,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GroupRewardDisplay
+ 2025-10-20T07:50:35.197Z,610.197327,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: NotificationBubble
+ 2025-10-20T07:50:35.197Z,610.197388,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DevProductPrice
+ 2025-10-20T07:50:35.197Z,610.197449,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: GamePassPrice
+ 2025-10-20T07:50:35.197Z,610.197510,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ChristmasColorStrobe
+ 2025-10-20T07:50:35.197Z,610.197510,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Island Location Tag
+ 2025-10-20T07:50:35.197Z,610.197571,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: BagSize
+ 2025-10-20T07:50:35.197Z,610.197571,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ClientPassives
+ 2025-10-20T07:50:35.197Z,610.197754,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: FloatingDrop
+ 2025-10-20T07:50:35.197Z,610.197815,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Rainbow
+ 2025-10-20T07:50:35.197Z,610.197876,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LimitedProductPurchase
+ 2025-10-20T07:50:35.197Z,610.197937,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: DevProductPrompt
+ 2025-10-20T07:50:35.198Z,610.198059,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: LuckTotem
+ 2025-10-20T07:50:35.198Z,610.198181,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TempleDoor
+ 2025-10-20T07:50:35.198Z,610.198242,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: Lever
+ 2025-10-20T07:50:35.198Z,610.198303,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: CountdownLabel
+ 2025-10-20T07:50:35.198Z,610.198425,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: HalloweenFastTravel
+ 2025-10-20T07:50:35.198Z,610.198486,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: TrickOrTreatDoor
+ 2025-10-20T07:50:35.201Z,610.201233,6e73b000,6 [FLog::Output] [✓] ReplicatedFirst: Content
+ 2025-10-20T07:50:35.201Z,610.201355,6e73b000,6 [FLog::Output] [✓] ReplicatedFirst: Runner
+ 2025-10-20T07:50:35.201Z,610.201355,6e73b000,6 [FLog::Output] [✓] ReplicatedFirst: WaitForPlayerData
+ 2025-10-20T07:50:35.201Z,610.201416,6e73b000,6 [FLog::Output] [✓] ReplicatedFirst: BeforeInit
+ 2025-10-20T07:50:35.201Z,610.201416,6e73b000,6 [FLog::Output] [✓] ReplicatedFirst: AfterStart
+ 2025-10-20T07:50:35.211Z,610.211914,6e73b000,6 [FLog::Output] [✓] StarterPlayer: PlayerModule
+ 2025-10-20T07:50:35.211Z,610.211975,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CameraModule
+ 2025-10-20T07:50:35.212Z,610.212036,6e73b000,6 [FLog::Output] [✓] StarterPlayer: BaseCamera
+ 2025-10-20T07:50:35.212Z,610.212036,6e73b000,6 [FLog::Output] [✓] StarterPlayer: LegacyCamera
+ 2025-10-20T07:50:35.212Z,610.212036,6e73b000,6 [FLog::Output] [✓] StarterPlayer: BaseOcclusion
+ 2025-10-20T07:50:35.212Z,610.212097,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CameraInput
+ 2025-10-20T07:50:35.212Z,610.212097,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CameraUtils
+ 2025-10-20T07:50:35.212Z,610.212158,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CameraToggleStateController
+ 2025-10-20T07:50:35.212Z,610.212158,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VRBaseCamera
+ 2025-10-20T07:50:35.212Z,610.212158,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ClassicCamera
+ 2025-10-20T07:50:35.212Z,610.212219,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CameraUI
+ 2025-10-20T07:50:35.212Z,610.212219,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Invisicam
+ 2025-10-20T07:50:35.212Z,610.212219,6e73b000,6 [FLog::Output] [✓] StarterPlayer: MouseLockController
+ 2025-10-20T07:50:35.212Z,610.212280,6e73b000,6 [FLog::Output] [✓] StarterPlayer: OrbitalCamera
+ 2025-10-20T07:50:35.212Z,610.212280,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Poppercam
+ 2025-10-20T07:50:35.212Z,610.212280,6e73b000,6 [FLog::Output] [✓] StarterPlayer: TransparencyController
+ 2025-10-20T07:50:35.212Z,610.212341,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VehicleCamera
+ 2025-10-20T07:50:35.212Z,610.212341,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VehicleCameraConfig
+ 2025-10-20T07:50:35.212Z,610.212341,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VehicleCameraCore
+ 2025-10-20T07:50:35.212Z,610.212402,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VRCamera
+ 2025-10-20T07:50:35.212Z,610.212463,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VRVehicleCamera
+ 2025-10-20T07:50:35.212Z,610.212463,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ZoomController
+ 2025-10-20T07:50:35.212Z,610.212524,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Popper
+ 2025-10-20T07:50:35.212Z,610.212524,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ControlModule
+ 2025-10-20T07:50:35.212Z,610.212524,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ClickToMoveDisplay
+ 2025-10-20T07:50:35.212Z,610.212585,6e73b000,6 [FLog::Output] [✓] StarterPlayer: TouchThumbstick
+ 2025-10-20T07:50:35.212Z,610.212585,6e73b000,6 [FLog::Output] [✓] StarterPlayer: BaseCharacterController
+ 2025-10-20T07:50:35.212Z,610.212585,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ClickToMoveController
+ 2025-10-20T07:50:35.212Z,610.212646,6e73b000,6 [FLog::Output] [✓] StarterPlayer: DynamicThumbstick
+ 2025-10-20T07:50:35.212Z,610.212646,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Gamepad
+ 2025-10-20T07:50:35.212Z,610.212708,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Keyboard
+ 2025-10-20T07:50:35.212Z,610.212708,6e73b000,6 [FLog::Output] [✓] StarterPlayer: TouchJump
+ 2025-10-20T07:50:35.212Z,610.212708,6e73b000,6 [FLog::Output] [✓] StarterPlayer: PathDisplay
+ 2025-10-20T07:50:35.212Z,610.212769,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VehicleController
+ 2025-10-20T07:50:35.212Z,610.212769,6e73b000,6 [FLog::Output] [✓] StarterPlayer: VRNavigation
+ 2025-10-20T07:50:35.212Z,610.212830,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ConnectionUtil
+ 2025-10-20T07:50:35.212Z,610.212830,6e73b000,6 [FLog::Output] [✓] StarterPlayer: FlagUtil
+ 2025-10-20T07:50:35.212Z,610.212830,6e73b000,6 [FLog::Output] [✓] StarterPlayer: AtomicBinding
+ 2025-10-20T07:50:35.212Z,610.212891,6e73b000,6 [FLog::Output] [✓] StarterPlayer: CharacterOutline
+ 2025-10-20T07:50:35.212Z,610.212891,6e73b000,6 [FLog::Output] [✓] StarterPlayer: Footsteps
+ 2025-10-20T07:50:35.212Z,610.212952,6e73b000,6 [FLog::Output] [✓] StarterPlayer: ResetFieldOfView
+ 2025-10-20T07:50:35.212Z,610.212952,6e73b000,6 [FLog::Output] [✓] StarterPlayer: getFront
+ 2025-10-20T07:50:35.212Z,610.212952,6e73b000,6 [FLog::Output] [✓] StarterPlayer: getBack
+ 2025-10-20T07:50:35.213Z,610.213013,6e73b000,6 [FLog::Output] [✓] StarterPlayer: resetAssembly
+ 2025-10-20T07:50:35.213Z,610.213013,6e73b000,6 [FLog::Output] [✓] StarterPlayer: getThumbstick
+ 2025-10-20T07:50:35.213Z,610.213074,6e73b000,6 [FLog::Output] [✓] Lighting: Day
+ 2025-10-20T07:50:35.213Z,610.213074,6e73b000,6 [FLog::Output] [✓] Lighting: Night
+ 2025-10-20T07:50:35.213Z,610.213135,6e73b000,6 [FLog::Output] [✓] Lighting: Kohana Volcano
+ 2025-10-20T07:50:35.213Z,610.213135,6e73b000,6 [FLog::Output] [✓] Lighting: Esoteric Depths
+ 2025-10-20T07:50:35.213Z,610.213135,6e73b000,6 [FLog::Output] [✓] Lighting: Winter Fest
+ 2025-10-20T07:50:35.213Z,610.213196,6e73b000,6 [FLog::Output] [✓] Lighting: Crater Island
+ 2025-10-20T07:50:35.213Z,610.213196,6e73b000,6 [FLog::Output] [✓] Lighting: Tropical Grove
+ 2025-10-20T07:50:35.213Z,610.213196,6e73b000,6 [FLog::Output] [✓] Lighting: Lost Isle
+ 2025-10-20T07:50:35.213Z,610.213196,6e73b000,6 [FLog::Output] [✓] Lighting: Sisyphus Statue
+ 2025-10-20T07:50:35.213Z,610.213257,6e73b000,6 [FLog::Output] [✓] Lighting: Treasure Room
+ 2025-10-20T07:50:35.213Z,610.213257,6e73b000,6 [FLog::Output] [✓] Lighting: Treasure Hall
+ 2025-10-20T07:50:35.213Z,610.213257,6e73b000,6 [FLog::Output] [✓] Lighting: Fisherman Island
+ 2025-10-20T07:50:35.213Z,610.213318,6e73b000,6 [FLog::Output] [✓] Lighting: Kohana
+ 2025-10-20T07:50:35.213Z,610.213318,6e73b000,6 [FLog::Output] [✓] Lighting: Ancient Jungle
+ 2025-10-20T07:50:35.213Z,610.213318,6e73b000,6 [FLog::Output] [✓] Lighting: Sacred Temple
+ 2025-10-20T07:50:35.213Z,610.213318,6e73b000,6 [FLog::Output] [✓] Lighting: Underground Cellar
+ 2025-10-20T07:50:35.213Z,610.213379,6e73b000,6 [FLog::Output] [✓] Lighting: Mount Hallow
+ 2025-10-20T07:50:35.236Z,610.236938,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.236Z,610.237000,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.237Z,610.237061,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.237Z,610.237061,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.237Z,610.237122,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.237Z,610.237122,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.237Z,610.237122,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.237Z,610.237488,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.237Z,610.237549,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.237Z,610.237549,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.237Z,610.237610,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.237Z,610.237610,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.237Z,610.237610,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.237Z,610.237671,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.237Z,610.237854,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.237Z,610.237915,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.237Z,610.237915,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.237Z,610.237915,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.237Z,610.237976,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.237Z,610.237976,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.238Z,610.238037,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.238Z,610.238159,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.238Z,610.238159,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.238Z,610.238220,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.238Z,610.238220,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.238Z,610.238220,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.238Z,610.238281,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.238Z,610.238281,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.238Z,610.238464,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.238Z,610.238464,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.238Z,610.238525,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.238Z,610.238525,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.238Z,610.238525,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.238Z,610.238586,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.238Z,610.238586,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.238Z,610.238770,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.238Z,610.238770,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.238Z,610.238770,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.238Z,610.238831,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.238Z,610.238831,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.238Z,610.238892,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.238Z,610.238892,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.239Z,610.239075,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.239Z,610.239075,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.239Z,610.239075,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.239Z,610.239136,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.239Z,610.239136,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.239Z,610.239197,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.239Z,610.239197,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.239Z,610.239380,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.239Z,610.239380,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.239Z,610.239441,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.239Z,610.239502,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.239Z,610.239563,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.239Z,610.239563,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.239Z,610.239624,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.239Z,610.239807,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.239Z,610.239868,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.239Z,610.239868,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.239Z,610.239929,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.239Z,610.239929,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.239Z,610.239929,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.239Z,610.239990,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.240Z,610.240234,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.240Z,610.240234,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.240Z,610.240295,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.240Z,610.240295,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.240Z,610.240295,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.240Z,610.240356,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.240Z,610.240356,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.240Z,610.240540,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.240Z,610.240601,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.240Z,610.240601,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.240Z,610.240601,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.240Z,610.240662,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.240Z,610.240662,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.240Z,610.240723,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.240Z,610.240845,6e73b000,6 [FLog::Output] [✓] Workspace: CharacterOutline
+ 2025-10-20T07:50:35.240Z,610.240845,6e73b000,6 [FLog::Output] [✓] Workspace: Footsteps
+ 2025-10-20T07:50:35.240Z,610.240906,6e73b000,6 [FLog::Output] [✓] Workspace: ResetFieldOfView
+ 2025-10-20T07:50:35.240Z,610.240906,6e73b000,6 [FLog::Output] [✓] Workspace: getFront
+ 2025-10-20T07:50:35.240Z,610.240967,6e73b000,6 [FLog::Output] [✓] Workspace: getBack
+ 2025-10-20T07:50:35.240Z,610.240967,6e73b000,6 [FLog::Output] [✓] Workspace: resetAssembly
+ 2025-10-20T07:50:35.240Z,610.240967,6e73b000,6 [FLog::Output] [✓] Workspace: getThumbstick
+ 2025-10-20T07:50:35.241Z,610.241150,6e73b000,6 [FLog::Output]
+ ✅ Found 982 modules total
+ 2025-10-20T07:50:35.241Z,610.241150,6e73b000,6 [FLog::Output]
+ 📡 Scanning RemoteEvents/Functions...
+ 2025-10-20T07:50:35.283Z,610.283630,6e73b000,6 [FLog::Output] [📤] RemoteEvent: CmdrEvent
+ 2025-10-20T07:50:35.283Z,610.283691,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: CmdrFunction
+ 2025-10-20T07:50:35.283Z,610.283936,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ElevatorStateUpdated
+ 2025-10-20T07:50:35.283Z,610.283997,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/BlackoutScreen
+ 2025-10-20T07:50:35.283Z,610.283997,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PromptFavoriteGame
+ 2025-10-20T07:50:35.284Z,610.284058,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/SpecialDialogueEvent
+ 2025-10-20T07:50:35.284Z,610.284058,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ServerLuckCommand
+ 2025-10-20T07:50:35.284Z,610.284058,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/WeatherCommand
+ 2025-10-20T07:50:35.284Z,610.284119,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PlayerCommand
+ 2025-10-20T07:50:35.284Z,610.284119,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PlaceLeverItem
+ 2025-10-20T07:50:35.284Z,610.284119,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ClaimEventReward
+ 2025-10-20T07:50:35.284Z,610.284180,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseMarketItem
+ 2025-10-20T07:50:35.284Z,610.284180,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/TotemSpawned
+ 2025-10-20T07:50:35.284Z,610.284241,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/SpawnTotem
+ 2025-10-20T07:50:35.284Z,610.284241,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/LoadVFX
+ 2025-10-20T07:50:35.284Z,610.284241,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RedeemCode
+ 2025-10-20T07:50:35.284Z,610.284302,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/AwaitTradeResponse
+ 2025-10-20T07:50:35.284Z,610.284302,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/InitiateTrade
+ 2025-10-20T07:50:35.284Z,610.284363,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/CanSendTrade
+ 2025-10-20T07:50:35.284Z,610.284363,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ReconnectPlayer
+ 2025-10-20T07:50:35.284Z,610.284363,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/SpinWheel
+ 2025-10-20T07:50:35.284Z,610.284424,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RequestSpin
+ 2025-10-20T07:50:35.284Z,610.284424,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UpdateChangeLog
+ 2025-10-20T07:50:35.284Z,610.284424,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/RecievedDailyRewards
+ 2025-10-20T07:50:35.284Z,610.284485,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/ClaimDailyLogin
+ 2025-10-20T07:50:35.284Z,610.284485,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/UnequipOxygenTank
+ 2025-10-20T07:50:35.284Z,610.284546,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/EquipOxygenTank
+ 2025-10-20T07:50:35.284Z,610.284546,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RedeemChristmasItems
+ 2025-10-20T07:50:35.284Z,610.284546,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/ConsumePotion
+ 2025-10-20T07:50:35.284Z,610.284607,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/VerifyGroupReward
+ 2025-10-20T07:50:35.284Z,610.284607,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/BoatChanged
+ 2025-10-20T07:50:35.284Z,610.284668,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/DespawnBoat
+ 2025-10-20T07:50:35.284Z,610.284668,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/SpawnBoat
+ 2025-10-20T07:50:35.284Z,610.284668,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseBoat
+ 2025-10-20T07:50:35.284Z,610.284729,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/DestroyEffect
+ 2025-10-20T07:50:35.284Z,610.284729,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ChangeSetting
+ 2025-10-20T07:50:35.284Z,610.284729,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FeatureUnlocked
+ 2025-10-20T07:50:35.284Z,610.284790,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/CancelPrompt
+ 2025-10-20T07:50:35.284Z,610.284790,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseGear
+ 2025-10-20T07:50:35.284Z,610.284851,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseBait
+ 2025-10-20T07:50:35.284Z,610.284851,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseFishingRod
+ 2025-10-20T07:50:35.284Z,610.284851,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/SellAllItems
+ 2025-10-20T07:50:35.284Z,610.284912,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/SellItem
+ 2025-10-20T07:50:35.284Z,610.284912,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FishingMinigameChanged
+ 2025-10-20T07:50:35.284Z,610.284973,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/RollEnchant
+ 2025-10-20T07:50:35.284Z,610.284973,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/TextNotification
+ 2025-10-20T07:50:35.284Z,610.284973,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FavoriteStateChanged
+ 2025-10-20T07:50:35.285Z,610.285034,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UnequipToolFromHotbar
+ 2025-10-20T07:50:35.285Z,610.285034,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/EquipToolFromHotbar
+ 2025-10-20T07:50:35.285Z,610.285034,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ClaimNotification
+ 2025-10-20T07:50:35.285Z,610.285095,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseSkinCrate
+ 2025-10-20T07:50:35.285Z,610.285095,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/UpdateAutoSellThreshold
+ 2025-10-20T07:50:35.285Z,610.285156,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/DisplaySystemMessage
+ 2025-10-20T07:50:35.285Z,610.285156,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PromptGamePassPurchase
+ 2025-10-20T07:50:35.285Z,610.285156,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/UpdateFishingRadar
+ 2025-10-20T07:50:35.285Z,610.285217,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PromptProductPurchase
+ 2025-10-20T07:50:35.285Z,610.285217,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PromptPurchase
+ 2025-10-20T07:50:35.285Z,610.285278,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ProductPurchaseFinished
+ 2025-10-20T07:50:35.285Z,610.285278,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PlaySound
+ 2025-10-20T07:50:35.285Z,610.285278,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/ActivateQuestLine
+ 2025-10-20T07:50:35.285Z,610.285339,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/CreateTranscendedStone
+ 2025-10-20T07:50:35.285Z,610.285339,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ObtainedNewFishNotification
+ 2025-10-20T07:50:35.285Z,610.285339,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/EquipRodSkin
+ 2025-10-20T07:50:35.285Z,610.285400,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UnequipRodSkin
+ 2025-10-20T07:50:35.285Z,610.285400,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/EquipItem
+ 2025-10-20T07:50:35.285Z,610.285461,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UnequipItem
+ 2025-10-20T07:50:35.285Z,610.285461,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/EquipBait
+ 2025-10-20T07:50:35.285Z,610.285461,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FavoriteItem
+ 2025-10-20T07:50:35.285Z,610.285522,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/CheckEligible
+ 2025-10-20T07:50:35.285Z,610.285522,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RemoveGiftReceiver
+ 2025-10-20T07:50:35.285Z,610.285522,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/SetGiftReceiver
+ 2025-10-20T07:50:35.285Z,610.285583,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RF_ClaimMegalodonQuest
+ 2025-10-20T07:50:35.285Z,610.285583,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/RollSkinCrate
+ 2025-10-20T07:50:35.285Z,610.285645,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ProductPurchaseCompleted
+ 2025-10-20T07:50:35.285Z,610.285645,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/UseGiftFromInventory
+ 2025-10-20T07:50:35.285Z,610.285645,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PlayFishingEffect
+ 2025-10-20T07:50:35.285Z,610.285706,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ReplicateTextEffect
+ 2025-10-20T07:50:35.285Z,610.285706,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ReplicateCutscene
+ 2025-10-20T07:50:35.285Z,610.285706,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/StopCutscene
+ 2025-10-20T07:50:35.285Z,610.285767,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/BaitSpawned
+ 2025-10-20T07:50:35.285Z,610.285767,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FishCaught
+ 2025-10-20T07:50:35.285Z,610.285828,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/PurchaseWeatherEvent
+ 2025-10-20T07:50:35.285Z,610.285828,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/IncrementOnboardingStep
+ 2025-10-20T07:50:35.285Z,610.285889,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/UpdateAutoFishingState
+ 2025-10-20T07:50:35.285Z,610.285889,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UpdateChargeState
+ 2025-10-20T07:50:35.285Z,610.285950,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/UpdateEnchantState
+ 2025-10-20T07:50:35.285Z,610.285950,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ActivateSecondEnchantingAltar
+ 2025-10-20T07:50:35.286Z,610.286011,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/ActivateEnchantingAltar
+ 2025-10-20T07:50:35.286Z,610.286011,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/ChargeFishingRod
+ 2025-10-20T07:50:35.286Z,610.286011,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/CancelFishingInputs
+ 2025-10-20T07:50:35.286Z,610.286072,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/PlayVFX
+ 2025-10-20T07:50:35.286Z,610.286072,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FishingStopped
+ 2025-10-20T07:50:35.286Z,610.286072,6e73b000,6 [FLog::Output] [🔄] RemoteFunction: RF/RequestFishingMinigameStarted
+ 2025-10-20T07:50:35.286Z,610.286133,6e73b000,6 [FLog::Output] [📤] RemoteEvent: RE/FishingCompleted
+ 2025-10-20T07:50:35.286Z,610.286194,6e73b000,6 [FLog::Output] [📤] RemoteEvent: Added
+ 2025-10-20T07:50:35.286Z,610.286194,6e73b000,6 [FLog::Output] [📤] RemoteEvent: Removed
+ 2025-10-20T07:50:35.286Z,610.286255,6e73b000,6 [FLog::Output] [📤] RemoteEvent: Update
+ 2025-10-20T07:50:35.286Z,610.286255,6e73b000,6 [FLog::Output] [📤] RemoteEvent: UpdateReplicateTo
+ 2025-10-20T07:50:35.286Z,610.286255,6e73b000,6 [FLog::Output] [📤] RemoteEvent: Set
+ 2025-10-20T07:50:35.286Z,610.286316,6e73b000,6 [FLog::Output] [📤] RemoteEvent: ArrayUpdate
+ 2025-10-20T07:50:35.338Z,610.338928,6e73b000,6 [FLog::Output]
+ ✅ Found 100 remotes total
+ 2025-10-20T07:50:35.338Z,610.338989,6e73b000,6 [FLog::Output]
+ 🎮 Detecting game type...
+ 2025-10-20T07:50:35.344Z,610.344238,6e73b000,6 [FLog::Output] [🎯] Detected: fishing (confidence: 167)
+ 2025-10-20T07:50:35.344Z,610.344238,6e73b000,6 [FLog::Output]
+ ============================================================
+ 2025-10-20T07:50:35.344Z,610.344299,6e73b000,6 [FLog::Output] PHASE 2: DEEP ANALYSIS
+ 2025-10-20T07:50:35.344Z,610.344299,6e73b000,6 [FLog::Output] ============================================================
+ 2025-10-20T07:50:35.996Z,610.996033,6e38b000,12 [DFLog::HttpTraceError] HttpResponse(#1331 0x305bb3ca0) time:647.8ms (net:647.7ms callback:0.0ms timeInRetryQueue:0.0ms)status:500 Internal Server Error bodySize:55 url:{ "https://economy.roblox.com/v2/assets/121864768012064/details" } ip:128.116.116.3 external:0 numberOfTimesRetried:0
+ 2025-10-20T07:50:36.025Z,611.025818,6e73b000,6 [FLog::Error] Error: MarketplaceService:getProductInfo() failed because HTTP 500 (Internal Server Error)
+ Stack Begin
+ Script 'LocalScript', Line 796 - function ExecuteAnalysis
+ Script 'LocalScript', Line 1087
+ Stack End
