@@ -1,14 +1,3 @@
- 2025-10-20T07:50:32.118Z,607.118774,6e73b000,6 [FLog::Output] ╔═══════════════════════════════════════════╗
- ║ 🎲 ULTIMATE RNG ANALYZER V2.0 🎲 ║
- ║ Hydrogen App Compatible Edition ║
- ║ Auto-dumps to Hydrogen/dump/ ║
- ╚═══════════════════════════════════════════╝
- 2025-10-20T07:50:32.118Z,607.118835,6e73b000,6 [FLog::Output]
- ╔═══════════════════════════════════════════╗
- ║ 🎮 COMMANDS AVAILABLE 🎮 ║
- ╚═══════════════════════════════════════════╝
- AUTOMATIC MODE:
- Just wait, analysis will auto-start!
  MANUAL COMMANDS:
  _G.UltimateAnalyzer.Run() -- Full analysis
  _G.UltimateAnalyzer.QuickScan() -- Fast scan
