@@ -1,19 +1,15 @@
 -- ========================================
--- 💾 MAC FILE SAVER + OUTPUT FORMATTER
--- Save analysis ke file yang bisa copy ke Mac
+-- 💾 MAC FILE SAVER (OPTIMIZED)
+-- Save analysis to executor workspace
 -- ========================================
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 
--- Config untuk Mac path (untuk reference)
-local MAC_TARGET_PATH = "/Users/apple/rey/bug/lua/test/"
-
 print([[
 ╔════════════════════════════════════════╗
-║      💾 MAC FILE SAVER LOADED 💾       ║
-║   Output akan disimpan ke executor     ║
-║   workspace, lalu copy manual ke Mac   ║
+║    💾 MAC FILE SAVER OPTIMIZED 💾     ║
+║  Auto-analyzing and saving files...    ║
 ╚════════════════════════════════════════╝
 ]])
 
@@ -23,225 +19,125 @@ print([[
 
 local FileManager = {}
 
-function FileManager:GetExecutorWorkspace()
-    -- Coba deteksi executor workspace path
-    if isfolder then
-        -- Synapse X / Script-Ware / etc
-        return "workspace/"
+function FileManager:Init()
+    -- Check executor capabilities
+    self.canWrite = writefile ~= nil
+    self.canMakeFolder = makefolder ~= nil
+    self.canListFiles = listfiles ~= nil
+    
+    if not self.canWrite then
+        warn("⚠️ writefile() not supported - files cannot be saved!")
+        return false
     end
-    return ""
+    
+    print("✅ Executor supports file operations")
+    return true
 end
 
 function FileManager:CreateFolder(folderName)
-    if makefolder then
-        local success = pcall(function()
-            makefolder(folderName)
-        end)
-        return success
-    end
-    return false
+    if not self.canMakeFolder then return false end
+    
+    local success, err = pcall(function()
+        makefolder(folderName)
+    end)
+    
+    return success
 end
 
 function FileManager:WriteFile(fileName, content)
-    if writefile then
-        local success, err = pcall(function()
-            writefile(fileName, content)
-        end)
-        
-        if success then
-            print(string.format("✅ File saved: %s", fileName))
-            print(string.format("📂 Executor workspace: %s", self:GetExecutorWorkspace()))
-            return true
-        else
-            print(string.format("❌ Failed to save: %s", tostring(err)))
-            return false
-        end
+    if not self.canWrite then return false end
+    
+    local success, err = pcall(function()
+        writefile(fileName, content)
+    end)
+    
+    if success then
+        print(string.format("✅ Saved: %s", fileName))
+        return true
     else
-        print("❌ writefile() not supported by your executor")
+        warn(string.format("❌ Failed: %s - %s", fileName, tostring(err)))
         return false
     end
 end
 
-function FileManager:SaveToMacInstructions(fileName)
-    local instructions = string.format([[
-╔════════════════════════════════════════╗
-║     📋 HOW TO COPY TO MAC PATH         ║
-╚════════════════════════════════════════╝
-
-File saved in executor workspace: %s
-
-TO COPY TO MAC:
-1. Open Finder
-2. Press Cmd+Shift+G
-3. Paste: %s
-4. Buka folder executor Anda (biasanya di Documents atau Downloads)
-5. Copy file "%s" dari workspace executor
-6. Paste ke folder Mac target
-
-TERMINAL METHOD:
-1. Buka Terminal
-2. Ketik: cd %s
-3. Ketik: mkdir -p lua/test (jika folder belum ada)
-4. Copy manual file dari executor workspace
-
-FILE LOCATION:
-- Executor workspace: [Check executor documentation]
-- Target Mac path: %s
-
-]], fileName, MAC_TARGET_PATH, fileName, MAC_TARGET_PATH, MAC_TARGET_PATH)
+function FileManager:ListFiles(folderName)
+    if not self.canListFiles then return {} end
     
-    return instructions
+    local success, files = pcall(function()
+        return listfiles(folderName)
+    end)
+    
+    return success and files or {}
 end
 
 -- ========================================
--- OUTPUT FORMATTERS
+-- ANALYSIS ENGINE
 -- ========================================
 
-local OutputFormatter = {}
+local AnalysisEngine = {}
 
-function OutputFormatter:FormatJSON(data)
-    if HttpService then
-        local success, json = pcall(function()
-            return HttpService:JSONEncode(data)
-        end)
+function AnalysisEngine:FindModule(moduleName)
+    local found = ReplicatedStorage:FindFirstChild(moduleName, true)
+    if found then
+        local success, module = pcall(require, found)
         if success then
-            return json
+            return module
         end
     end
-    return "ERROR: Could not encode JSON"
+    return nil
 end
 
-function OutputFormatter:FormatLua(data, tableName)
-    tableName = tableName or "AnalysisData"
+function AnalysisEngine:AnalyzeTable(tbl, depth)
+    depth = depth or 0
+    if depth > 3 then return {} end
     
-    local function serializeTable(tbl, indent)
-        indent = indent or 0
-        local spacing = string.rep("    ", indent)
-        local result = "{\n"
+    local result = {}
+    
+    for k, v in pairs(tbl) do
+        local vtype = type(v)
         
-        for k, v in pairs(tbl) do
-            local key = type(k) == "string" and string.format('["%s"]', k) or string.format("[%s]", k)
-            
-            if type(v) == "table" then
-                result = result .. spacing .. "    " .. key .. " = " .. serializeTable(v, indent + 1) .. ",\n"
-            elseif type(v) == "string" then
-                result = result .. spacing .. "    " .. key .. ' = "' .. v .. '",\n'
-            elseif type(v) == "number" or type(v) == "boolean" then
-                result = result .. spacing .. "    " .. key .. " = " .. tostring(v) .. ",\n"
-            else
-                result = result .. spacing .. "    " .. key .. ' = "' .. tostring(v) .. '",\n'
-            end
+        if vtype == "table" then
+            result[k] = {
+                type = "table",
+                keys = self:GetTableKeys(v)
+            }
+        elseif vtype == "function" then
+            result[k] = {
+                type = "function",
+                callable = true
+            }
+        else
+            result[k] = {
+                type = vtype,
+                value = tostring(v):sub(1, 100)
+            }
         end
-        
-        result = result .. spacing .. "}"
-        return result
     end
     
-    local luaCode = string.format([[
--- ========================================
--- Analysis Data Export
--- Generated: %s
--- Target: %s
--- ========================================
-
-local %s = %s
-
-return %s
-]], os.date("%Y-%m-%d %H:%M:%S"), MAC_TARGET_PATH, tableName, serializeTable(data, 0), tableName)
-    
-    return luaCode
+    return result
 end
 
-function OutputFormatter:FormatMarkdown(analysis)
-    local md = string.format([[
-# 🎲 RNG System Analysis Report
-
-**Generated:** %s  
-**Target Mac Path:** `%s`
-
----
-
-## 📊 Analysis Summary
-
-### RNG Modules Found
-%s
-
-### Luck Modifiers
-%s
-
-### Roll Functions
-%s
-
-### Exploit Opportunities
-%s
-
----
-
-## 📝 Detailed Findings
-
-### 1. RNG System Components
-]], os.date("%Y-%m-%d %H:%M:%S"), MAC_TARGET_PATH, 
-        self:CountItems(analysis.RNGModules or {}),
-        self:CountItems(analysis.LuckModifiers or {}),
-        self:CountItems(analysis.RollFunctions or {}),
-        "See detailed analysis below")
-    
-    return md
-end
-
-function OutputFormatter:CountItems(tbl)
-    local count = 0
-    for _ in pairs(tbl) do
-        count = count + 1
+function AnalysisEngine:GetTableKeys(tbl)
+    local keys = {}
+    for k, _ in pairs(tbl) do
+        table.insert(keys, tostring(k))
     end
-    return string.format("**Total:** %d items", count)
+    return keys
 end
 
--- ========================================
--- MAIN ANALYSIS WITH AUTO-SAVE
--- ========================================
-
-local function RunAnalysisWithAutoSave()
-    print("\n🚀 Starting Analysis with Auto-Save...\n")
-    
-    -- Create output folder
-    FileManager:CreateFolder("LuckAnalysis")
-    
-    -- Run analysis (simplified version)
-    local Analysis = {
-        RNGModules = {},
-        LuckModifiers = {},
-        RollFunctions = {},
-        Timestamp = os.date("%Y-%m-%d %H:%M:%S")
+function AnalysisEngine:RunFullAnalysis()
+    local analysis = {
+        timestamp = os.date("%Y-%m-%d %H:%M:%S"),
+        executor = tostring(identifyexecutor and identifyexecutor() or "Unknown"),
+        modules = {}
     }
     
-    print("📊 Analyzing modules...")
+    print("\n📊 Starting analysis...\n")
     
-    -- Analyze RollData
-    local RollData = require(ReplicatedStorage:FindFirstChild("RollData", true))
-    if RollData then
-        Analysis.RNGModules.RollData = {}
-        for k, v in pairs(RollData) do
-            Analysis.RNGModules.RollData[k] = type(v)
-            print(string.format("  [RollData] %s: %s", k, type(v)))
-        end
-    end
-    
-    -- Analyze WeightRandom
-    local WeightRandom = require(ReplicatedStorage:FindFirstChild("WeightRandom", true))
-    if WeightRandom then
-        Analysis.RNGModules.WeightRandom = {}
-        for k, v in pairs(WeightRandom) do
-            Analysis.RNGModules.WeightRandom[k] = type(v)
-            if type(v) == "function" then
-                Analysis.RollFunctions[k] = "function"
-                print(string.format("  [WeightRandom] 🎲 %s", k))
-            end
-        end
-    end
-    
-    -- Analyze Luck Modifiers
-    local modules = {
+    -- Key modules to analyze
+    local targetModules = {
+        "RollData",
+        "WeightRandom",
         "FishingRodModifiers",
         "Enchants",
         "Potions",
@@ -249,156 +145,195 @@ local function RunAnalysisWithAutoSave()
         "DoubleLuckController"
     }
     
-    for _, moduleName in ipairs(modules) do
-        local module = ReplicatedStorage:FindFirstChild(moduleName, true)
+    for _, moduleName in ipairs(targetModules) do
+        local module = self:FindModule(moduleName)
         if module then
-            local required = require(module)
-            if required then
-                Analysis.LuckModifiers[moduleName] = {}
-                for k, v in pairs(required) do
-                    Analysis.LuckModifiers[moduleName][k] = type(v)
-                    print(string.format("  [%s] %s: %s", moduleName, k, type(v)))
-                end
-            end
+            print(string.format("  [✓] %s", moduleName))
+            analysis.modules[moduleName] = self:AnalyzeTable(module)
+        else
+            print(string.format("  [✗] %s (not found)", moduleName))
         end
     end
     
-    print("\n💾 Saving files...\n")
+    print("\n✅ Analysis complete!\n")
     
-    -- Save as JSON
-    local jsonData = OutputFormatter:FormatJSON(Analysis)
-    FileManager:WriteFile("LuckAnalysis/analysis.json", jsonData)
+    return analysis
+end
+
+-- ========================================
+-- OUTPUT FORMATTER
+-- ========================================
+
+local OutputFormatter = {}
+
+function OutputFormatter:ToJSON(data)
+    local success, json = pcall(function()
+        return HttpService:JSONEncode(data)
+    end)
+    return success and json or "{}"
+end
+
+function OutputFormatter:ToLua(data, varName)
+    varName = varName or "AnalysisData"
     
-    -- Save as Lua
-    local luaData = OutputFormatter:FormatLua(Analysis, "LuckAnalysisData")
-    FileManager:WriteFile("LuckAnalysis/analysis.lua", luaData)
+    local function serialize(tbl, indent)
+        indent = indent or 0
+        local s = string.rep("  ", indent)
+        local lines = {"{"}
+        
+        for k, v in pairs(tbl) do
+            local key = type(k) == "string" and string.format('["%s"]', k) or string.format("[%s]", k)
+            local value
+            
+            if type(v) == "table" then
+                value = serialize(v, indent + 1)
+            elseif type(v) == "string" then
+                value = string.format('"%s"', v:gsub('"', '\\"'))
+            else
+                value = tostring(v)
+            end
+            
+            table.insert(lines, string.format("%s  %s = %s,", s, key, value))
+        end
+        
+        table.insert(lines, s .. "}")
+        return table.concat(lines, "\n")
+    end
     
-    -- Save as Markdown
-    local mdData = OutputFormatter:FormatMarkdown(Analysis)
-    FileManager:WriteFile("LuckAnalysis/analysis.md", mdData)
+    return string.format([[
+-- ========================================
+-- RNG Analysis Export
+-- Generated: %s
+-- ========================================
+
+local %s = %s
+
+return %s
+]], os.date("%Y-%m-%d %H:%M:%S"), varName, serialize(data), varName)
+end
+
+function OutputFormatter:ToMarkdown(analysis)
+    local lines = {
+        "# 🎲 RNG System Analysis",
+        "",
+        string.format("**Generated:** %s", analysis.timestamp),
+        string.format("**Executor:** %s", analysis.executor),
+        "",
+        "---",
+        "",
+        "## 📊 Modules Analyzed",
+        ""
+    }
     
-    -- Save detailed text report
-    local textReport = string.format([[
-╔════════════════════════════════════════╗
-║     🎲 RNG SYSTEM ANALYSIS REPORT     ║
-╚════════════════════════════════════════╝
-
-Generated: %s
-Target Mac Path: %s
-
-════════════════════════════════════════
-📊 SUMMARY
-════════════════════════════════════════
-
-RNG Modules Found: %d
-Luck Modifiers: %d
-Roll Functions: %d
-
-════════════════════════════════════════
-📁 FILES SAVED
-════════════════════════════════════════
-
-1. analysis.json - JSON format
-2. analysis.lua - Lua table format
-3. analysis.md - Markdown format
-4. analysis.txt - This text report
-
-════════════════════════════════════════
-📋 COPY TO MAC INSTRUCTIONS
-════════════════════════════════════════
-
-%s
-
-════════════════════════════════════════
-✅ ANALYSIS COMPLETE
-════════════════════════════════════════
-]], 
-        os.date("%Y-%m-%d %H:%M:%S"),
-        MAC_TARGET_PATH,
-        FileManager:CountTable(Analysis.RNGModules),
-        FileManager:CountTable(Analysis.LuckModifiers),
-        FileManager:CountTable(Analysis.RollFunctions),
-        FileManager:SaveToMacInstructions("LuckAnalysis/*.*")
-    )
+    for moduleName, data in pairs(analysis.modules) do
+        table.insert(lines, string.format("### %s", moduleName))
+        table.insert(lines, "")
+        
+        local count = 0
+        for _ in pairs(data) do count = count + 1 end
+        table.insert(lines, string.format("**Items found:** %d", count))
+        table.insert(lines, "")
+    end
     
-    FileManager:WriteFile("LuckAnalysis/analysis.txt", textReport)
+    return table.concat(lines, "\n")
+end
+
+function OutputFormatter:ToText(analysis)
+    local lines = {
+        "════════════════════════════════════════",
+        "    🎲 RNG SYSTEM ANALYSIS REPORT    ",
+        "════════════════════════════════════════",
+        "",
+        string.format("Generated: %s", analysis.timestamp),
+        string.format("Executor: %s", analysis.executor),
+        "",
+        "════════════════════════════════════════",
+        "📊 MODULES ANALYZED",
+        "════════════════════════════════════════",
+        ""
+    }
     
-    print(textReport)
+    for moduleName, data in pairs(analysis.modules) do
+        local count = 0
+        for _ in pairs(data) do count = count + 1 end
+        table.insert(lines, string.format("[✓] %s (%d items)", moduleName, count))
+    end
+    
+    table.insert(lines, "")
+    table.insert(lines, "════════════════════════════════════════")
+    table.insert(lines, "✅ FILES SAVED TO: LuckAnalysis/")
+    table.insert(lines, "════════════════════════════════════════")
+    table.insert(lines, "")
+    table.insert(lines, "📋 Copy these files to your Mac:")
+    table.insert(lines, "   /Users/apple/rey/bug/lua/test/")
+    
+    return table.concat(lines, "\n")
+end
+
+-- ========================================
+-- MAIN EXECUTION
+-- ========================================
+
+local function Main()
+    -- Initialize file manager
+    if not FileManager:Init() then
+        warn("❌ Cannot proceed without file write support")
+        return
+    end
+    
+    -- Create output folder
+    print("📁 Creating LuckAnalysis folder...")
+    FileManager:CreateFolder("LuckAnalysis")
+    
+    -- Run analysis
+    local analysis = AnalysisEngine:RunFullAnalysis()
+    
+    -- Save in multiple formats
+    print("💾 Saving files...\n")
+    
+    local formats = {
+        {name = "analysis.json", content = OutputFormatter:ToJSON(analysis)},
+        {name = "analysis.lua", content = OutputFormatter:ToLua(analysis)},
+        {name = "analysis.md", content = OutputFormatter:ToMarkdown(analysis)},
+        {name = "analysis.txt", content = OutputFormatter:ToText(analysis)}
+    }
+    
+    local savedCount = 0
+    for _, format in ipairs(formats) do
+        if FileManager:WriteFile("LuckAnalysis/" .. format.name, format.content) then
+            savedCount = savedCount + 1
+        end
+    end
+    
+    -- Summary
+    print("")
+    print("════════════════════════════════════════")
+    print(string.format("✅ %d files saved successfully!", savedCount))
+    print("════════════════════════════════════════")
+    print("")
+    print("📂 Location: [Executor Workspace]/LuckAnalysis/")
+    print("📋 Files: analysis.json, .lua, .md, .txt")
+    print("")
+    print("💡 Mac sync script should auto-detect")
+    print("   these files and copy them!")
     
     -- Copy summary to clipboard
     if setclipboard then
-        setclipboard(textReport)
+        setclipboard(OutputFormatter:ToText(analysis))
         print("\n✅ Report copied to clipboard!")
     end
     
-    print("\n" .. string.rep("=", 60))
-    print("✅ ALL FILES SAVED!")
-    print(string.rep("=", 60))
-    print("\n📂 Files location: [Executor Workspace]/LuckAnalysis/")
-    print("📋 Check console for Mac copy instructions")
-    print("\n💡 TIP: Check your executor documentation for workspace location")
-    
-    return Analysis
+    return analysis
 end
 
-function FileManager:CountTable(tbl)
-    local count = 0
-    for _ in pairs(tbl) do
-        count = count + 1
-    end
-    return count
-end
-
--- ========================================
--- QUICK COMMANDS
--- ========================================
-
-print([[
-╔════════════════════════════════════════╗
-║         💡 QUICK COMMANDS 💡           ║
-╚════════════════════════════════════════╝
-
-AUTOMATIC (Recommended):
-Just wait, script will auto-analyze and save!
-
-MANUAL COMMANDS:
-_G.SaveToMac = {
-    Analyze = function() -- Run full analysis
-    ShowPath = function() -- Show Mac path info
-    GetFiles = function() -- List saved files
-}
-
-════════════════════════════════════════
-]])
-
--- Store globally for later use
-_G.SaveToMac = {
+-- Store globally
+_G.MacAnalyzer = {
+    Run = Main,
     FileManager = FileManager,
-    OutputFormatter = OutputFormatter,
-    Analysis = nil,
-    
-    Analyze = function()
-        _G.SaveToMac.Analysis = RunAnalysisWithAutoSave()
-        return _G.SaveToMac.Analysis
-    end,
-    
-    ShowPath = function()
-        print(FileManager:SaveToMacInstructions("LuckAnalysis/*.*"))
-    end,
-    
-    GetFiles = function()
-        if listfiles then
-            local files = listfiles("LuckAnalysis")
-            print("\n📁 Saved files:")
-            for _, file in ipairs(files) do
-                print("  • " .. file)
-            end
-        else
-            print("❌ listfiles() not supported")
-        end
-    end
+    AnalysisEngine = AnalysisEngine,
+    OutputFormatter = OutputFormatter
 }
 
--- Auto-run analysis
-wait(1)
-return RunAnalysisWithAutoSave()
+-- Auto-run
+wait(0.5)
+return Main()
