@@ -1,7 +1,7 @@
 -- ========================================
 -- 🎲 ULTIMATE RNG SYSTEM ANALYZER V2.0
--- Comprehensive deep analysis of ANY Roblox game
--- Universal pattern detection & exploit finder
+-- Hydrogen App Compatible Edition
+-- Auto-dumps to Hydrogen/dump/ folder
 -- ========================================
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -13,8 +13,8 @@ local Workspace = game:GetService("Workspace")
 print([[
 ╔═══════════════════════════════════════════╗
 ║  🎲 ULTIMATE RNG ANALYZER V2.0 🎲        ║
-║  Universal Game Analysis Engine          ║
-║  No Limits • No Boundaries               ║
+║  Hydrogen App Compatible Edition         ║
+║  Auto-dumps to Hydrogen/dump/            ║
 ╚═══════════════════════════════════════════╝
 ]])
 
@@ -23,40 +23,176 @@ print([[
 -- ========================================
 
 local Config = {
-    maxDepth = 10,                    -- Maximum recursion depth
-    maxTableSize = 1000,              -- Max items to analyze per table
-    scanAllServices = true,           -- Scan ALL game services
-    deepFunctionAnalysis = true,      -- Analyze function bytecode
-    detectPatterns = true,            -- Auto-detect game patterns
-    extractConstants = true,          -- Find all numeric constants
-    hookFunctions = true,             -- Hook detected RNG functions
-    monitorRemotes = true,            -- Track RemoteEvents/Functions
-    analyzeLocalScripts = true,       -- Try to analyze LocalScripts
-    extractStrings = true,            -- Extract all string patterns
-    findHiddenModules = true,         -- Search for hidden modules
-    debugMode = false                 -- Verbose output
+    maxDepth = 10,
+    maxTableSize = 1000,
+    scanAllServices = true,
+    deepFunctionAnalysis = true,
+    detectPatterns = true,
+    extractConstants = true,
+    hookFunctions = true,
+    monitorRemotes = true,
+    analyzeLocalScripts = true,
+    extractStrings = true,
+    findHiddenModules = true,
+    debugMode = false,
+    -- Hydrogen specific paths
+    dumpFolder = "dump/",
+    subFolders = {
+        modules = "dump/Modules/",
+        functions = "dump/Functions/",
+        tables = "dump/Tables/",
+        patterns = "dump/Patterns/",
+        exploits = "dump/Exploits/",
+        remotes = "dump/Remotes/",
+        reports = "dump/Reports/"
+    }
 }
+
+-- ========================================
+-- HYDROGEN FILE SYSTEM
+-- ========================================
+
+local FileSystem = {}
+
+function FileSystem:Init()
+    -- Check Hydrogen file functions
+    self.canWrite = writefile ~= nil
+    self.canMakeFolder = makefolder ~= nil
+    self.canListFiles = listfiles ~= nil
+    self.canDeleteFile = delfile ~= nil
+    self.canReadFile = readfile ~= nil
+    
+    if not self.canWrite then
+        warn("⚠️ writefile() not supported!")
+        return false
+    end
+    
+    print("✅ Hydrogen file system initialized")
+    print("📂 Dump location: Hydrogen/" .. Config.dumpFolder)
+    return true
+end
+
+function FileSystem:CreateFolders()
+    if not self.canMakeFolder then
+        warn("⚠️ makefolder() not supported, files will be in root")
+        return
+    end
+    
+    -- Create main dump folder
+    pcall(function() makefolder(Config.dumpFolder) end)
+    
+    -- Create subfolders
+    for name, path in pairs(Config.subFolders) do
+        pcall(function() 
+            makefolder(path)
+            print("📁 Created: " .. path)
+        end)
+    end
+    
+    print("✅ Folder structure created\n")
+end
+
+function FileSystem:WriteJSON(filename, data)
+    if not self.canWrite then return false end
+    
+    local success, json = pcall(function()
+        return HttpService:JSONEncode(data)
+    end)
+    
+    if success and json then
+        local path = Config.dumpFolder .. filename
+        pcall(function()
+            writefile(path, json)
+            print(string.format("💾 Saved: %s (%.2f KB)", filename, #json / 1024))
+        end)
+        return true
+    else
+        warn("❌ Failed to encode JSON: " .. filename)
+        return false
+    end
+end
+
+function FileSystem:WriteLua(filename, data, varName)
+    if not self.canWrite then return false end
+    
+    varName = varName or "Data"
+    
+    local function serialize(tbl, indent, maxItems)
+        indent = indent or 0
+        maxItems = maxItems or 100
+        local s = string.rep("  ", indent)
+        local lines = {"{"}
+        
+        local count = 0
+        for k, v in pairs(tbl) do
+            count = count + 1
+            if count > maxItems then
+                table.insert(lines, s .. '  ["__TRUNCATED__"] = "Truncated after ' .. maxItems .. ' items",')
+                break
+            end
+            
+            local key
+            if type(k) == "string" then
+                key = string.format('["%s"]', k:gsub('"', '\\"'))
+            else
+                key = string.format("[%s]", tostring(k))
+            end
+            
+            local value
+            if type(v) == "table" then
+                if indent < 5 then -- Limit recursion
+                    value = serialize(v, indent + 1, 50)
+                else
+                    value = '"{...}"'
+                end
+            elseif type(v) == "string" then
+                value = string.format('"%s"', v:gsub('"', '\\"'):sub(1, 200))
+            elseif type(v) == "number" or type(v) == "boolean" then
+                value = tostring(v)
+            else
+                value = string.format('"%s"', tostring(v))
+            end
+            
+            table.insert(lines, string.format("%s  %s = %s,", s, key, value))
+        end
+        
+        table.insert(lines, s .. "}")
+        return table.concat(lines, "\n")
+    end
+    
+    local content = string.format("-- Auto-generated by Ultimate RNG Analyzer\n-- %s\n\nlocal %s = %s\n\nreturn %s", 
+        os.date("%Y-%m-%d %H:%M:%S"), 
+        varName, 
+        serialize(data), 
+        varName
+    )
+    
+    local path = Config.dumpFolder .. filename
+    pcall(function()
+        writefile(path, content)
+        print(string.format("💾 Saved: %s (%.2f KB)", filename, #content / 1024))
+    end)
+    
+    return true
+end
+
+function FileSystem:WriteText(filename, text)
+    if not self.canWrite then return false end
+    
+    local path = Config.dumpFolder .. filename
+    pcall(function()
+        writefile(path, text)
+        print(string.format("💾 Saved: %s (%.2f KB)", filename, #text / 1024))
+    end)
+    
+    return true
+end
 
 -- ========================================
 -- ADVANCED UTILITIES
 -- ========================================
 
 local Utils = {}
-
-function Utils:DeepCopy(orig, seen)
-    seen = seen or {}
-    if type(orig) ~= 'table' then return orig end
-    if seen[orig] then return seen[orig] end
-    
-    local copy = {}
-    seen[orig] = copy
-    
-    for k, v in next, orig, nil do
-        copy[Utils:DeepCopy(k, seen)] = Utils:DeepCopy(v, seen)
-    end
-    
-    return setmetatable(copy, Utils:DeepCopy(getmetatable(orig), seen))
-end
 
 function Utils:SafeRequire(module)
     if not module or not module:IsA("ModuleScript") then return nil end
@@ -74,7 +210,9 @@ end
 function Utils:GetFunctionSource(func)
     if not func or type(func) ~= "function" then return nil end
     
-    local info = debug.getinfo(func)
+    local success, info = pcall(debug.getinfo, func)
+    if not success then return nil end
+    
     return {
         source = info.source or "Unknown",
         short_src = info.short_src or "Unknown",
@@ -92,8 +230,8 @@ function Utils:ExtractUpvalues(func)
     local i = 1
     
     while true do
-        local name, value = debug.getupvalue(func, i)
-        if not name then break end
+        local success, name, value = pcall(debug.getupvalue, func, i)
+        if not success or not name then break end
         
         upvalues[name] = {
             type = type(value),
@@ -107,23 +245,24 @@ end
 
 function Utils:ExtractConstants(func)
     local constants = {}
-    local info = debug.getinfo(func)
     
-    if info and info.func then
-        local i = 1
-        while true do
-            local success, constant = pcall(debug.getconstant, func, i)
-            if not success then break end
-            
-            if constant ~= nil then
-                table.insert(constants, {
-                    index = i,
-                    type = type(constant),
-                    value = self:SerializeValue(constant, 0)
-                })
-            end
-            i = i + 1
+    if not debug.getconstant then
+        return constants
+    end
+    
+    local i = 1
+    while i < 100 do -- Limit to 100 constants
+        local success, constant = pcall(debug.getconstant, func, i)
+        if not success then break end
+        
+        if constant ~= nil then
+            table.insert(constants, {
+                index = i,
+                type = type(constant),
+                value = self:SerializeValue(constant, 0)
+            })
         end
+        i = i + 1
     end
     
     return constants
@@ -143,7 +282,7 @@ function Utils:AnalyzeFunctionBytecode(func)
     -- Pattern detection in constants
     for _, constant in ipairs(analysis.constants) do
         if type(constant.value) == "string" then
-            local str = constant.value:lower()
+            local str = tostring(constant.value):lower()
             if str:find("random") or str:find("rng") or str:find("roll") then
                 analysis.callsRandom = true
             end
@@ -154,7 +293,7 @@ function Utils:AnalyzeFunctionBytecode(func)
     end
     
     -- Calculate complexity
-    analysis.complexity = #analysis.constants + #analysis.upvalues
+    analysis.complexity = #analysis.constants + Utils:CountTable(analysis.upvalues)
     
     return analysis
 end
@@ -186,7 +325,7 @@ function Utils:SerializeValue(value, depth, seen)
         
         return items
     elseif vtype == "function" then
-        if Config.deepFunctionAnalysis then
+        if Config.deepFunctionAnalysis and depth < 2 then
             return self:AnalyzeFunctionBytecode(value)
         else
             return {type = "function", name = tostring(value)}
@@ -215,6 +354,12 @@ function Utils:GetInstancePath(instance)
     return table.concat(path, ".")
 end
 
+function Utils:CountTable(tbl)
+    local count = 0
+    for _ in pairs(tbl) do count = count + 1 end
+    return count
+end
+
 -- ========================================
 -- UNIVERSAL MODULE SCANNER
 -- ========================================
@@ -227,14 +372,20 @@ function ModuleScanner:ScanAllServices()
     local services = {
         game.ReplicatedStorage,
         game.ReplicatedFirst,
-        game.ServerStorage,
-        game.ServerScriptService,
         game.StarterGui,
         game.StarterPack,
         game.StarterPlayer,
         game.Lighting,
         game.Workspace
     }
+    
+    -- Try to access ServerStorage and ServerScriptService (client might not have access)
+    pcall(function()
+        table.insert(services, game.ServerStorage)
+    end)
+    pcall(function()
+        table.insert(services, game.ServerScriptService)
+    end)
     
     local modules = {}
     
@@ -256,35 +407,15 @@ function ModuleScanner:ScanAllServices()
                 end
             end
         end)
+        
+        if not success then
+            print(string.format("  [⚠️] Cannot access: %s", serviceName))
+        end
     end
+    
+    print(string.format("\n✅ Found %d modules total\n", Utils:CountTable(modules)))
     
     return modules
-end
-
-function ModuleScanner:FindByPattern(pattern)
-    print(string.format("\n🔍 Searching for pattern: %s\n", pattern))
-    
-    local results = {}
-    
-    for _, service in ipairs(game:GetChildren()) do
-        pcall(function()
-            for _, descendant in ipairs(service:GetDescendants()) do
-                if descendant:IsA("ModuleScript") and descendant.Name:lower():find(pattern:lower()) then
-                    local module = Utils:SafeRequire(descendant)
-                    if module then
-                        results[descendant.Name] = {
-                            module = module,
-                            instance = descendant,
-                            path = Utils:GetInstancePath(descendant)
-                        }
-                        print(string.format("  [✓] Found: %s", descendant.Name))
-                    end
-                end
-            end
-        end)
-    end
-    
-    return results
 end
 
 function ModuleScanner:ScanRemoteEvents()
@@ -301,19 +432,24 @@ function ModuleScanner:ScanRemoteEvents()
                 if descendant:IsA("RemoteEvent") then
                     remotes.events[descendant.Name] = {
                         path = Utils:GetInstancePath(descendant),
-                        instance = descendant
+                        instance = descendant,
+                        parent = descendant.Parent.Name
                     }
                     print(string.format("  [📤] RemoteEvent: %s", descendant.Name))
                 elseif descendant:IsA("RemoteFunction") then
                     remotes.functions[descendant.Name] = {
                         path = Utils:GetInstancePath(descendant),
-                        instance = descendant
+                        instance = descendant,
+                        parent = descendant.Parent.Name
                     }
                     print(string.format("  [🔄] RemoteFunction: %s", descendant.Name))
                 end
             end
         end)
     end
+    
+    print(string.format("\n✅ Found %d remotes total\n", 
+        Utils:CountTable(remotes.events) + Utils:CountTable(remotes.functions)))
     
     return remotes
 end
@@ -328,7 +464,7 @@ function RNGAnalyzer:DeepAnalyze(module, name, depth)
     depth = depth or 0
     if depth > 3 then return {} end
     
-    print(string.format("%s📊 Deep analyzing: %s (depth: %d)", string.rep("  ", depth), name, depth))
+    print(string.format("%s📊 Analyzing: %s", string.rep("  ", depth), name))
     
     local analysis = {
         name = name,
@@ -338,32 +474,37 @@ function RNGAnalyzer:DeepAnalyze(module, name, depth)
         numbers = {},
         strings = {},
         patterns = {},
-        references = {},
         metadata = {}
     }
     
+    local processed = 0
     for key, value in pairs(module) do
+        processed = processed + 1
+        if processed > 500 then -- Limit processing
+            analysis.metadata.truncated = true
+            break
+        end
+        
         local vtype = type(value)
         
         if vtype == "function" then
             analysis.functions[key] = Utils:AnalyzeFunctionBytecode(value)
-        elseif vtype == "table" then
-            -- Detect table patterns
+        elseif vtype == "table" and depth < 2 then
             local tableAnalysis = self:AnalyzeTable(value, key, depth + 1)
             analysis.tables[key] = tableAnalysis
         elseif vtype == "number" then
             analysis.numbers[key] = value
         elseif vtype == "string" then
-            analysis.strings[key] = value
+            analysis.strings[key] = value:sub(1, 100)
             
-            -- Pattern detection
-            if value:lower():find("weight") then
+            local valueLower = value:lower()
+            if valueLower:find("weight") then
                 analysis.patterns.hasWeights = true
             end
-            if value:lower():find("luck") then
+            if valueLower:find("luck") then
                 analysis.patterns.hasLuck = true
             end
-            if value:lower():find("rare") or value:lower():find("legendary") then
+            if valueLower:find("rare") or valueLower:find("legendary") then
                 analysis.patterns.hasRarity = true
             end
         end
@@ -385,21 +526,20 @@ function RNGAnalyzer:AnalyzeTable(tbl, name, depth)
         isArray = true,
         isWeightTable = false,
         keys = {},
-        values = {},
-        patterns = {}
+        values = {}
     }
     
     local arrayIndex = 1
     
     for k, v in pairs(tbl) do
         analysis.size = analysis.size + 1
+        if analysis.size > 100 then break end -- Limit
         
         if k ~= arrayIndex then
             analysis.isArray = false
         end
         arrayIndex = arrayIndex + 1
         
-        -- Detect weight patterns
         local keyLower = tostring(k):lower()
         if keyLower:find("weight") or keyLower == "w" then
             analysis.hasWeights = true
@@ -409,21 +549,14 @@ function RNGAnalyzer:AnalyzeTable(tbl, name, depth)
             analysis.hasProbabilities = true
             analysis.isWeightTable = true
         end
-        if keyLower:find("multiplier") or keyLower:find("mult") or keyLower:find("modifier") then
+        if keyLower:find("multiplier") or keyLower:find("mult") then
             analysis.hasMultipliers = true
         end
         
         table.insert(analysis.keys, tostring(k))
         
-        -- Analyze values
         if type(v) == "number" then
             table.insert(analysis.values, {key = k, value = v, type = "number"})
-        elseif type(v) == "table" then
-            -- Recursive analysis for nested tables
-            local nested = self:AnalyzeTable(v, tostring(k), depth + 1)
-            if nested.isWeightTable then
-                analysis.isWeightTable = true
-            end
         end
     end
     
@@ -442,32 +575,28 @@ function RNGAnalyzer:FindRNGPatterns(module, name)
         usesSeeds = false,
         rngFunctions = {},
         weightTables = {},
-        seedVariables = {},
-        randomCalls = []
+        seedVariables = {}
     }
     
     for key, value in pairs(module) do
         if type(value) == "function" then
             local analysis = Utils:AnalyzeFunctionBytecode(value)
             
-            -- Check for RNG patterns in constants
             for _, constant in ipairs(analysis.constants) do
                 if type(constant.value) == "string" then
-                    local str = constant.value:lower()
+                    local str = tostring(constant.value):lower()
                     
                     if str:find("random%.new") then
                         patterns.usesRandomNew = true
                         table.insert(patterns.rngFunctions, {
                             name = key,
-                            type = "Random.new",
-                            analysis = analysis
+                            type = "Random.new"
                         })
                     elseif str:find("math%.random") then
                         patterns.usesMathRandom = true
                         table.insert(patterns.rngFunctions, {
                             name = key,
-                            type = "math.random",
-                            analysis = analysis
+                            type = "math.random"
                         })
                     end
                     
@@ -478,12 +607,12 @@ function RNGAnalyzer:FindRNGPatterns(module, name)
                 end
             end
             
-            -- Check upvalues for Random objects
             for upname, upval in pairs(analysis.upvalues) do
-                if upname:lower():find("random") or upname:lower():find("rng") then
+                local upnameLower = upname:lower()
+                if upnameLower:find("random") or upnameLower:find("rng") then
                     patterns.usesRandom = true
                 end
-                if upname:lower():find("seed") then
+                if upnameLower:find("seed") then
                     patterns.usesSeeds = true
                 end
             end
@@ -540,7 +669,6 @@ function PatternDetector:DetectGameType(allModules)
         end
     end
     
-    -- Find dominant pattern
     local maxScore = 0
     local gameType = "unknown"
     
@@ -567,15 +695,11 @@ function PatternDetector:FindExploitPatterns(analysisData)
         clientSideRNG = {},
         predictableSeeds = {},
         manipulableWeights = {},
-        unprotectedRemotes = {},
         exposedConstants = {},
-        weakValidation = {},
-        timingVulnerabilities = {},
         recommendations = {}
     }
     
     for moduleName, data in pairs(analysisData.modules or {}) do
-        -- Check for client-side RNG
         if data.patterns then
             if data.patterns.usesMathRandom then
                 table.insert(exploits.clientSideRNG, {
@@ -597,19 +721,17 @@ function PatternDetector:FindExploitPatterns(analysisData)
                 print(string.format("  [🟠] HIGH: %s uses seeds", moduleName))
             end
             
-            if data.patterns.usesWeights and #data.patterns.weightTables > 0 then
+            if data.patterns.usesWeights and Utils:CountTable(data.patterns.weightTables) > 0 then
                 table.insert(exploits.manipulableWeights, {
                     module = moduleName,
                     risk = "MEDIUM",
                     reason = "Weight tables accessible from client",
-                    tables = data.patterns.weightTables,
                     exploit = "Can modify weights before calculation"
                 })
                 print(string.format("  [🟡] MEDIUM: %s has exposed weights", moduleName))
             end
         end
         
-        -- Check for exposed constants
         if data.numbers then
             for key, value in pairs(data.numbers) do
                 if value >= 0.01 and value <= 100 then
@@ -617,115 +739,20 @@ function PatternDetector:FindExploitPatterns(analysisData)
                         module = moduleName,
                         constant = key,
                         value = value,
-                        risk = "LOW",
-                        reason = "Numeric constant (potential rate/multiplier)"
+                        risk = "LOW"
                     })
                 end
             end
         end
     end
     
-    -- Recommendations
     table.insert(exploits.recommendations, "Move ALL RNG calculations to server-side")
     table.insert(exploits.recommendations, "Use cryptographically secure RNG (Random.new)")
     table.insert(exploits.recommendations, "Never expose weight tables to client")
     table.insert(exploits.recommendations, "Validate ALL user inputs server-side")
     table.insert(exploits.recommendations, "Implement rate limiting on critical actions")
-    table.insert(exploits.recommendations, "Add server-side sanity checks")
     
     return exploits
-end
-
--- ========================================
--- ADVANCED FILE MANAGER
--- ========================================
-
-local FileManager = {}
-
-function FileManager:Init()
-    self.canWrite = writefile ~= nil
-    self.canMakeFolder = makefolder ~= nil
-    self.canList = listfiles ~= nil
-    
-    if not self.canWrite then
-        warn("⚠️ writefile() not supported!")
-        return false
-    end
-    
-    print("✅ Advanced file system ready\n")
-    return true
-end
-
-function FileManager:CreateStructure()
-    local folders = {
-        "UltimateAnalysis",
-        "UltimateAnalysis/Modules",
-        "UltimateAnalysis/Functions",
-        "UltimateAnalysis/Tables",
-        "UltimateAnalysis/Patterns",
-        "UltimateAnalysis/Exploits",
-        "UltimateAnalysis/Remotes",
-        "UltimateAnalysis/Reports"
-    }
-    
-    for _, folder in ipairs(folders) do
-        pcall(function() makefolder(folder) end)
-    end
-end
-
-function FileManager:WriteJSON(path, data)
-    local success, json = pcall(function()
-        return HttpService:JSONEncode(data)
-    end)
-    
-    if success then
-        pcall(function()
-            writefile(path, json)
-            print(string.format("💾 %s", path))
-        end)
-    end
-end
-
-function FileManager:WriteLua(path, data, varName)
-    varName = varName or "Data"
-    
-    local function serialize(tbl, indent)
-        indent = indent or 0
-        local s = string.rep("  ", indent)
-        local lines = {"{"}
-        
-        local count = 0
-        for k, v in pairs(tbl) do
-            count = count + 1
-            if count > 100 then
-                table.insert(lines, s .. '  ["__TRUNCATED__"] = true,')
-                break
-            end
-            
-            local key = type(k) == "string" and string.format('["%s"]', k) or string.format("[%s]", k)
-            local value
-            
-            if type(v) == "table" then
-                value = serialize(v, indent + 1)
-            elseif type(v) == "string" then
-                value = string.format('"%s"', v:gsub('"', '\\"'))
-            else
-                value = tostring(v)
-            end
-            
-            table.insert(lines, string.format("%s  %s = %s,", s, key, value))
-        end
-        
-        table.insert(lines, s .. "}")
-        return table.concat(lines, "\n")
-    end
-    
-    local content = string.format("local %s = %s\n\nreturn %s", varName, serialize(data), varName)
-    
-    pcall(function()
-        writefile(path, content)
-        print(string.format("💾 %s", path))
-    end)
 end
 
 -- ========================================
@@ -734,15 +761,17 @@ end
 
 local function ExecuteAnalysis()
     print("\n🚀 Starting ULTIMATE analysis...\n")
+    print("📂 Dumping to: Hydrogen/" .. Config.dumpFolder .. "\n")
     
     local startTime = tick()
     
-    -- Initialize
-    if not FileManager:Init() then
-        warn("Cannot save files - analysis will continue anyway")
-    else
-        FileManager:CreateStructure()
+    -- Initialize file system
+    if not FileSystem:Init() then
+        warn("Cannot save files - analysis will stop")
+        return nil
     end
+    
+    FileSystem:CreateFolders()
     
     -- Scan everything
     print(string.rep("=", 60))
@@ -751,10 +780,6 @@ local function ExecuteAnalysis()
     
     local allModules = ModuleScanner:ScanAllServices()
     local remotes = Config.monitorRemotes and ModuleScanner:ScanRemoteEvents() or {}
-    
-    print(string.format("\n✅ Found %d modules, %d remotes\n", 
-        Utils:CountTable(allModules), 
-        Utils:CountTable(remotes.events) + Utils:CountTable(remotes.functions)))
     
     -- Detect game type
     local gameType = PatternDetector:DetectGameType(allModules)
@@ -767,8 +792,8 @@ local function ExecuteAnalysis()
     local fullAnalysis = {
         metadata = {
             timestamp = os.date("%Y-%m-%d %H:%M:%S"),
-            executor = tostring(identifyexecutor and identifyexecutor() or "Unknown"),
-            gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,
+            executor = "Hydrogen",
+            gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name or "Unknown",
             placeId = game.PlaceId,
             gameType = gameType,
             analysisTime = 0
@@ -780,18 +805,24 @@ local function ExecuteAnalysis()
         statistics = {
             totalModules = 0,
             totalFunctions = 0,
-            totalTables = 0,
             totalRemotes = 0
         }
     }
     
     -- Analyze each module
+    local moduleCount = 0
     for moduleName, moduleData in pairs(allModules) do
+        moduleCount = moduleCount + 1
+        
         fullAnalysis.modules[moduleName] = RNGAnalyzer:DeepAnalyze(moduleData.module, moduleName)
         fullAnalysis.patterns[moduleName] = RNGAnalyzer:FindRNGPatterns(moduleData.module, moduleName)
         
-        -- Update statistics
-        fullAnalysis.statistics.totalModules = fullAnalysis.statistics.totalModules + 1
+        -- Save individual module analysis
+        local safeName = moduleName:gsub("[^%w]", "_")
+        FileSystem:WriteJSON("Modules/" .. safeName .. ".json", fullAnalysis.modules[moduleName])
+        FileSystem:WriteJSON("Patterns/" .. safeName .. ".json", fullAnalysis.patterns[moduleName])
+        
+        fullAnalysis.statistics.totalModules = moduleCount
         
         if fullAnalysis.modules[moduleName].functions then
             for _ in pairs(fullAnalysis.modules[moduleName].functions) do
@@ -810,81 +841,79 @@ local function ExecuteAnalysis()
     fullAnalysis.exploits = PatternDetector:FindExploitPatterns(fullAnalysis)
     
     -- Calculate analysis time
-    fullAnalysis.metadata.analysisTime = math.floor((tick() - startTime) * 1000) / 1000
+    fullAnalysis.metadata.analysisTime = math.floor((tick() - startTime) * 100) / 100
     
     -- Save everything
     print("\n" .. string.rep("=", 60))
     print("PHASE 4: SAVING RESULTS")
     print(string.rep("=", 60) .. "\n")
     
-    if FileManager.canWrite then
-        FileManager:WriteJSON("UltimateAnalysis/complete_analysis.json", fullAnalysis)
-        FileManager:WriteLua("UltimateAnalysis/complete_analysis.lua", fullAnalysis, "CompleteAnalysis")
-        
-        -- Save individual components
-        for moduleName, analysis in pairs(fullAnalysis.modules) do
-            local safeName = moduleName:gsub("[^%w]", "_")
-            FileManager:WriteJSON(string.format("UltimateAnalysis/Modules/%s.json", safeName), analysis)
-        end
-        
-        for moduleName, pattern in pairs(fullAnalysis.patterns) do
-            local safeName = moduleName:gsub("[^%w]", "_")
-            FileManager:WriteJSON(string.format("UltimateAnalysis/Patterns/%s.json", safeName), pattern)
-        end
-        
-        FileManager:WriteJSON("UltimateAnalysis/Exploits/all_vulnerabilities.json", fullAnalysis.exploits)
-        FileManager:WriteJSON("UltimateAnalysis/Remotes/remote_events.json", remotes)
-    end
+    FileSystem:WriteJSON("complete_analysis.json", fullAnalysis)
+    FileSystem:WriteLua("complete_analysis.lua", fullAnalysis, "CompleteAnalysis")
+    FileSystem:WriteJSON("Exploits/all_vulnerabilities.json", fullAnalysis.exploits)
+    FileSystem:WriteJSON("Remotes/remote_events.json", remotes)
+    
+    -- Generate text report
+    local report = string.format([[
+════════════════════════════════════════════════════════
+         ULTIMATE ANALYSIS COMPREHENSIVE REPORT
+════════════════════════════════════════════════════════
+
+Generated: %s
+Game: %s
+Place ID: %s
+Game Type: %s (confidence: %d)
+Analysis Time: %.2fs
+
+════════════════════════════════════════════════════════
+STATISTICS
+════════════════════════════════════════════════════════
+Total Modules: %d
+Total Functions: %d
+Total Remotes: %d
+
+════════════════════════════════════════════════════════
+VULNERABILITIES
+════════════════════════════════════════════════════════
+Critical: %d
+High: %d
+Medium: %d
+Low: %d
+
+════════════════════════════════════════════════════════
+All files saved to: Hydrogen/%s
+════════════════════════════════════════════════════════
+]], 
+        fullAnalysis.metadata.timestamp,
+        fullAnalysis.metadata.gameName,
+        fullAnalysis.metadata.placeId,
+        gameType.type,
+        gameType.confidence,
+        fullAnalysis.metadata.analysisTime,
+        fullAnalysis.statistics.totalModules,
+        fullAnalysis.statistics.totalFunctions,
+        fullAnalysis.statistics.totalRemotes,
+        #fullAnalysis.exploits.clientSideRNG,
+        #fullAnalysis.exploits.predictableSeeds,
+        #fullAnalysis.exploits.manipulableWeights,
+        #fullAnalysis.exploits.exposedConstants,
+        Config.dumpFolder
+    )
+    
+    FileSystem:WriteText("Reports/analysis_report_" .. os.date("%Y%m%d_%H%M%S") .. ".txt", report)
     
     -- Print final summary
     print("\n" .. string.rep("=", 60))
     print("✅ ULTIMATE ANALYSIS COMPLETE!")
     print(string.rep("=", 60))
-    print(string.format("\n📊 Statistics:"))
-    print(string.format("   • Modules analyzed: %d", fullAnalysis.statistics.totalModules))
-    print(string.format("   • Functions found: %d", fullAnalysis.statistics.totalFunctions))
-    print(string.format("   • Remotes detected: %d", fullAnalysis.statistics.totalRemotes))
-    print(string.format("   • Analysis time: %.2fs", fullAnalysis.metadata.analysisTime))
-    print(string.format("\n🎮 Game Type: %s (confidence: %d)", gameType.type, gameType.confidence))
-    print(string.format("\n🔓 Vulnerabilities:"))
-    print(string.format("   • Critical: %d", #fullAnalysis.exploits.clientSideRNG))
-    print(string.format("   • High: %d", #fullAnalysis.exploits.predictableSeeds))
-    print(string.format("   • Medium: %d", #fullAnalysis.exploits.manipulableWeights))
-    print(string.format("   • Low: %d", #fullAnalysis.exploits.exposedConstants))
-    print("\n📂 Files saved to: [Workspace]/UltimateAnalysis/")
+    print(report)
     
     if setclipboard then
-        local summary = string.format([[
-ULTIMATE RNG ANALYSIS SUMMARY
-=============================
-Game: %s
-Type: %s
-Modules: %d | Functions: %d | Remotes: %d
-Vulnerabilities: %d critical, %d high, %d medium
-Analysis Time: %.2fs
-        ]], 
-            fullAnalysis.metadata.gameName,
-            gameType.type,
-            fullAnalysis.statistics.totalModules,
-            fullAnalysis.statistics.totalFunctions,
-            fullAnalysis.statistics.totalRemotes,
-            #fullAnalysis.exploits.clientSideRNG,
-            #fullAnalysis.exploits.predictableSeeds,
-            #fullAnalysis.exploits.manipulableWeights,
-            fullAnalysis.metadata.analysisTime
-        )
-        
-        setclipboard(summary)
+        setclipboard(report)
         print("\n✅ Summary copied to clipboard!")
     end
     
     return fullAnalysis
-end
-
-function Utils:CountTable(tbl)
-    local count = 0
-    for _ in pairs(tbl) do count = count + 1 end
-    return count
 end
 
 -- ========================================
@@ -897,6 +926,7 @@ _G.UltimateAnalyzer = {
     
     -- Utils
     Utils = Utils,
+    FileSystem = FileSystem,
     
     -- Scanners
     ModuleScanner = ModuleScanner,
@@ -905,35 +935,14 @@ _G.UltimateAnalyzer = {
     RNGAnalyzer = RNGAnalyzer,
     PatternDetector = PatternDetector,
     
-    -- File Manager
-    FileManager = FileManager,
-    
-    -- Advanced features
-    ScanPattern = function(pattern)
-        return ModuleScanner:FindByPattern(pattern)
-    end,
-    
-    AnalyzeModule = function(moduleName)
-        local modules = ModuleScanner:ScanAllServices()
-        if modules[moduleName] then
-            local analysis = RNGAnalyzer:DeepAnalyze(modules[moduleName].module, moduleName)
-            local patterns = RNGAnalyzer:FindRNGPatterns(modules[moduleName].module, moduleName)
-            return {analysis = analysis, patterns = patterns}
-        end
-        return nil
-    end,
-    
-    GetModuleByName = function(name)
-        local modules = ModuleScanner:ScanAllServices()
-        return modules[name]
-    end,
-    
+    -- Quick functions
     ListAllModules = function()
         local modules = ModuleScanner:ScanAllServices()
         local list = {}
         for name, _ in pairs(modules) do
             table.insert(list, name)
         end
+        table.sort(list)
         return list
     end,
     
@@ -969,37 +978,22 @@ _G.UltimateAnalyzer = {
         return ModuleScanner:ScanRemoteEvents()
     end,
     
-    -- Hook functions
-    HookFunction = function(moduleName, functionName, callback)
+    AnalyzeModule = function(moduleName)
         local modules = ModuleScanner:ScanAllServices()
         if modules[moduleName] then
-            local module = modules[moduleName].module
-            if module[functionName] and type(module[functionName]) == "function" then
-                local original = module[functionName]
-                module[functionName] = function(...)
-                    local args = {...}
-                    local result = callback(original, args)
-                    if result ~= nil then
-                        return result
-                    end
-                    return original(...)
-                end
-                return true
-            end
+            local analysis = RNGAnalyzer:DeepAnalyze(modules[moduleName].module, moduleName)
+            local patterns = RNGAnalyzer:FindRNGPatterns(modules[moduleName].module, moduleName)
+            return {analysis = analysis, patterns = patterns}
         end
-        return false
+        return nil
     end,
     
-    -- Export functions
-    ExportToFile = function(filename, data)
-        if FileManager.canWrite then
-            FileManager:WriteJSON("UltimateAnalysis/" .. filename, data)
-            return true
-        end
-        return false
+    GetModuleByName = function(name)
+        local modules = ModuleScanner:ScanAllServices()
+        return modules[name]
     end,
     
-    -- Quick analysis presets
+    -- Quick scan modes
     QuickScan = function()
         print("\n⚡ Quick Scan Mode\n")
         Config.maxDepth = 3
@@ -1017,9 +1011,26 @@ _G.UltimateAnalyzer = {
     ExploitScan = function()
         print("\n🔓 Exploit-Focused Scan\n")
         Config.maxDepth = 5
-        Config.hookFunctions = true
         local result = ExecuteAnalysis()
-        return result.exploits
+        return result and result.exploits or {}
+    end,
+    
+    -- Export function
+    ExportToFile = function(filename, data)
+        return FileSystem:WriteJSON(filename, data)
+    end,
+    
+    -- Config access
+    GetConfig = function()
+        return Config
+    end,
+    
+    SetConfig = function(key, value)
+        if Config[key] ~= nil then
+            Config[key] = value
+            return true
+        end
+        return false
     end
 }
 
@@ -1040,26 +1051,49 @@ MANUAL COMMANDS:
   _G.UltimateAnalyzer.Run()           -- Full analysis
   _G.UltimateAnalyzer.QuickScan()     -- Fast scan
   _G.UltimateAnalyzer.DeepScan()      -- Deep scan
-  _G.UltimateAnalyzer.ExploitScan()   -- Find exploits
+  _G.UltimateAnalyzer.ExploitScan()   -- Find exploits only
 
 UTILITY COMMANDS:
   _G.UltimateAnalyzer.ListAllModules()
-  _G.UltimateAnalyzer.ScanPattern("Weight")
   _G.UltimateAnalyzer.AnalyzeModule("WeightRandom")
   _G.UltimateAnalyzer.FindWeightTables()
   _G.UltimateAnalyzer.FindRNGFunctions()
   _G.UltimateAnalyzer.MonitorRemotes()
 
 ADVANCED:
-  _G.UltimateAnalyzer.HookFunction("Module", "Function", callback)
+  _G.UltimateAnalyzer.GetConfig()
+  _G.UltimateAnalyzer.SetConfig("maxDepth", 5)
   _G.UltimateAnalyzer.ExportToFile("custom.json", data)
+
+📂 All files saved to: Hydrogen/dump/
+   • complete_analysis.json
+   • complete_analysis.lua
+   • Modules/*.json
+   • Patterns/*.json
+   • Exploits/all_vulnerabilities.json
+   • Remotes/remote_events.json
+   • Reports/*.txt
 
 ════════════════════════════════════════════
 ]])
 
 -- Auto-run with delay
-print("\n⏳ Starting ULTIMATE analysis in 2 seconds...\n")
-print("💡 Tip: Press Ctrl+C in console to cancel\n")
+print("\n⏳ Starting ULTIMATE analysis in 3 seconds...")
+print("💡 Tip: You can cancel and run manually with _G.UltimateAnalyzer.Run()\n")
 
-wait(2)
-return ExecuteAnalysis()
+task.wait(3)
+
+-- Execute analysis
+local result = ExecuteAnalysis()
+
+if result then
+    print("\n" .. string.rep("=", 60))
+    print("🎉 ANALYSIS COMPLETE!")
+    print(string.rep("=", 60))
+    print("\n📂 Check Hydrogen/dump/ folder for all results")
+    print("📊 Use _G.UltimateAnalyzer API for more features\n")
+else
+    warn("\n⚠️ Analysis failed - check errors above")
+end
+
+return _G.UltimateAnalyzer
