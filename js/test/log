@@ -26,23 +26,6 @@
  _G.UltimateAnalyze
  2025-10-20T07:50:32.118Z,607.118835,6e73b000,6 [FLog::Output]
  ⏳ Starting ULTIMATE analysis in 3 seconds...
- 2025-10-20T07:50:32.118Z,607.118896,6e73b000,6 [FLog::Output] 💡 Tip: You can cancel and run manually with _G.UltimateAnalyzer.Run()
- 🚀 Starting ULTIMATE analysis...
- 2025-10-20T07:50:35.128Z,610.128967,6e73b000,6 [FLog::Output] 📂 Dumping to: Hydrogen/dump/
- 2025-10-20T07:50:35.129Z,610.129028,6e73b000,6 [FLog::Output] ✅ Hydrogen file system initialized
- 2025-10-20T07:50:35.129Z,610.129028,6e73b000,6 [FLog::Output] 📂 Dump location: Hydrogen/dump/
- 2025-10-20T07:50:35.129Z,610.129456,6e73b000,6 [FLog::Output] 📁 Created: dump/Modules/
- 2025-10-20T07:50:35.129Z,610.129517,6e73b000,6 [FLog::Output] 📁 Created: dump/Patterns/
- 2025-10-20T07:50:35.129Z,610.129578,6e73b000,6 [FLog::Output] 📁 Created: dump/Functions/
- 2025-10-20T07:50:35.129Z,610.129578,6e73b000,6 [FLog::Output] 📁 Created: dump/Reports/
- 2025-10-20T07:50:35.129Z,610.129639,6e73b000,6 [FLog::Output] 📁 Created: dump/Remotes/
- 2025-10-20T07:50:35.129Z,610.129700,6e73b000,6 [FLog::Output] 📁 Created: dump/Exploits/
- 2025-10-20T07:50:35.129Z,610.129700,6e73b000,6 [FLog::Output] 📁 Created: dump/Tables/
- 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ✅ Folder structure created
- 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ============================================================
- 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] PHASE 1: COMPREHENSIVE SCANNING
- 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output] ============================================================
- 2025-10-20T07:50:35.129Z,610.129761,6e73b000,6 [FLog::Output]
  🌐 Scanning ALL game services...
  2025-10-20T07:50:35.138Z,610.138489,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ModelProvider
  2025-10-20T07:50:35.138Z,610.138611,6e73b000,6 [FLog::Output] [✓] ReplicatedStorage: ReclassFishProjectile
@@ -1314,17 +1297,3 @@
  2025-10-20T07:50:35.286Z,610.286255,6e73b000,6 [FLog::Output] [📤] RemoteEvent: Set
  2025-10-20T07:50:35.286Z,610.286316,6e73b000,6 [FLog::Output] [📤] RemoteEvent: ArrayUpdate
  2025-10-20T07:50:35.338Z,610.338928,6e73b000,6 [FLog::Output]
- ✅ Found 100 remotes total
- 2025-10-20T07:50:35.338Z,610.338989,6e73b000,6 [FLog::Output]
- 🎮 Detecting game type...
- 2025-10-20T07:50:35.344Z,610.344238,6e73b000,6 [FLog::Output] [🎯] Detected: fishing (confidence: 167)
- 2025-10-20T07:50:35.344Z,610.344238,6e73b000,6 [FLog::Output]
- ============================================================
- 2025-10-20T07:50:35.344Z,610.344299,6e73b000,6 [FLog::Output] PHASE 2: DEEP ANALYSIS
- 2025-10-20T07:50:35.344Z,610.344299,6e73b000,6 [FLog::Output] ============================================================
- 2025-10-20T07:50:35.996Z,610.996033,6e38b000,12 [DFLog::HttpTraceError] HttpResponse(#1331 0x305bb3ca0) time:647.8ms (net:647.7ms callback:0.0ms timeInRetryQueue:0.0ms)status:500 Internal Server Error bodySize:55 url:{ "https://economy.roblox.com/v2/assets/121864768012064/details" } ip:128.116.116.3 external:0 numberOfTimesRetried:0
- 2025-10-20T07:50:36.025Z,611.025818,6e73b000,6 [FLog::Error] Error: MarketplaceService:getProductInfo() failed because HTTP 500 (Internal Server Error)
- Stack Begin
- Script 'LocalScript', Line 796 - function ExecuteAnalysis
- Script 'LocalScript', Line 1087
- Stack End
