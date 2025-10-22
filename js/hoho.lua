@@ -1,7 +1,7 @@
 -- RhyRu9 FISH IT v1.2
 -- DEVELOPER BY RhyRu9
--- Update: 22 Oct 2025 (Event-Based Fishing + Auto-Tap System)
--- CRITICAL CHANGES: Auto-tap setelah reel untuk faster catching!
+-- Update: 22 Oct 2025 (Event-Based Fishing + Rapid Tap System)
+-- CRITICAL CHANGES: Deteksi real-time + Rapid Tap 50ms!
 
 print("Memuat RhyRu9 FISH IT v1.2...")
 
@@ -32,7 +32,7 @@ local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Window = Rayfield:CreateWindow({
     Name = "RhyRu9 FISH IT v1.2",
     LoadingTitle = "RhyRu9 FISH IT",
-    LoadingSubtitle = "AUTO-TAP SYSTEM",
+    LoadingSubtitle = "RAPID TAP SYSTEM",
     ConfigurationSaving = { Enabled = false },
 })
 
@@ -48,8 +48,6 @@ local Config = {
     FlyAktif = false,
     KecepatanFly = 50,
     NoClip = false,
-    AutoTap = true,
-    TapSpeed = 50,
     
     Telegram = {
         Aktif = false,
@@ -71,8 +69,6 @@ local FishingState = {
     MaxErrors = 3
 }
 
-local AutoTapActive = false
-
 -- ==================== DATA ====================
 local dataIkan = {}
 local pencariIkan = {}
@@ -93,15 +89,12 @@ local function ResetFishingState()
     FishingState.IsWaitingBite = false
     FishingState.IsReeling = false
     FishingState.BiteDetected = false
-    AutoTapActive = false
     task.wait(0.5)
 end
 
 local function HandleError(context)
     FishingState.ErrorCount = FishingState.ErrorCount + 1
     warn(string.format("[ERROR] %s - Count: %d/%d", context, FishingState.ErrorCount, FishingState.MaxErrors))
-    
-    AutoTapActive = false
     
     if FishingState.ErrorCount >= FishingState.MaxErrors then
         print("[RESET] Terlalu banyak error, reset penuh...")
@@ -127,7 +120,7 @@ local MulaiMini = AmbilRemote("RF/RequestFishingMinigameStarted")
 local SelesaiMancing = AmbilRemote("RE/FishingCompleted")
 local JualSemua = AmbilRemote("RF/SellAllItems")
 local IkanTertangkap = AmbilRemote("RE/FishCaught")
-local TextEffect = AmbilRemote("RE/ReplicateTextEffect")
+local TextEffect = AmbilRemote("RE/ReplicateTextEffect")  -- ← KEY EVENT!
 
 -- ==================== LOAD DATA IKAN ====================
 local berkasTerbuka = "FISHES_DATA.json"
@@ -151,7 +144,7 @@ if isfile(berkasTerbuka) then
                 end
             end
         end
-        print("[DATA] Ikan dimuat dari file")
+        print("[DATA] " .. #dataIkan .. " ikan dimuat")
     end
 end
 
@@ -205,6 +198,7 @@ function BotTelegram:KirimPesan(infoIkan)
     
     local raritasIkan = tingkatKeRaritas[infoIkan.Tingkat] or "TIDAK DIKETAHUI"
     
+    -- Filter raritas
     if #Config.Telegram.RaritasTerpilih > 0 then
         local harusKirim = false
         for _, raritasTarget in ipairs(Config.Telegram.RaritasTerpilih) do
@@ -332,49 +326,9 @@ function BotTelegram:KirimPesanTest()
     end
 end
 
--- ==================== AUTO-TAP SYSTEM ====================
-local function StartAutoTap()
-    if AutoTapActive then return end
-    if not Config.AutoTap then return end
-    
-    AutoTapActive = true
-    print("[AUTO-TAP] ⚡ Memulai rapid tap...")
-    
-    task.spawn(function()
-        local tapCount = 0
-        local tapInterval = Config.TapSpeed / 1000
-        
-        while AutoTapActive and FishingState.IsReeling do
-            pcall(function()
-                VirtualUser:CaptureController()
-                VirtualUser:Button1Down(Vector2.new(0, 0))
-                task.wait(0.01)
-                VirtualUser:Button1Up(Vector2.new(0, 0))
-            end)
-            
-            tapCount = tapCount + 1
-            if tapCount % 10 == 0 then
-                print("[AUTO-TAP] Taps: " .. tapCount)
-            end
-            
-            task.wait(tapInterval)
-        end
-        
-        print("[AUTO-TAP] ✅ Berhenti. Total taps: " .. tapCount)
-        AutoTapActive = false
-    end)
-end
-
-local function StopAutoTap()
-    if AutoTapActive then
-        print("[AUTO-TAP] 🛑 Menghentikan...")
-        AutoTapActive = false
-    end
-end
-
 -- ==================== EVENT LISTENERS ====================
 
--- LISTENER: Deteksi Ikan Gigit
+-- LISTENER: Deteksi Ikan Gigit! (REAL-TIME)
 if TextEffect then
     print("[LISTENER] ✅ TextEffect connected - Deteksi gigit real-time!")
     
@@ -382,11 +336,13 @@ if TextEffect then
         if not Config.MancingOtomatis then return end
         if not data or not data.TextData then return end
         
+        -- CEK: Apakah ini "!" (Exclaim)?
         if data.TextData.EffectType == "Exclaim" then
             print("\n[🎣 GIGIT!] ========================================")
             print("[GIGIT] IKAN MENGGIGIT! Efek '!' terdeteksi!")
             print("[GIGIT] Waktu deteksi: " .. tick())
             
+            -- Set flag bite detected
             FishingState.BiteDetected = true
             FishingState.IsWaitingBite = false
             
@@ -405,9 +361,6 @@ if IkanTertangkap then
     local lastUID = nil
     IkanTertangkap.OnClientEvent:Connect(function(data)
         if not data then return end
-        
-        -- ✨ STOP AUTO-TAP IMMEDIATELY! ✨
-        StopAutoTap()
         
         local nama = type(data) == "string" and data or (data.Name or "Unknown")
         local tingkat = type(data) == "table" and (data.Tier or 1) or 1
@@ -431,6 +384,7 @@ if IkanTertangkap then
         
         BotTelegram:KirimPesan(info)
         
+        -- Reset error counter pada success
         FishingState.ErrorCount = 0
         FishingState.IsReeling = false
     end)
@@ -438,7 +392,7 @@ else
     warn("[LISTENER] ❌ IkanTertangkap TIDAK DITEMUKAN!")
 end
 
--- ==================== SISTEM MANCING EVENT-BASED ====================
+-- ==================== SISTEM MANCING EVENT-BASED + RAPID TAP ====================
 
 local function CastRod()
     print("[CAST] Memulai lempar pancing...")
@@ -516,6 +470,7 @@ local function CastRod()
         return false
     end
     
+    -- Cast success!
     FishingState.IsCasting = false
     FishingState.IsWaitingBite = true
     FishingState.LastCastTime = tick()
@@ -524,72 +479,74 @@ local function CastRod()
     return true
 end
 
-local function ReelIn()
+local function RapidTapReel()
     if FishingState.IsReeling then 
-        print("[REEL] Sudah reeling, skip")
+        print("[RAPID-TAP] Sudah reeling, skip")
         return 
     end
     
-    print("[REEL] Menarik ikan...")
+    print("[RAPID-TAP] 🎣 Memulai RAPID TAPPING SYSTEM...")
     FishingState.IsReeling = true
     FishingState.IsWaitingBite = false
     
+    -- Tunggu sebentar sebelum mulai tapping (simulasi reaksi manusia)
     task.wait(0.3)
     
-    -- Kirim reel command
-    local selesaiSukses = false
-    for i = 1, 3 do
-        local ok = pcall(function()
+    -- RAPID TAPPING SYSTEM - 50ms interval
+    local tapStart = tick()
+    local tapDuration = 2.5 -- 2.5 detik rapid tap
+    local tapCount = 0
+    local maxTaps = math.floor(tapDuration / 0.05) -- 50 taps
+    
+    print(string.format("[RAPID-TAP] Akan melakukan %d taps (50ms interval)", maxTaps))
+    
+    while tick() - tapStart < tapDuration and FishingState.IsReeling do
+        tapCount = tapCount + 1
+        
+        -- Fire reel command setiap 50ms
+        pcall(function()
             SelesaiMancing:FireServer()
         end)
-        if ok then
-            selesaiSukses = true
-            print("[REEL] ✅ Command sent!")
-            break
+        
+        -- Progress feedback
+        if tapCount % 10 == 0 then
+            local progress = math.floor((tapCount / maxTaps) * 100)
+            print(string.format("[RAPID-TAP] Tap #%d/%d (%d%%)", tapCount, maxTaps, progress))
         end
-        task.wait(0.1)
+        
+        task.wait(0.05) -- ⚡ 50 MILISECOND DELAY - CORE FEATURE!
     end
     
-    if not selesaiSukses then
-        HandleError("Reel in gagal")
-        StopAutoTap()
-        return
-    end
+    print(string.format("[RAPID-TAP] ✅ Selesai! Total %d taps dalam %.2f detik", tapCount, tick() - tapStart))
     
-    -- ✨ MULAI AUTO-TAP SETELAH REEL! ✨
-    task.wait(0.2)
-    StartAutoTap()
+    -- Final reel untuk memastikan
+    pcall(function()
+        SelesaiMancing:FireServer()
+    end)
     
-    -- Tunggu sampai ikan tertangkap (max 15 detik)
-    local waitStart = tick()
-    while FishingState.IsReeling and (tick() - waitStart) < 15 do
-        task.wait(0.1)
-    end
-    
-    -- Stop auto-tap (backup jika event tidak trigger)
-    StopAutoTap()
-    
-    task.wait(0.5)
+    task.wait(0.3)
     ResetFishingState()
 end
 
 local function SistemMancingOtomatis()
     task.spawn(function()
         print("\n╔═══════════════════════════════════════╗")
-        print("║   EVENT-BASED FISHING SYSTEM v1.2   ║")
-        print("║   Real-time bite + Auto-Tap!         ║")
+        print("║   RAPID TAP FISHING SYSTEM v1.2     ║")
+        print("║   50ms Tapping + Event Detection!    ║")
         print("╚═══════════════════════════════════════╝\n")
         
         while Config.MancingOtomatis do
             FishingState.IsActive = true
             
             local sukses, err = pcall(function()
+                -- Pastikan karakter ada
                 if not LocalPlayer.Character or not HumanoidRootPart then
                     repeat task.wait(0.5) until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     Character = LocalPlayer.Character
                     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
                 end
                 
+                -- Cast pancing
                 if not FishingState.IsWaitingBite and not FishingState.IsReeling then
                     if CastRod() then
                         print("[MAIN] Cast berhasil, menunggu bite event...")
@@ -600,13 +557,15 @@ local function SistemMancingOtomatis()
                     end
                 end
                 
+                -- Tunggu sampai ikan gigit (event-based!)
                 if FishingState.IsWaitingBite then
                     local waitStart = tick()
-                    local maxWait = 30
+                    local maxWait = 30 -- Maksimal 30 detik
                     
                     while FishingState.IsWaitingBite and not FishingState.BiteDetected do
                         task.wait(0.1)
                         
+                        -- Timeout protection
                         if tick() - waitStart > maxWait then
                             print("[MAIN] Timeout 30s, tidak ada gigitan. Retry...")
                             ResetFishingState()
@@ -614,10 +573,11 @@ local function SistemMancingOtomatis()
                         end
                     end
                     
+                    -- Kalau bite detected, REEL DENGAN RAPID TAP!
                     if FishingState.BiteDetected then
-                        print("[MAIN] Bite terdeteksi! Reeling...")
-                        ReelIn()
-                        task.wait(1)
+                        print("[MAIN] 🎣 Bite terdeteksi! Memulai RAPID TAPPING...")
+                        RapidTapReel()
+                        task.wait(0.8) -- Cooldown lebih pendek sebelum cast lagi
                     end
                 end
                 
@@ -631,7 +591,6 @@ local function SistemMancingOtomatis()
         end
         
         FishingState.IsActive = false
-        StopAutoTap()
         ResetFishingState()
         print("[MAIN] Sistem mancing dihentikan")
     end)
@@ -738,41 +697,21 @@ local function BuatUI()
     -- TAB 1: MANCING
     local Tab1 = Window:CreateTab("🎣 Mancing", 4483362458)
     
-    Tab1:CreateSection("Event-Based Fishing System v1.2")
+    Tab1:CreateSection("Rapid Tap Fishing System")
     
     Tab1:CreateToggle({
-        Name = "🔥 Mancing Otomatis (Event + Auto-Tap!)",
+        Name = "🔥 Mancing Otomatis (Rapid Tap 50ms!)",
         CurrentValue = false,
         Callback = function(v)
             Config.MancingOtomatis = v
             if v then
                 SistemMancingOtomatis()
                 Rayfield:Notify({
-                    Title = "🔥 System Started!",
-                    Content = "Event-based + Auto-tap aktif!",
+                    Title = "🔥 Rapid Tap Started!",
+                    Content = "50ms tapping system aktif!",
                     Duration = 3
                 })
-            else
-                StopAutoTap()
             end
-        end
-    })
-    
-    Tab1:CreateToggle({
-        Name = "⚡ Auto-Tap (Faster Catch)",
-        CurrentValue = true,
-        Callback = function(v)
-            Config.AutoTap = v
-        end
-    })
-    
-    Tab1:CreateSlider({
-        Name = "Tap Speed (ms)",
-        Range = {20, 100},
-        Increment = 5,
-        CurrentValue = 50,
-        Callback = function(v)
-            Config.TapSpeed = v
         end
     })
     
@@ -794,17 +733,16 @@ local function BuatUI()
         end
     })
     
-    Tab1:CreateSection("ℹ️ Cara Kerja V1.2")
+    Tab1:CreateSection("⚡ Cara Kerja V1.2")
     Tab1:CreateLabel("✅ Deteksi REAL-TIME kapan ikan gigit")
+    Tab1:CreateLabel("✅ Rapid Tap System 50ms interval")
+    Tab1:CreateLabel("✅ 50+ taps dalam 2.5 detik")
     Tab1:CreateLabel("✅ Auto-reel saat '!' muncul")
-    Tab1:CreateLabel("⚡ AUTO-TAP setelah reel (faster catch!)")
-    Tab1:CreateLabel("✅ Stop tap otomatis saat ikan tertangkap")
     Tab1:CreateLabel("✅ 15x retry system + error handling")
     
     Tab1:CreateButton({
         Name = "🔄 Reset Fishing State",
         Callback = function()
-            StopAutoTap()
             ResetFishingState()
             FishingState.ErrorCount = 0
             Rayfield:Notify({
@@ -905,6 +843,7 @@ local function BuatUI()
     
     Tab3:CreateSection("Teleport Cepat")
     
+    -- Grid layout untuk tombol teleport cepat
     local quickLocations = {
         {1, "📍 Fisherman's Island"},
         {12, "🌋 Volcano"}, 
@@ -1015,25 +954,22 @@ local function BuatUI()
     local statusLabel = Tab5:CreateLabel("Fishing State: IDLE")
     local errorLabel = Tab5:CreateLabel("Error Count: 0")
     local biteLabel = Tab5:CreateLabel("Last Bite: Never")
-    local tapLabel = Tab5:CreateLabel("Auto-Tap: OFF")
+    local tapLabel = Tab5:CreateLabel("Tap Speed: 50ms")
     
+    -- Update status real-time
     task.spawn(function()
         while true do
-            local state = "IDLE"
-            if FishingState.IsCasting then state = "CASTING"
-            elseif FishingState.IsWaitingBite then state = "WAITING BITE"
-            elseif FishingState.IsReeling then state = "REELING"
-            end
-            
-            statusLabel:SetText("Fishing State: " .. state)
+            statusLabel:SetText("Fishing State: " .. (
+                FishingState.IsActive and "ACTIVE" or "IDLE"
+            ))
             errorLabel:SetText("Error Count: " .. FishingState.ErrorCount)
-            tapLabel:SetText("Auto-Tap: " .. (AutoTapActive and "⚡ ACTIVE" or "OFF"))
+            tapLabel:SetText("Tap Speed: 50ms")
             
             if FishingState.BiteDetected then
                 biteLabel:SetText("Last Bite: " .. os.date("%H:%M:%S"))
             end
             
-            task.wait(0.5)
+            task.wait(1)
         end
     end)
     
@@ -1041,14 +977,14 @@ local function BuatUI()
     
     Tab5:CreateParagraph({
         Title = "RhyRu9 FISH IT v1.2",
-        Content = "Developer: RhyRu9\nUpdate: 22 Oktober 2025\n\n✨ FITUR BARU:\n• Event-Based Fishing System\n• Real-time Bite Detection\n⚡ AUTO-TAP SYSTEM (NEW!)\n• Smart State Management\n• Enhanced Error Handling"
+        Content = "Developer: RhyRu9\nUpdate: 22 Oktober 2025\n\n✨ FITUR BARU:\n• Rapid Tap System (50ms)\n• Event-Based Fishing\n• Real-time Bite Detection\n• Enhanced Error Handling"
     })
     
     Tab5:CreateSection("Cara Kerja")
     
     Tab5:CreateParagraph({
-        Title = "Event-Based + Auto-Tap",
-        Content = "1. Cast rod → Tunggu event\n2. Deteksi '!' (RE/ReplicateTextEffect)\n3. Auto reel ketika ikan gigit\n⚡ 4. AUTO-TAP rapid click (50ms)\n5. Stop tap saat ikan tertangkap\n6. Repeat otomatis"
+        Title = "Rapid Tap System",
+        Content = "1. Cast rod → Tunggu event\n2. Deteksi '!' (RE/ReplicateTextEffect)\n3. Rapid Tap 50ms (50+ taps)\n4. Auto reel dengan tapping cepat\n5. Tunggu notifikasi ikan tertangkap\n6. Repeat otomatis"
     })
     
     Tab5:CreateButton({
@@ -1060,7 +996,7 @@ local function BuatUI()
                 Duration = 2
             })
             task.wait(2)
-            StopAutoTap()
+            -- Simulasi restart
             ResetFishingState()
             Config.MancingOtomatis = false
             task.wait(1)
@@ -1078,11 +1014,13 @@ LocalPlayer.CharacterAdded:Connect(function(char)
     
     task.wait(2)
     
+    -- Restore settings
     if Humanoid then
         Humanoid.WalkSpeed = Config.KecepatanJalan
         Humanoid.JumpPower = Config.KekuatanLompat
     end
     
+    -- Restart systems if they were active
     if Config.MancingOtomatis then
         task.wait(2)
         SistemMancingOtomatis()
@@ -1109,11 +1047,12 @@ end)
 local function PreventIdle()
     task.spawn(function()
         while true do
+            -- Prevent game from thinking we're idle
             pcall(function()
                 VirtualUser:CaptureController()
                 VirtualUser:ClickButton2(Vector2.new())
             end)
-            task.wait(60)
+            task.wait(60) -- Every minute
         end
     end)
 end
@@ -1121,8 +1060,11 @@ end
 -- ==================== INITIALIZATION ====================
 local function Initialize()
     BuatUI()
+    
+    -- Start anti-idle
     PreventIdle()
     
+    -- Apply initial character settings
     if Humanoid then
         Humanoid.WalkSpeed = Config.KecepatanJalan
         Humanoid.JumpPower = Config.KekuatanLompat
@@ -1132,11 +1074,11 @@ local function Initialize()
     
     ╔═══════════════════════════════════════╗
     ║        RhyRu9 FISH IT v1.2           ║
-    ║      EVENT-BASED + AUTO-TAP          ║
+    ║         RAPID TAP SYSTEM             ║
     ║                                      ║
+    ║  ⚡ Rapid Tap 50ms Interval          ║
     ║  ✅ Real-time Bite Detection         ║
-    ║  ⚡ AUTO-TAP System (NEW!)           ║
-    ║  ✅ Smart State Management           ║
+    ║  🔥 50+ Taps dalam 2.5 Detik        ║
     ║  ✅ Enhanced Error Handling          ║
     ║  ✅ Telegram Notifications           ║
     ║                                      ║
@@ -1147,7 +1089,7 @@ local function Initialize()
     
     Rayfield:Notify({
         Title = "✅ RhyRu9 FISH IT v1.2 Loaded",
-        Content = "Event-Based + Auto-Tap Ready!",
+        Content = "Rapid Tap System Ready!",
         Duration = 5
     })
 end
@@ -1156,8 +1098,8 @@ end
 local function GlobalErrorHandler(err)
     warn("[GLOBAL ERROR] " .. tostring(err))
     
+    -- Attempt recovery
     pcall(function()
-        StopAutoTap()
         ResetFishingState()
         FishingState.ErrorCount = 0
     end)
@@ -1173,12 +1115,8 @@ task.spawn(function()
     while true do
         if Config.MancingOtomatis and not FishingState.IsActive then
             warn("[AUTO-RECOVERY] Fishing stopped unexpectedly, restarting...")
-            StopAutoTap()
-            task.wait(1)
             SistemMancingOtomatis()
         end
         task.wait(10)
     end
 end)
-
-print("✅ RhyRu9 FISH IT v1.2 - Fully Loaded!")
