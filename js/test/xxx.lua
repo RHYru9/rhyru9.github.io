@@ -1,9 +1,8 @@
--- RhyRu9 FISH IT v1.3
+-- RhyRu9 FISH IT v1.3 - Rayfield Integration
 -- DEVELOPER BY RhyRu9
--- Update: 28 Oct 2025 (Fixed Event Flow + Optimized Timing)
--- CRITICAL: Event-based detection dengan timing presisi
+-- Update: 28 Oct 2025 (Integrated with Rayfield UI)
 
-print("Loading RhyRu9 FISH IT v1.3...")
+print("Loading RhyRu9 FISH IT v1.3 with Rayfield...")
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -25,15 +24,8 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local Humanoid = Character:WaitForChild("Humanoid")
 
--- ==================== UI SETUP ====================
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-
-local Window = Rayfield:CreateWindow({
-    Name = "RhyRu9 FISH IT v1.3",
-    LoadingTitle = "RhyRu9 FISH IT",
-    LoadingSubtitle = "EVENT-BASED SYSTEM",
-    ConfigurationSaving = { Enabled = false },
-})
+-- ==================== LOAD RAYFIELD ====================
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- ==================== CONFIGURATION ====================
 local Config = {
@@ -54,7 +46,6 @@ local Config = {
         RarityFilter = {}
     },
     
-    -- Timing configuration
     Timing = {
         CastRetry = 3,
         CastDelay = 0.2,
@@ -62,8 +53,7 @@ local Config = {
         ChargeDelay = 0.15,
         MinigameRetry = 5,
         MinigameDelay = 0.1,
-        ReelTaps = 50,
-        ReelInterval = 0.05, -- 50ms
+        ReelInterval = 0.05,
         ReelDuration = 2.5,
         PostCastWait = 0.3,
         PostReelWait = 0.8,
@@ -163,7 +153,7 @@ end
 
 -- ==================== LOAD FISH DATA ====================
 local DataFile = "FISHES_DATA.json"
-if isfile(DataFile) then
+if isfile and isfile(DataFile) then
     local success, decoded = pcall(function()
         return HttpService:JSONDecode(readfile(DataFile))
     end)
@@ -234,7 +224,6 @@ function TelegramBot:SendNotification(fishInfo)
     
     local rarity = TierToRarity[fishInfo.Tier] or "UNKNOWN"
     
-    -- Filter by rarity
     if #Config.Telegram.RarityFilter > 0 then
         local shouldSend = false
         for _, targetRarity in ipairs(Config.Telegram.RarityFilter) do
@@ -294,7 +283,8 @@ function TelegramBot:SendTestMessage()
         Rayfield:Notify({
             Title = "❌ Error",
             Content = "Bot token is empty!",
-            Duration = 3
+            Duration = 3,
+            Image = 4483362458
         })
         return false
     end
@@ -304,7 +294,8 @@ function TelegramBot:SendTestMessage()
         Rayfield:Notify({
             Title = "❌ Chat ID Failed",
             Content = "Send '/start' to your bot first!",
-            Duration = 5
+            Duration = 5,
+            Image = 4483362458
         })
         return false
     end
@@ -332,14 +323,16 @@ function TelegramBot:SendTestMessage()
         Rayfield:Notify({
             Title = "✅ Success",
             Content = "Check your Telegram!",
-            Duration = 3
+            Duration = 3,
+            Image = 4483362458
         })
         return true
     else
         Rayfield:Notify({
             Title = "❌ Failed",
             Content = "Send error",
-            Duration = 3
+            Duration = 3,
+            Image = 4483362458
         })
         return false
     end
@@ -353,7 +346,6 @@ if Remotes.TextEffect then
         if not Config.AutoFish or not State.WaitingBite then return end
         if not data or not data.TextData then return end
         
-        -- Check for exclamation mark (bite indicator)
         if data.TextData.EffectType == "Exclaim" then
             print(string.format("\n[🎣 BITE] Detected at %.3f", tick()))
             State.BiteDetected = true
@@ -394,11 +386,9 @@ if Remotes.FishCaught then
         local rarity = TierToRarity[info.Tier] or "UNKNOWN"
         print(string.format("[CATCH] %s | %s | %s coins", name, rarity, tostring(info.SellPrice or 0)))
         
-        -- Update stats
         State.SuccessfulCatches = State.SuccessfulCatches + 1
         State.ErrorCount = 0
         
-        -- Send telegram notification
         TelegramBot:SendNotification(info)
         
         State.Reeling = false
@@ -415,7 +405,6 @@ local function CastRod()
     State.WaitingBite = false
     State.TotalCasts = State.TotalCasts + 1
     
-    -- Step 1: Equip tool
     local equipSuccess = false
     for i = 1, Config.Timing.CastRetry do
         local success = SafeFireServer(Remotes.EquipTool, 1)
@@ -435,7 +424,6 @@ local function CastRod()
     
     task.wait(Config.Timing.PostCastWait)
     
-    -- Step 2: Charge rod
     local chargeSuccess = false
     local attempts = 0
     
@@ -460,7 +448,6 @@ local function CastRod()
     
     task.wait(Config.Timing.PostCastWait)
     
-    -- Step 3: Start minigame (perfect cast)
     local minigameSuccess = false
     for i = 1, Config.Timing.MinigameRetry do
         local success = SafeInvokeServer(Remotes.StartMinigame, -1.233184814453125, 0.9945034885633273)
@@ -478,7 +465,6 @@ local function CastRod()
         return false
     end
     
-    -- Cast successful
     State.Casting = false
     State.WaitingBite = true
     State.LastCast = tick()
@@ -497,10 +483,8 @@ local function RapidTapReel()
     State.Reeling = true
     State.WaitingBite = false
     
-    -- Small delay to simulate human reaction
     task.wait(0.3)
     
-    -- Rapid tapping system
     local tapStart = tick()
     local tapCount = 0
     local maxTaps = math.floor(Config.Timing.ReelDuration / Config.Timing.ReelInterval)
@@ -512,7 +496,6 @@ local function RapidTapReel()
         
         SafeFireServer(Remotes.FishingComplete)
         
-        -- Progress feedback
         if tapCount % 10 == 0 then
             local progress = math.floor((tapCount / maxTaps) * 100)
             print(string.format("[REEL] Tap #%d/%d (%d%%)", tapCount, maxTaps, progress))
@@ -523,7 +506,6 @@ local function RapidTapReel()
     
     print(string.format("[REEL] ✅ Complete! Total %d taps in %.2fs", tapCount, tick() - tapStart))
     
-    -- Final tap
     SafeFireServer(Remotes.FishingComplete)
     
     task.wait(Config.Timing.PostReelWait)
@@ -541,14 +523,12 @@ local function AutoFishingSystem()
             State.Active = true
             
             local success, err = pcall(function()
-                -- Ensure character exists
                 if not LocalPlayer.Character or not HumanoidRootPart then
                     repeat task.wait(0.5) until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     Character = LocalPlayer.Character
                     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
                 end
                 
-                -- Cast rod
                 if not State.WaitingBite and not State.Reeling then
                     if CastRod() then
                         print("[SYSTEM] Cast successful, waiting for bite event...")
@@ -559,14 +539,12 @@ local function AutoFishingSystem()
                     end
                 end
                 
-                -- Wait for bite
                 if State.WaitingBite then
                     local waitStart = tick()
                     
                     while State.WaitingBite and not State.BiteDetected do
                         task.wait(0.1)
                         
-                        -- Timeout protection
                         if tick() - waitStart > Config.Timing.BiteTimeout then
                             print(string.format("[SYSTEM] Timeout %ds, no bite. Retrying...", Config.Timing.BiteTimeout))
                             ResetState()
@@ -574,7 +552,6 @@ local function AutoFishingSystem()
                         end
                     end
                     
-                    -- If bite detected, reel with rapid tap
                     if State.BiteDetected then
                         print("[SYSTEM] 🎣 Bite detected! Starting rapid tap...")
                         RapidTapReel()
@@ -675,362 +652,436 @@ local IslandData = {
     {Name = "Lost Island", Position = Vector3.new(-3717, 5, -1079)},
     {Name = "Sacred Temple", Position = Vector3.new(1475, -22, -630)},
     {Name = "Crater Island", Position = Vector3.new(981, 41, 5080)},
-    {Name = "Double Enchantment Chamber", Position = Vector3.new(1480, 127, -590)},
+    {Name = "Double Enchantment", Position = Vector3.new(1480, 127, -590)},
     {Name = "Treasure Chamber", Position = Vector3.new(-3599, -276, -1642)},
     {Name = "Crescent Lever", Position = Vector3.new(1419, 31, 78)},
-    {Name = "Hourglass Diamond Lever", Position = Vector3.new(1484, 8, -862)},
+    {Name = "Hourglass Diamond", Position = Vector3.new(1484, 8, -862)},
     {Name = "Snowy Island", Position = Vector3.new(1627, 4, 3288)}
 }
 
 local function TeleportToIsland(index)
     if not Config.TeleportEnabled then
-        Rayfield:Notify({Title = "Error", Content = "Enable teleport first!", Duration = 2})
+        Rayfield:Notify({
+            Title = "Error", 
+            Content = "Enable teleport first!", 
+            Duration = 2,
+            Image = 4483362458
+        })
         return
     end
     if IslandData[index] and HumanoidRootPart then
         HumanoidRootPart.CFrame = CFrame.new(IslandData[index].Position)
-        Rayfield:Notify({Title = "Teleport", Content = "To " .. IslandData[index].Name, Duration = 2})
+        Rayfield:Notify({
+            Title = "Teleport", 
+            Content = "To " .. IslandData[index].Name, 
+            Duration = 2,
+            Image = 4483362458
+        })
     end
 end
 
 -- ==================== UI CREATION ====================
-local function CreateUI()
-    -- TAB 1: FISHING
-    local Tab1 = Window:CreateTab("🎣 Fishing", 4483362458)
-    
-    Tab1:CreateSection("Auto Fishing System v1.3")
-    
-    Tab1:CreateToggle({
-        Name = "🔥 Auto Fishing (Event-Based)",
-        CurrentValue = false,
-        Callback = function(v)
-            Config.AutoFish = v
-            if v then
-                AutoFishingSystem()
-                Rayfield:Notify({
-                    Title = "🔥 Auto Fishing Started",
-                    Content = "Event-based detection active!",
-                    Duration = 3
-                })
-            end
-        end
-    })
-    
-    Tab1:CreateToggle({
-        Name = "Auto Sell",
-        CurrentValue = false,
-        Callback = function(v)
-            Config.AutoSell = v
-            if v then AutoSell() end
-        end
-    })
-    
-    Tab1:CreateToggle({
-        Name = "Anti AFK",
-        CurrentValue = false,
-        Callback = function(v)
-            Config.AntiAFK = v
-            if v then AntiAFK() end
-        end
-    })
-    
-    Tab1:CreateSection("⚡ How It Works")
-    Tab1:CreateLabel("✅ Real-time bite detection")
-    Tab1:CreateLabel("✅ 50ms rapid tap system")
-    Tab1:CreateLabel("✅ 50+ taps in 2.5 seconds")
-    Tab1:CreateLabel("✅ Auto-reel on '!' signal")
-    Tab1:CreateLabel("✅ Smart error handling")
-    
-    Tab1:CreateButton({
-        Name = "🔄 Reset Fishing State",
-        Callback = function()
-            ResetState()
-            State.ErrorCount = 0
+local Window = Rayfield:CreateWindow({
+    Name = "RhyRu9 FISH IT v1.3",
+    LoadingTitle = "RhyRu9 FISH IT",
+    LoadingSubtitle = "by RhyRu9",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "RhyRu9FishIT",
+        FileName = "FishConfig"
+    },
+    Discord = {
+        Enabled = false,
+        Invite = "",
+        RememberJoins = true
+    },
+    KeySystem = false
+})
+
+-- TAB 1: FISHING
+local FishingTab = Window:CreateTab("🎣 Fishing", 4483362458)
+
+FishingTab:CreateSection("Auto Fishing System v1.3")
+
+FishingTab:CreateToggle({
+    Name = "🔥 Auto Fishing (Event-Based)",
+    CurrentValue = false,
+    Flag = "AutoFish",
+    Callback = function(v)
+        Config.AutoFish = v
+        if v then
+            AutoFishingSystem()
             Rayfield:Notify({
-                Title = "State Reset",
-                Content = "Fishing state has been reset!",
-                Duration = 2
+                Title = "🔥 Auto Fishing Started",
+                Content = "Event-based detection active!",
+                Duration = 3,
+                Image = 4483362458
             })
         end
-    })
+    end
+})
 
-    -- TAB 2: TELEGRAM
-    local Tab2 = Window:CreateTab("📱 Telegram", 4483362458)
-    
-    Tab2:CreateSection("Telegram Settings")
-    
-    Tab2:CreateToggle({
-        Name = "Enable Telegram Notifications",
+FishingTab:CreateToggle({
+    Name = "💰 Auto Sell",
+    CurrentValue = false,
+    Flag = "AutoSell",
+    Callback = function(v)
+        Config.AutoSell = v
+        if v then AutoSell() end
+    end
+})
+
+FishingTab:CreateToggle({
+    Name = "⏰ Anti AFK",
+    CurrentValue = false,
+    Flag = "AntiAFK",
+    Callback = function(v)
+        Config.AntiAFK = v
+        if v then AntiAFK() end
+    end
+})
+
+FishingTab:CreateSection("⚡ How It Works")
+FishingTab:CreateParagraph({
+    Title = "System Features",
+    Content = "✅ Real-time bite detection\n✅ 50ms rapid tap system\n✅ 50+ taps in 2.5 seconds\n✅ Auto-reel on '!' signal\n✅ Smart error handling"
+})
+
+FishingTab:CreateButton({
+    Name = "🔄 Reset Fishing State",
+    Callback = function()
+        ResetState()
+        State.ErrorCount = 0
+        Rayfield:Notify({
+            Title = "State Reset",
+            Content = "Fishing state has been reset!",
+            Duration = 2,
+            Image = 4483362458
+        })
+    end
+})
+
+-- TAB 2: TELEGRAM
+local TelegramTab = Window:CreateTab("📱 Telegram", 4483362458)
+
+TelegramTab:CreateSection("Telegram Settings")
+
+TelegramTab:CreateToggle({
+    Name = "Enable Telegram Notifications",
+    CurrentValue = false,
+    Flag = "TelegramEnabled",
+    Callback = function(v) 
+        Config.Telegram.Enabled = v
+    end
+})
+
+TelegramTab:CreateInput({
+    Name = "Bot Token",
+    PlaceholderText = "Enter your bot token",
+    RemoveTextAfterFocusLost = false,
+    Flag = "BotToken",
+    Callback = function(v) 
+        Config.Telegram.BotToken = v
+    end
+})
+
+TelegramTab:CreateButton({
+    Name = "Test Send Message",
+    Callback = function()
+        TelegramBot:SendTestMessage()
+    end
+})
+
+TelegramTab:CreateSection("Rarity Filter")
+TelegramTab:CreateParagraph({
+    Title = "Filter Info",
+    Content = "Empty = Accept ALL fish\nEnable specific rarities to filter notifications"
+})
+
+local rarityList = {"SECRET", "MYTHICAL", "LEGENDARY", "EPIC", "RARE", "UNCOMMON", "COMMON"}
+
+for _, rarity in ipairs(rarityList) do
+    TelegramTab:CreateToggle({
+        Name = rarity,
         CurrentValue = false,
-        Callback = function(v) 
-            Config.Telegram.Enabled = v
-        end
-    })
-    
-    Tab2:CreateInput({
-        Name = "Bot Token",
-        PlaceholderText = "Enter your bot token",
-        RemoveTextAfterFocusLost = false,
-        Callback = function(v) 
-            Config.Telegram.BotToken = v
-        end
-    })
-    
-    Tab2:CreateButton({
-        Name = "Test Send Message",
-        Callback = function()
-            TelegramBot:SendTestMessage()
-        end
-    })
-    
-    Tab2:CreateSection("Rarity Filter")
-    Tab2:CreateLabel("Empty = Accept ALL fish")
-    
-    local rarityList = {"SECRET", "MYTHICAL", "LEGENDARY", "EPIC", "RARE", "UNCOMMON", "COMMON"}
-    
-    for _, rarity in ipairs(rarityList) do
-        Tab2:CreateToggle({
-            Name = rarity,
-            CurrentValue = false,
-            Callback = function(v)
-                if v then
-                    table.insert(Config.Telegram.RarityFilter, rarity)
-                else
-                    for i, val in ipairs(Config.Telegram.RarityFilter) do
-                        if val == rarity then 
-                            table.remove(Config.Telegram.RarityFilter, i) 
-                            break 
-                        end
+        Flag = "Rarity_" .. rarity,
+        Callback = function(v)
+            if v then
+                table.insert(Config.Telegram.RarityFilter, rarity)
+            else
+                for i, val in ipairs(Config.Telegram.RarityFilter) do
+                    if val == rarity then 
+                        table.remove(Config.Telegram.RarityFilter, i) 
+                        break 
                     end
                 end
             end
-        })
-    end
-
-    -- TAB 3: TELEPORT
-    local Tab3 = Window:CreateTab("📍 Teleport", 4483362458)
-    
-    Tab3:CreateSection("Teleport Settings")
-    
-    Tab3:CreateToggle({
-        Name = "Enable Teleport",
-        CurrentValue = false,
-        Callback = function(v) Config.TeleportEnabled = v end
-    })
-    
-    local islandOptions = {}
-    for i, island in ipairs(IslandData) do
-        table.insert(islandOptions, string.format("%d. %s", i, island.Name))
-    end
-    
-    local selectedIslandIndex = 1
-    
-    Tab3:CreateDropdown({
-        Name = "Select Island",
-        Options = islandOptions,
-        CurrentOption = {"1. " .. IslandData[1].Name},
-        Callback = function(option)
-            if option and #option > 0 then
-                local index = tonumber(option[1]:match("^(%d+)%."))
-                if index then selectedIslandIndex = index end
-            end
-        end
-    })
-    
-    Tab3:CreateButton({
-        Name = "Teleport to Selected Island",
-        Callback = function() TeleportToIsland(selectedIslandIndex) end
-    })
-    
-    Tab3:CreateSection("Quick Teleport")
-    
-    local quickLocations = {
-        {1, "📍 Fisherman's Island"},
-        {12, "🌋 Volcano"}, 
-        {21, "❄️ Snowy Island"},
-        {4, "🌳 Ancient Forest"},
-        {6, "🐠 Coral Reef"},
-        {13, "⚡ Enchantment Chamber"}
-    }
-    
-    for _, loc in ipairs(quickLocations) do
-        Tab3:CreateButton({
-            Name = loc[2],
-            Callback = function() TeleportToIsland(loc[1]) end
-        })
-    end
-
-    -- TAB 4: UTILITIES
-    local Tab4 = Window:CreateTab("⚡ Utilities", 4483362458)
-    
-    Tab4:CreateSection("Character")
-    
-    Tab4:CreateSlider({
-        Name = "Walk Speed",
-        Range = {16, 500},
-        Increment = 1,
-        CurrentValue = 16,
-        Callback = function(v)
-            Config.WalkSpeed = v
-            if Humanoid then Humanoid.WalkSpeed = v end
-        end
-    })
-    
-    Tab4:CreateSlider({
-        Name = "Jump Power",
-        Range = {50, 500},
-        Increment = 5,
-        CurrentValue = 50,
-        Callback = function(v)
-            Config.JumpPower = v
-            if Humanoid then Humanoid.JumpPower = v end
-        end
-    })
-    
-    Tab4:CreateButton({
-        Name = "Reset to Normal Speed",
-        Callback = function()
-            if Humanoid then
-                Humanoid.WalkSpeed = 16
-                Humanoid.JumpPower = 50
-                Config.WalkSpeed = 16
-                Config.JumpPower = 50
-            end
-        end
-    })
-    
-    Tab4:CreateSection("Additional Features")
-    
-    Tab4:CreateToggle({
-        Name = "Fly Mode",
-        CurrentValue = false,
-        Callback = function(v)
-            Config.FlyEnabled = v
-            if v then Fly() end
-        end
-    })
-    
-    Tab4:CreateSlider({
-        Name = "Fly Speed",
-        Range = {10, 300},
-        Increment = 5,
-        CurrentValue = 50,
-        Callback = function(v) Config.FlySpeed = v end
-    })
-    
-    Tab4:CreateToggle({
-        Name = "NoClip",
-        CurrentValue = false,
-        Callback = function(v)
-            Config.NoClip = v
-            if v then NoClip() end
-        end
-    })
-    
-    Tab4:CreateSection("Visual")
-    
-    Tab4:CreateButton({
-        Name = "Fullbright",
-        Callback = function()
-            Lighting.Brightness = 2
-            Lighting.ClockTime = 12
-            Lighting.FogEnd = 100000
-            Lighting.GlobalShadows = false
-        end
-    })
-    
-    Tab4:CreateButton({
-        Name = "Remove Fog",
-        Callback = function()
-            Lighting.FogEnd = 100000
-        end
-    })
-
-    -- TAB 5: INFO & STATUS
-    local Tab5 = Window:CreateTab("ℹ️ Info", 4483362458)
-    
-    Tab5:CreateSection("System Status")
-    
-    local statusLabel = Tab5:CreateLabel("State: IDLE")
-    local errorLabel = Tab5:CreateLabel("Errors: 0")
-    local castsLabel = Tab5:CreateLabel("Total Casts: 0")
-    local catchesLabel = Tab5:CreateLabel("Successful: 0")
-    local successRateLabel = Tab5:CreateLabel("Success Rate: 0%")
-    
-    -- Real-time status updates
-    task.spawn(function()
-        while true do
-            local stateText = State.Active and "ACTIVE" or "IDLE"
-            if State.Casting then stateText = "CASTING"
-            elseif State.WaitingBite then stateText = "WAITING"
-            elseif State.Reeling then stateText = "REELING" end
-            
-            statusLabel:SetText("State: " .. stateText)
-            errorLabel:SetText("Errors: " .. State.ErrorCount)
-            castsLabel:SetText("Total Casts: " .. State.TotalCasts)
-            catchesLabel:SetText("Successful: " .. State.SuccessfulCatches)
-            
-            if State.TotalCasts > 0 then
-                local rate = (State.SuccessfulCatches / State.TotalCasts) * 100
-                successRateLabel:SetText(string.format("Success Rate: %.1f%%", rate))
-            end
-            
-            task.wait(1)
-        end
-    end)
-    
-    Tab5:CreateSection("About Script")
-    
-    Tab5:CreateParagraph({
-        Title = "RhyRu9 FISH IT v1.3",
-        Content = "Developer: RhyRu9\nUpdate: 28 October 2025\n\n✨ NEW FEATURES:\n• Fixed event flow\n• Optimized timing\n• Enhanced error handling\n• Real-time statistics\n• Improved reliability"
-    })
-    
-    Tab5:CreateSection("System Information")
-    
-    Tab5:CreateParagraph({
-        Title = "Event Flow",
-        Content = "1. Equip Tool (3x retry)\n2. Charge Rod (15x retry)\n3. Start Minigame (perfect cast)\n4. Wait for '!' event\n5. Rapid tap 50ms (50+ taps)\n6. Catch notification\n7. Auto repeat"
-    })
-    
-    Tab5:CreateSection("Timing Configuration")
-    
-    Tab5:CreateLabel(string.format("Cast Retry: %d attempts", Config.Timing.CastRetry))
-    Tab5:CreateLabel(string.format("Charge Retry: %d attempts", Config.Timing.ChargeRetry))
-    Tab5:CreateLabel(string.format("Reel Interval: %dms", Config.Timing.ReelInterval * 1000))
-    Tab5:CreateLabel(string.format("Reel Duration: %.1fs", Config.Timing.ReelDuration))
-    Tab5:CreateLabel(string.format("Bite Timeout: %ds", Config.Timing.BiteTimeout))
-    
-    Tab5:CreateButton({
-        Name = "🔄 Restart Script",
-        Callback = function()
-            Rayfield:Notify({
-                Title = "Restarting...",
-                Content = "Script will restart",
-                Duration = 2
-            })
-            task.wait(2)
-            ResetState()
-            Config.AutoFish = false
-            task.wait(1)
-            Config.AutoFish = true
-            AutoFishingSystem()
-        end
-    })
-    
-    Tab5:CreateButton({
-        Name = "📊 Reset Statistics",
-        Callback = function()
-            State.TotalCasts = 0
-            State.SuccessfulCatches = 0
-            Rayfield:Notify({
-                Title = "Statistics Reset",
-                Content = "All stats cleared",
-                Duration = 2
-            })
         end
     })
 end
+
+-- TAB 3: TELEPORT
+local TeleportTab = Window:CreateTab("📍 Teleport", 4483362458)
+
+TeleportTab:CreateSection("Teleport Settings")
+
+TeleportTab:CreateToggle({
+    Name = "Enable Teleport",
+    CurrentValue = false,
+    Flag = "TeleportEnabled",
+    Callback = function(v) Config.TeleportEnabled = v end
+})
+
+local islandOptions = {}
+for i, island in ipairs(IslandData) do
+    table.insert(islandOptions, string.format("%d. %s", i, island.Name))
+end
+
+local selectedIslandIndex = 1
+
+TeleportTab:CreateDropdown({
+    Name = "Select Island",
+    Options = islandOptions,
+    CurrentOption = {"1. " .. IslandData[1].Name},
+    Flag = "SelectedIsland",
+    Callback = function(option)
+        if option and #option > 0 then
+            local index = tonumber(option[1]:match("^(%d+)%."))
+            if index then selectedIslandIndex = index end
+        end
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "Teleport to Selected Island",
+    Callback = function() TeleportToIsland(selectedIslandIndex) end
+})
+
+TeleportTab:CreateSection("Quick Teleport")
+
+local quickLocations = {
+    {1, "📍 Fisherman's Island"},
+    {12, "🌋 Volcano"}, 
+    {21, "❄️ Snowy Island"},
+    {4, "🌳 Ancient Forest"},
+    {6, "🐠 Coral Reef"},
+    {13, "⚡ Enchantment Chamber"}
+}
+
+for _, loc in ipairs(quickLocations) do
+    TeleportTab:CreateButton({
+        Name = loc[2],
+        Callback = function() TeleportToIsland(loc[1]) end
+    })
+end
+
+-- TAB 4: UTILITIES
+local UtilitiesTab = Window:CreateTab("⚡ Utilities", 4483362458)
+
+UtilitiesTab:CreateSection("Character Settings")
+
+UtilitiesTab:CreateSlider({
+    Name = "Walk Speed",
+    Range = {16, 500},
+    Increment = 1,
+    CurrentValue = 16,
+    Flag = "WalkSpeed",
+    Callback = function(v)
+        Config.WalkSpeed = v
+        if Humanoid then Humanoid.WalkSpeed = v end
+    end
+})
+
+UtilitiesTab:CreateSlider({
+    Name = "Jump Power",
+    Range = {50, 500},
+    Increment = 5,
+    CurrentValue = 50,
+    Flag = "JumpPower",
+    Callback = function(v)
+        Config.JumpPower = v
+        if Humanoid then Humanoid.JumpPower = v end
+    end
+})
+
+UtilitiesTab:CreateButton({
+    Name = "Reset to Normal Speed",
+    Callback = function()
+        if Humanoid then
+            Humanoid.WalkSpeed = 16
+            Humanoid.JumpPower = 50
+            Config.WalkSpeed = 16
+            Config.JumpPower = 50
+        end
+        Rayfield:Notify({
+            Title = "Speed Reset",
+            Content = "Character speed reset to normal",
+            Duration = 2,
+            Image = 4483362458
+        })
+    end
+})
+
+UtilitiesTab:CreateSection("Movement Features")
+
+UtilitiesTab:CreateToggle({
+    Name = "✈️ Fly Mode",
+    CurrentValue = false,
+    Flag = "FlyEnabled",
+    Callback = function(v)
+        Config.FlyEnabled = v
+        if v then Fly() end
+    end
+})
+
+UtilitiesTab:CreateSlider({
+    Name = "Fly Speed",
+    Range = {10, 300},
+    Increment = 5,
+    CurrentValue = 50,
+    Flag = "FlySpeed",
+    Callback = function(v) Config.FlySpeed = v end
+})
+
+UtilitiesTab:CreateToggle({
+    Name = "👻 NoClip",
+    CurrentValue = false,
+    Flag = "NoClip",
+    Callback = function(v)
+        Config.NoClip = v
+        if v then NoClip() end
+    end
+})
+
+UtilitiesTab:CreateSection("Visual Settings")
+
+UtilitiesTab:CreateButton({
+    Name = "💡 Fullbright",
+    Callback = function()
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 12
+        Lighting.FogEnd = 100000
+        Lighting.GlobalShadows = false
+        Rayfield:Notify({
+            Title = "Fullbright",
+            Content = "Fullbright enabled!",
+            Duration = 2,
+            Image = 4483362458
+        })
+    end
+})
+
+UtilitiesTab:CreateButton({
+    Name = "🌫️ Remove Fog",
+    Callback = function()
+        Lighting.FogEnd = 100000
+        Rayfield:Notify({
+            Title = "Fog Removed",
+            Content = "Fog has been removed!",
+            Duration = 2,
+            Image = 4483362458
+        })
+    end
+})
+
+-- TAB 5: INFO & STATUS
+local InfoTab = Window:CreateTab("ℹ️ Info", 4483362458)
+
+InfoTab:CreateSection("System Status")
+
+local statusLabel = InfoTab:CreateLabel("State: IDLE")
+local errorLabel = InfoTab:CreateLabel("Errors: 0")
+local castsLabel = InfoTab:CreateLabel("Total Casts: 0")
+local catchesLabel = InfoTab:CreateLabel("Successful: 0")
+local successRateLabel = InfoTab:CreateLabel("Success Rate: 0%")
+
+-- Real-time status updates
+task.spawn(function()
+    while true do
+        local stateText = State.Active and "ACTIVE" or "IDLE"
+        if State.Casting then stateText = "CASTING"
+        elseif State.WaitingBite then stateText = "WAITING"
+        elseif State.Reeling then stateText = "REELING" end
+        
+        statusLabel:Set("State: " .. stateText)
+        errorLabel:Set("Errors: " .. State.ErrorCount)
+        castsLabel:Set("Total Casts: " .. State.TotalCasts)
+        catchesLabel:Set("Successful: " .. State.SuccessfulCatches)
+        
+        if State.TotalCasts > 0 then
+            local rate = (State.SuccessfulCatches / State.TotalCasts) * 100
+            successRateLabel:Set(string.format("Success Rate: %.1f%%", rate))
+        end
+        
+        task.wait(1)
+    end
+end)
+
+InfoTab:CreateSection("About Script")
+
+InfoTab:CreateParagraph({
+    Title = "RhyRu9 FISH IT v1.3",
+    Content = "Developer: RhyRu9\nUpdate: 28 October 2025\n\n✨ NEW FEATURES:\n• Fixed event flow\n• Optimized timing\n• Enhanced error handling\n• Real-time statistics\n• Improved reliability"
+})
+
+InfoTab:CreateSection("System Information")
+
+InfoTab:CreateParagraph({
+    Title = "Event Flow",
+    Content = "1. Equip Tool (3x retry)\n2. Charge Rod (15x retry)\n3. Start Minigame (perfect cast)\n4. Wait for '!' event\n5. Rapid tap 50ms (50+ taps)\n6. Catch notification\n7. Auto repeat"
+})
+
+InfoTab:CreateSection("Timing Configuration")
+
+InfoTab:CreateLabel(string.format("Cast Retry: %d attempts", Config.Timing.CastRetry))
+InfoTab:CreateLabel(string.format("Charge Retry: %d attempts", Config.Timing.ChargeRetry))
+InfoTab:CreateLabel(string.format("Reel Interval: %dms", Config.Timing.ReelInterval * 1000))
+InfoTab:CreateLabel(string.format("Reel Duration: %.1fs", Config.Timing.ReelDuration))
+InfoTab:CreateLabel(string.format("Bite Timeout: %ds", Config.Timing.BiteTimeout))
+
+InfoTab:CreateButton({
+    Name = "🔄 Restart Script",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Restarting...",
+            Content = "Script will restart",
+            Duration = 2,
+            Image = 4483362458
+        })
+        task.wait(2)
+        ResetState()
+        Config.AutoFish = false
+        task.wait(1)
+        Config.AutoFish = true
+        AutoFishingSystem()
+    end
+})
+
+InfoTab:CreateButton({
+    Name = "📊 Reset Statistics",
+    Callback = function()
+        State.TotalCasts = 0
+        State.SuccessfulCatches = 0
+        Rayfield:Notify({
+            Title = "Statistics Reset",
+            Content = "All stats cleared",
+            Duration = 2,
+            Image = 4483362458
+        })
+    end
+})
+
+InfoTab:CreateSection("Controls")
+
+InfoTab:CreateParagraph({
+    Title = "Fly Controls",
+    Content = "W/A/S/D - Movement\nSpace - Up\nLeft Shift - Down"
+})
+
+InfoTab:CreateParagraph({
+    Title = "Tips",
+    Content = "• Enable Anti-AFK to prevent being kicked\n• Use Auto Sell to automatically sell fish\n• Telegram notifications for rare catches\n• Teleport to different fishing spots\n• Adjust walk speed for faster movement"
+})
 
 -- ==================== CHARACTER HANDLER ====================
 LocalPlayer.CharacterAdded:Connect(function(char)
@@ -1040,33 +1091,20 @@ LocalPlayer.CharacterAdded:Connect(function(char)
     
     task.wait(2)
     
-    -- Restore settings
     if Humanoid then
         Humanoid.WalkSpeed = Config.WalkSpeed
         Humanoid.JumpPower = Config.JumpPower
     end
     
-    -- Restart systems if they were active
     if Config.AutoFish then
         task.wait(2)
         AutoFishingSystem()
     end
     
-    if Config.AutoSell then
-        AutoSell()
-    end
-    
-    if Config.AntiAFK then
-        AntiAFK()
-    end
-    
-    if Config.FlyEnabled then
-        Fly()
-    end
-    
-    if Config.NoClip then
-        NoClip()
-    end
+    if Config.AutoSell then AutoSell() end
+    if Config.AntiAFK then AntiAFK() end
+    if Config.FlyEnabled then Fly() end
+    if Config.NoClip then NoClip() end
 end)
 
 -- ==================== ANTI-IDLE ====================
@@ -1084,10 +1122,8 @@ end
 
 -- ==================== INITIALIZATION ====================
 local function Initialize()
-    CreateUI()
     PreventIdle()
     
-    -- Apply initial character settings
     if Humanoid then
         Humanoid.WalkSpeed = Config.WalkSpeed
         Humanoid.JumpPower = Config.JumpPower
@@ -1114,7 +1150,8 @@ local function Initialize()
     Rayfield:Notify({
         Title = "✅ RhyRu9 FISH IT v1.3",
         Content = "Event-based system ready!",
-        Duration = 5
+        Duration = 5,
+        Image = 4483362458
     })
 end
 
@@ -1152,3 +1189,5 @@ game:GetService("Players").PlayerRemoving:Connect(function(player)
         ResetState()
     end
 end)
+
+print("[SCRIPT] RhyRu9 FISH IT v1.3 loaded successfully!")
