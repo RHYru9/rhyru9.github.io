@@ -686,7 +686,6 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "RhyRu9 FISH IT",
     LoadingSubtitle = "by RhyRu9",
     ConfigurationSaving = {
-        Enabled = true,
         FolderName = "RhyRu9FishIT",
         FileName = "FishConfig"
     },
