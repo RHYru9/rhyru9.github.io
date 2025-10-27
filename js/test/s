@@ -1,0 +1,513 @@
+-- ╔═══════════════════════════════════════════════════════════╗
+-- ║  ROBLOX FISHING MODULE DUMPER & ANALYZER v2.0            ║
+-- ║  Developer: RhyRu9                                        ║
+-- ║  Date: 28 Oktober 2025                                    ║
+-- ║                                                           ║
+-- ║  FITUR:                                                   ║
+-- ║  ✅ Dump semua Remote Events/Functions                   ║
+-- ║  ✅ Monitor TextEffect real-time                         ║
+-- ║  ✅ Deteksi tanda seru (!) dengan timestamp              ║
+-- ║  ✅ Auto Perfect Cast (-1.233, 0.994)                    ║
+-- ║  ✅ Rapid Tap System (custom ms)                         ║
+-- ║  ✅ Logging lengkap untuk debug                          ║
+-- ╚═══════════════════════════════════════════════════════════╝
+
+print("="..string.rep("=", 60))
+print("  FISHING MODULE DUMPER v2.0 - INITIALIZING...")
+print("="..string.rep("=", 60))
+
+-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 1: REMOTE DUMP SYSTEM
+-- ═══════════════════════════════════════════════════════════
+
+local DumpData = {
+    Remotes = {},
+    TextEffects = {},
+    FishCaught = {},
+    Timestamps = {}
+}
+
+print("\n[DUMP] 🔍 Scanning ReplicatedStorage...")
+
+-- Function to recursively find all remotes
+local function ScanForRemotes(parent, path)
+    path = path or parent.Name
+    
+    for _, child in pairs(parent:GetChildren()) do
+        local fullPath = path .. "/" .. child.Name
+        
+        if child:IsA("RemoteEvent") then
+            table.insert(DumpData.Remotes, {
+                Type = "RemoteEvent",
+                Name = child.Name,
+                Path = fullPath,
+                Object = child
+            })
+            print(string.format("[REMOTE] 📡 RemoteEvent: %s", fullPath))
+            
+        elseif child:IsA("RemoteFunction") then
+            table.insert(DumpData.Remotes, {
+                Type = "RemoteFunction", 
+                Name = child.Name,
+                Path = fullPath,
+                Object = child
+            })
+            print(string.format("[REMOTE] 📞 RemoteFunction: %s", fullPath))
+        end
+        
+        -- Scan deeper
+        if #child:GetChildren() > 0 then
+            ScanForRemotes(child, fullPath)
+        end
+    end
+end
+
+-- Start scanning
+ScanForRemotes(ReplicatedStorage)
+
+print(string.format("\n[DUMP] ✅ Found %d remotes total\n", #DumpData.Remotes))
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 2: FIND CRITICAL REMOTES
+-- ═══════════════════════════════════════════════════════════
+
+local Remotes = {
+    TextEffect = nil,
+    FishCaught = nil,
+    EquipTool = nil,
+    ChargeRod = nil,
+    StartMinigame = nil,
+    FishingCompleted = nil,
+    SellAll = nil
+}
+
+print("[SEARCH] 🎯 Looking for critical remotes...")
+
+-- Search patterns
+local searchPatterns = {
+    TextEffect = {"TextEffect", "ReplicateText", "Effect"},
+    FishCaught = {"FishCaught", "Caught", "CatchFish"},
+    EquipTool = {"EquipTool", "Equip", "Hotbar"},
+    ChargeRod = {"Charge", "FishingRod", "Rod"},
+    StartMinigame = {"Minigame", "Start", "Request"},
+    FishingCompleted = {"Completed", "Finish", "Complete"},
+    SellAll = {"Sell", "SellAll", "SellItems"}
+}
+
+for remoteName, patterns in pairs(searchPatterns) do
+    for _, remoteData in ipairs(DumpData.Remotes) do
+        local name = remoteData.Name:lower()
+        local path = remoteData.Path:lower()
+        
+        for _, pattern in ipairs(patterns) do
+            if name:find(pattern:lower()) or path:find(pattern:lower()) then
+                Remotes[remoteName] = remoteData.Object
+                print(string.format("[FOUND] ✅ %s: %s", remoteName, remoteData.Path))
+                break
+            end
+        end
+        
+        if Remotes[remoteName] then break end
+    end
+    
+    if not Remotes[remoteName] then
+        warn(string.format("[MISSING] ❌ %s not found!", remoteName))
+    end
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 3: TEXT EFFECT MONITOR (TANDA SERU!)
+-- ═══════════════════════════════════════════════════════════
+
+local BiteDetection = {
+    LastBiteTime = 0,
+    BiteCount = 0,
+    IsWaitingBite = false,
+    BiteCallback = nil
+}
+
+if Remotes.TextEffect then
+    print("\n[MONITOR] 👁️ Setting up TextEffect listener...")
+    
+    Remotes.TextEffect.OnClientEvent:Connect(function(data)
+        local timestamp = tick()
+        
+        -- Log semua TextEffect
+        table.insert(DumpData.TextEffects, {
+            Time = timestamp,
+            Data = data,
+            FormattedTime = os.date("%H:%M:%S", timestamp)
+        })
+        
+        -- Print ke console
+        print("\n" .. string.rep("=", 60))
+        print(string.format("[TEXT EFFECT] ⚡ Received at %s", os.date("%H:%M:%S", timestamp)))
+        
+        if type(data) == "table" then
+            for key, value in pairs(data) do
+                if type(value) == "table" then
+                    print(string.format("  %s:", key))
+                    for k2, v2 in pairs(value) do
+                        print(string.format("    %s = %s", tostring(k2), tostring(v2)))
+                    end
+                else
+                    print(string.format("  %s = %s", tostring(key), tostring(value)))
+                end
+            end
+        else
+            print(string.format("  Data: %s", tostring(data)))
+        end
+        
+        -- CRITICAL: Deteksi tanda seru!
+        if data and data.TextData and data.TextData.EffectType == "Exclaim" then
+            BiteDetection.LastBiteTime = timestamp
+            BiteDetection.BiteCount = BiteDetection.BiteCount + 1
+            
+            print("╔" .. string.rep("═", 58) .. "╗")
+            print("║" .. string.rep(" ", 18) .. "🎣 BITE DETECTED! 🎣" .. string.rep(" ", 18) .. "║")
+            print("╚" .. string.rep("═", 58) .. "╝")
+            print(string.format("  Bite #%d at %s", BiteDetection.BiteCount, os.date("%H:%M:%S", timestamp)))
+            print(string.rep("=", 60) .. "\n")
+            
+            -- Trigger callback jika ada
+            if BiteDetection.BiteCallback then
+                BiteDetection.BiteCallback(data)
+            end
+        end
+        
+        print(string.rep("=", 60) .. "\n")
+    end)
+    
+    print("[MONITOR] ✅ TextEffect listener active!")
+else
+    warn("[MONITOR] ❌ TextEffect remote not found - cannot detect bites!")
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 4: FISH CAUGHT MONITOR
+-- ═══════════════════════════════════════════════════════════
+
+if Remotes.FishCaught then
+    print("[MONITOR] 🐟 Setting up FishCaught listener...")
+    
+    Remotes.FishCaught.OnClientEvent:Connect(function(fishData)
+        local timestamp = tick()
+        
+        table.insert(DumpData.FishCaught, {
+            Time = timestamp,
+            Data = fishData,
+            FormattedTime = os.date("%H:%M:%S", timestamp)
+        })
+        
+        print("\n" .. string.rep("=", 60))
+        print(string.format("[FISH CAUGHT] 🐟 at %s", os.date("%H:%M:%S", timestamp)))
+        
+        if type(fishData) == "table" then
+            local name = fishData.Name or "Unknown"
+            local tier = fishData.Tier or 0
+            local chance = fishData.Chance or 0
+            local price = fishData.SellPrice or 0
+            
+            print(string.format("  Name: %s", name))
+            print(string.format("  Tier: %d", tier))
+            print(string.format("  Chance: %.6f%%", chance * 100))
+            print(string.format("  Price: %d coins", price))
+        end
+        
+        print(string.rep("=", 60) .. "\n")
+    end)
+    
+    print("[MONITOR] ✅ FishCaught listener active!")
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 5: AUTO FISHING SYSTEM
+-- ═══════════════════════════════════════════════════════════
+
+local AutoFish = {
+    Enabled = false,
+    IsCasting = false,
+    IsReeling = false,
+    RapidTapMS = 50,  -- Milliseconds between taps
+    PerfectCastX = -1.233184814453125,
+    PerfectCastY = 0.9945034885633273
+}
+
+function AutoFish:CastRod()
+    if self.IsCasting then 
+        warn("[AUTOFISH] Already casting!")
+        return false 
+    end
+    
+    print("\n[AUTOFISH] 🎣 Starting cast sequence...")
+    self.IsCasting = true
+    
+    -- Step 1: Equip tool
+    if Remotes.EquipTool then
+        print("[AUTOFISH] Step 1: Equipping rod...")
+        local success = pcall(function()
+            Remotes.EquipTool:FireServer(1)
+        end)
+        
+        if not success then
+            warn("[AUTOFISH] ❌ Failed to equip!")
+            self.IsCasting = false
+            return false
+        end
+        
+        task.wait(0.3)
+    end
+    
+    -- Step 2: Charge rod
+    if Remotes.ChargeRod then
+        print("[AUTOFISH] Step 2: Charging rod...")
+        
+        local charged = false
+        for i = 1, 15 do
+            local success, result = pcall(function()
+                return Remotes.ChargeRod:InvokeServer(tick())
+            end)
+            
+            if success and result then
+                charged = true
+                print(string.format("[AUTOFISH] ✅ Charged (attempt %d/15)", i))
+                break
+            end
+            
+            task.wait(0.15)
+        end
+        
+        if not charged then
+            warn("[AUTOFISH] ❌ Failed to charge after 15 attempts!")
+            self.IsCasting = false
+            return false
+        end
+        
+        task.wait(0.3)
+    end
+    
+    -- Step 3: Perfect cast
+    if Remotes.StartMinigame then
+        print("[AUTOFISH] Step 3: Perfect cast...")
+        print(string.format("[AUTOFISH] Using values: X=%.15f, Y=%.15f", self.PerfectCastX, self.PerfectCastY))
+        
+        local success = pcall(function()
+            Remotes.StartMinigame:InvokeServer(self.PerfectCastX, self.PerfectCastY)
+        end)
+        
+        if success then
+            print("[AUTOFISH] ✅ Cast complete! Waiting for bite...")
+            BiteDetection.IsWaitingBite = true
+        else
+            warn("[AUTOFISH] ❌ Failed to start minigame!")
+            self.IsCasting = false
+            return false
+        end
+    end
+    
+    self.IsCasting = false
+    return true
+end
+
+function AutoFish:RapidTap()
+    if self.IsReeling then
+        warn("[AUTOFISH] Already reeling!")
+        return
+    end
+    
+    if not Remotes.FishingCompleted then
+        warn("[AUTOFISH] ❌ FishingCompleted remote not found!")
+        return
+    end
+    
+    print("\n[AUTOFISH] ⚡ RAPID TAP STARTED!")
+    print(string.format("[AUTOFISH] Tap interval: %dms", self.RapidTapMS))
+    
+    self.IsReeling = true
+    BiteDetection.IsWaitingBite = false
+    
+    local tapStart = tick()
+    local tapDuration = 2.5  -- 2.5 seconds
+    local tapInterval = self.RapidTapMS / 1000  -- Convert to seconds
+    local tapCount = 0
+    local maxTaps = math.floor(tapDuration / tapInterval)
+    
+    print(string.format("[AUTOFISH] Will perform ~%d taps", maxTaps))
+    
+    while tick() - tapStart < tapDuration do
+        tapCount = tapCount + 1
+        
+        pcall(function()
+            Remotes.FishingCompleted:FireServer()
+        end)
+        
+        -- Progress feedback every 10 taps
+        if tapCount % 10 == 0 then
+            local progress = math.floor((tapCount / maxTaps) * 100)
+            print(string.format("[AUTOFISH] Tap #%d/%d (%d%%)", tapCount, maxTaps, progress))
+        end
+        
+        task.wait(tapInterval)
+    end
+    
+    -- Final tap to ensure
+    pcall(function()
+        Remotes.FishingCompleted:FireServer()
+    end)
+    
+    print(string.format("[AUTOFISH] ✅ Rapid tap complete! %d taps in %.2fs", tapCount, tick() - tapStart))
+    
+    self.IsReeling = false
+    task.wait(1)
+end
+
+-- Set callback untuk bite detection
+BiteDetection.BiteCallback = function(data)
+    if AutoFish.Enabled then
+        print("[AUTOFISH] 🔥 Bite detected! Starting rapid tap...")
+        task.wait(0.2)  -- Small delay for realism
+        AutoFish:RapidTap()
+    end
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 6: AUTO FISHING LOOP
+-- ═══════════════════════════════════════════════════════════
+
+function AutoFish:Start()
+    if self.Enabled then
+        warn("[AUTOFISH] Already running!")
+        return
+    end
+    
+    print("\n╔" .. string.rep("═", 58) .. "╗")
+    print("║" .. string.rep(" ", 15) .. "AUTO FISHING STARTED" .. string.rep(" ", 22) .. "║")
+    print("╚" .. string.rep("═", 58) .. "╝\n")
+    
+    self.Enabled = true
+    
+    task.spawn(function()
+        while self.Enabled do
+            local success, err = pcall(function()
+                if not self.IsCasting and not self.IsReeling and not BiteDetection.IsWaitingBite then
+                    if self:CastRod() then
+                        -- Wait for bite or timeout
+                        local waitStart = tick()
+                        while BiteDetection.IsWaitingBite and tick() - waitStart < 30 do
+                            task.wait(0.1)
+                        end
+                        
+                        if BiteDetection.IsWaitingBite then
+                            warn("[AUTOFISH] ⏱️ Timeout (30s) - no bite detected")
+                            BiteDetection.IsWaitingBite = false
+                        end
+                    end
+                    
+                    task.wait(1)  -- Cooldown before next cast
+                end
+            end)
+            
+            if not success then
+                warn("[AUTOFISH] ⚠️ Error: " .. tostring(err))
+                task.wait(3)
+            end
+            
+            task.wait(0.5)
+        end
+        
+        print("\n[AUTOFISH] ⏹️ Auto fishing stopped\n")
+    end)
+end
+
+function AutoFish:Stop()
+    self.Enabled = false
+    self.IsCasting = false
+    self.IsReeling = false
+    BiteDetection.IsWaitingBite = false
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 7: COMMANDS & CONTROLS
+-- ═══════════════════════════════════════════════════════════
+
+print("\n" .. string.rep("=", 60))
+print("  AVAILABLE COMMANDS:")
+print(string.rep("=", 60))
+print("  AutoFish:Start()          - Start auto fishing")
+print("  AutoFish:Stop()           - Stop auto fishing")
+print("  AutoFish:CastRod()        - Manual cast")
+print("  AutoFish:RapidTap()       - Manual rapid tap")
+print("  AutoFish.RapidTapMS = X   - Set tap speed (default 50ms)")
+print("  DumpData                  - View all collected data")
+print("  Remotes                   - View found remotes")
+print(string.rep("=", 60))
+
+print("\n╔" .. string.rep("═", 58) .. "╗")
+print("║" .. string.rep(" ", 15) .. "DUMPER INITIALIZED!" .. string.rep(" ", 22) .. "║")
+print("║" .. string.rep(" ", 10) .. "Use AutoFish:Start() to begin" .. string.rep(" ", 18) .. "║")
+print("╚" .. string.rep("═", 58) .. "╝\n")
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 8: EXPORT FUNCTIONS
+-- ═══════════════════════════════════════════════════════════
+
+function ExportDumpData()
+    local export = {
+        GeneratedAt = os.date("%Y-%m-%d %H:%M:%S"),
+        Player = LocalPlayer.Name,
+        Remotes = {},
+        TextEffects = DumpData.TextEffects,
+        FishCaught = DumpData.FishCaught,
+        Statistics = {
+            TotalRemotes = #DumpData.Remotes,
+            TextEffectCount = #DumpData.TextEffects,
+            FishCaughtCount = #DumpData.FishCaught,
+            BiteDetections = BiteDetection.BiteCount
+        }
+    }
+    
+    for _, remote in ipairs(DumpData.Remotes) do
+        table.insert(export.Remotes, {
+            Type = remote.Type,
+            Name = remote.Name,
+            Path = remote.Path
+        })
+    end
+    
+    local json = HttpService:JSONEncode(export)
+    
+    if writefile then
+        local filename = string.format("FishingDump_%s.json", os.date("%Y%m%d_%H%M%S"))
+        writefile(filename, json)
+        print(string.format("[EXPORT] ✅ Data saved to %s", filename))
+    else
+        print("[EXPORT] ℹ️ writefile not available, printing to console:")
+        print(json)
+    end
+    
+    return export
+end
+
+-- ═══════════════════════════════════════════════════════════
+-- SECTION 9: AUTO-START (Optional)
+-- ═══════════════════════════════════════════════════════════
+
+-- Uncomment to auto-start:
+-- task.wait(2)
+-- AutoFish:Start()
+
+return {
+    AutoFish = AutoFish,
+    Remotes = Remotes,
+    DumpData = DumpData,
+    BiteDetection = BiteDetection,
+    ExportDumpData = ExportDumpData
+}
