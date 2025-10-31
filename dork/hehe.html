@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Filter URL by Active Domains</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin-bottom: 12px;
+      padding: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #0052a3;
+    }
+    #result {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      background-color: #fff;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Filter URL by Active Domains</h1>
+
+  <label for="urls">Paste URLs (one per line):</label>
+  <textarea id="urls" placeholder="http://example.com/path&#10;https://sub.example.com/..."></textarea>
+
+  <label for="domains">Paste active domains (one per line):</label>
+  <textarea id="domains" placeholder="example.com&#10;sub.example.com"></textarea>
+
+  <button onclick="filterUrls()">Filter URLs</button>
+
+  <div id="result"></div>
+
+  <script>
+    function extractDomain(url) {
+      try {
+        const u = new URL(url.trim());
+        return u.hostname.toLowerCase();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function filterUrls() {
+      const urlInput = document.getElementById('urls').value;
+      const domainInput = document.getElementById('domains').value;
+
+      const urls = urlInput.split('\n').map(s => s.trim()).filter(s => s);
+      const activeDomains = new Set(
+        domainInput.split('\n').map(s => s.trim().toLowerCase()).filter(s => s)
+      );
+
+      const filtered = [];
+      for (const url of urls) {
+        const domain = extractDomain(url);
+        if (domain && activeDomains.has(domain)) {
+          filtered.push(url);
+        }
+      }
+
+      document.getElementById('result').textContent = filtered.join('\n');
+    }
+  </script>
+</body>
+</html>
