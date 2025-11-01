@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Domain Filter - Bug Bounty Toolkit</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domain & Port Filter - Bug Bounty Toolkit</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
   <!-- Navigation -->
   <nav>
@@ -29,11 +27,9 @@
   <!-- Header -->
   <header>
     <div class="container">
-      <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
-        🔍 Filter URL by Active Domains
-      </h1>
+      <h1>🔍 Filter URL by Active Domain & Port</h1>
       <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
-        Filter your URLs based on active domains with exclude/include options and port filtering
+        Paste your URLs and filter by exact active domains (from httpx) and explicit ports.
       </p>
     </div>
   </header>
@@ -42,23 +38,22 @@
   <div class="container" style="padding-bottom: 100px;">
     <!-- Main Tool Container -->
     <section class="base-card">
-      <h2 class="text-secondary mb-3" style="font-size: 1.3rem;">🛠️ URL Filter Tool</h2>
+      <h2 class="text-secondary mb-3">🛠️ URL Filter Tool</h2>
 
       <!-- URLs Input -->
       <div class="input-group">
         <label for="urls">Paste URLs (one per line):</label>
-        <textarea id="urls" placeholder="http://example.com/path
-https://sub.example.com:8080/api
-https://target.gov.id:443/admin
-https://api.example.co.id:3000/data"></textarea>
+        <textarea id="urls" placeholder="https://digilib.itb.ac.id/gdl/view/86434
+http://fa.itb.ac.id:80/focus/
+https://akademik.itb.ac.id/app/dosen"></textarea>
       </div>
 
-      <!-- Domains Input -->
+      <!-- Domains Input (Active Domains from httpx) -->
       <div class="input-group">
-        <label for="domains">Paste domains to filter (one per line):</label>
-        <textarea id="domains" placeholder="example.com
-sub.example.com
-target.gov.id"></textarea>
+        <label for="domains">Active domains (exact match, one per line):</label>
+        <textarea id="domains" placeholder="digilib.itb.ac.id
+akademik.itb.ac.id
+bosscha.itb.ac.id"></textarea>
       </div>
 
       <!-- Domain Filter Mode -->
@@ -66,14 +61,20 @@ target.gov.id"></textarea>
         <label>Domain Filter Mode:</label>
         <div class="radio-group">
           <div class="radio-item">
-            <input type="radio" id="includeMode" name="filterType" value="include" checked>
+            <input type="radio" id="includeMode" name="filterType" value="include" checked />
             <label for="includeMode">Include only these domains</label>
           </div>
           <div class="radio-item">
-            <input type="radio" id="excludeMode" name="filterType" value="exclude">
+            <input type="radio" id="excludeMode" name="filterType" value="exclude" />
             <label for="excludeMode">Exclude these domains</label>
           </div>
         </div>
+      </div>
+
+      <!-- Port Filter -->
+      <div class="input-group">
+        <label for="ports">Port Filter (comma-separated, e.g. 80,443,8080):</label>
+        <input type="text" id="ports" placeholder="Leave empty to skip port filtering" />
       </div>
 
       <!-- Port Filter Mode -->
@@ -81,33 +82,12 @@ target.gov.id"></textarea>
         <label>Port Filter Mode:</label>
         <div class="radio-group">
           <div class="radio-item">
-            <input type="radio" id="portNone" name="portFilterType" value="none" checked>
-            <label for="portNone">No port filtering</label>
+            <input type="radio" id="portIncludeMode" name="portFilterType" value="include" />
+            <label for="portIncludeMode">Include only these ports</label>
           </div>
           <div class="radio-item">
-            <input type="radio" id="portInclude" name="portFilterType" value="include">
-            <label for="portInclude">Include only these ports</label>
-          </div>
-          <div class="radio-item">
-            <input type="radio" id="portExclude" name="portFilterType" value="exclude">
-            <label for="portExclude">Exclude these ports</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ports Input (Hidden by default) -->
-      <div id="portFilterSection" class="input-group" style="display: none;">
-        <label for="ports">Paste ports to filter (one per line):</label>
-        <textarea id="ports" placeholder="80
-8080
-443
-3000
-9000"></textarea>
-        <div class="alert alert-info mt-1">
-          <span style="font-size: 1rem;">💡</span>
-          <div style="flex: 1;">
-            <strong>Important:</strong> Port filter only applies to URLs with <strong>explicit ports</strong> (e.g., :8080). 
-            URLs without explicit ports (e.g., http://example.com) will always pass through port filter.
+            <input type="radio" id="portExcludeMode" name="portFilterType" value="exclude" checked />
+            <label for="portExcludeMode">Exclude these ports</label>
           </div>
         </div>
       </div>
@@ -116,7 +96,7 @@ target.gov.id"></textarea>
       <div class="button-group mt-2">
         <button class="btn btn-primary" onclick="filterUrls()">🔍 Filter URLs</button>
         <button class="btn btn-primary" onclick="copyResults()">📋 Copy Results</button>
-        <button class="btn btn-secondary" onclick="clearAll()">🗑️ Clear All</button>
+        <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
       </div>
 
       <!-- Results Section -->
@@ -130,60 +110,31 @@ target.gov.id"></textarea>
 
       <!-- Error Section -->
       <div id="errorSection" class="alert alert-error mt-2" style="display: none;">
-        <span style="font-size: 1rem;">⚠️</span>
+        <span>⚠️</span>
         <div style="flex: 1;">
           <strong>Invalid URLs Found:</strong>
-          <div id="errorList" style="margin-top: 0.5rem; font-size: 0.85rem; font-family: 'Courier New', monospace;">
-          </div>
+          <div id="errorList" style="margin-top: 0.5rem; font-size: 0.85rem; font-family: 'Courier New', monospace;"></div>
         </div>
       </div>
     </section>
 
-    <!-- Quick Actions -->
+    <!-- Quick Actions (opsional, bisa dihapus jika tidak perlu) -->
     <section class="base-card">
-      <h2 class="text-secondary mb-3" style="font-size: 1.3rem;">⚡ Quick Actions</h2>
+      <h2 class="text-secondary mb-3">⚡ Quick Actions</h2>
 
       <div class="collapsible active">
         <div class="collapsible-header">
           <span style="font-weight: 600;">🇮🇩 Indonesian Domains</span>
         </div>
         <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common Indonesian TLDs to domain filter</p>
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">
+            Add common TLDs (note: these are wildcards; use only if needed)
+          </p>
           <div class="button-group">
             <button class="btn btn-secondary" onclick="addQuickDomains('co.id')">Add *.co.id</button>
             <button class="btn btn-secondary" onclick="addQuickDomains('ac.id')">Add *.ac.id</button>
             <button class="btn btn-secondary" onclick="addQuickDomains('go.id')">Add *.go.id</button>
             <button class="btn btn-secondary" onclick="addQuickDomains('gov.id')">Add *.gov.id</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="collapsible">
-        <div class="collapsible-header">
-          <span style="font-weight: 600;">🌍 International Domains</span>
-        </div>
-        <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common international TLDs to domain filter</p>
-          <div class="button-group">
-            <button class="btn btn-secondary" onclick="addQuickDomains('gov.uk')">Add *.gov.uk</button>
-            <button class="btn btn-secondary" onclick="addQuickDomains('gov.au')">Add *.gov.au</button>
-            <button class="btn btn-secondary" onclick="addQuickDomains('gov')">Add *.gov</button>
-            <button class="btn btn-secondary" onclick="addQuickDomains('edu')">Add *.edu</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="collapsible">
-        <div class="collapsible-header">
-          <span style="font-weight: 600;">🔌 Common Ports</span>
-        </div>
-        <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common port numbers to port filter</p>
-          <div class="button-group">
-            <button class="btn btn-secondary" onclick="addQuickPorts('80\n443')">Add HTTP/HTTPS (80, 443)</button>
-            <button class="btn btn-secondary" onclick="addQuickPorts('8080\n8443')">Add Alt HTTP (8080, 8443)</button>
-            <button class="btn btn-secondary" onclick="addQuickPorts('3000\n5000\n8000')">Add Dev Ports</button>
-            <button class="btn btn-secondary" onclick="addQuickPorts('21\n22\n23\n25')">Add Service Ports</button>
           </div>
         </div>
       </div>
@@ -208,5 +159,4 @@ target.gov.id"></textarea>
   <script src="js/settings.js"></script>
   <script src="js/domain-filter.js"></script>
 </body>
-
 </html>
