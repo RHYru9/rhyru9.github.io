@@ -19,7 +19,6 @@
       line-height: 1.6;
     }
 
-    /* Navbar Styles */
     .navbar {
       background: rgba(0, 0, 0, 0.9);
       backdrop-filter: blur(10px);
@@ -71,7 +70,6 @@
       text-shadow: 0 0 5px #00ff88;
     }
 
-    /* Main Content */
     .main-content {
       margin-top: 100px;
       padding: 2rem;
@@ -99,7 +97,6 @@
       margin-bottom: 2rem;
     }
 
-    /* Tool Container */
     .tool-container {
       background: rgba(0, 0, 0, 0.7);
       border: 1px solid #333;
@@ -214,6 +211,12 @@
       transform: translateY(0);
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     #result {
       margin-top: 20px;
       white-space: pre-wrap;
@@ -222,9 +225,49 @@
       padding: 1rem;
       border: 1px solid #333;
       border-radius: 8px;
-      overflow-x: auto;
       min-height: 100px;
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
       color: #00ff88;
+    }
+
+    #result::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    #result::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+
+    #result::-webkit-scrollbar-thumb {
+      background: #00ff88;
+      border-radius: 4px;
+    }
+
+    #result::-webkit-scrollbar-thumb:hover {
+      background: #00cc6a;
+    }
+
+    .error-section {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      border-radius: 8px;
+      color: #ff6b6b;
+      display: none;
+    }
+
+    .error-section.show {
+      display: block;
+    }
+
+    .error-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
 
     .status-bar {
@@ -247,6 +290,10 @@
       animation: pulse 1s infinite;
     }
 
+    .status-indicator.error {
+      background: #ff6b6b;
+    }
+
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -254,12 +301,6 @@
       font-size: 14px;
       padding-top: 20px;
       border-top: 1px solid #334155;
-    }
-
-    .footer a {
-      color: #3b82f6;
-      text-decoration: none;
-      font-weight: 500;
     }
 
     @keyframes glow {
@@ -273,7 +314,6 @@
       100% { opacity: 1; }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .nav-container {
         flex-direction: column;
@@ -295,7 +335,6 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
       <div class="logo">URL Filter</div>
@@ -308,7 +347,6 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
   <div class="main-content">
     <div class="hero-section">
       <h1 class="hero-title">Filter URL by Active Domains</h1>
@@ -342,10 +380,15 @@
       </div>
 
       <div id="result"></div>
+      
+      <div id="errorSection" class="error-section">
+        <div class="error-title">⚠️ Invalid URLs Found:</div>
+        <div id="errorList"></div>
+      </div>
     </div>
 
     <div class="status-bar">
-      <span class="status-indicator"></span>
+      <span class="status-indicator" id="statusIndicator"></span>
       <span id="statusText">Ready to filter URLs</span>
     </div>
 
@@ -357,7 +400,10 @@
   <script>
     function extractDomain(url) {
       try {
-        const u = new URL(url.trim());
+        const trimmed = url.trim();
+        if (!trimmed) return null;
+        
+        const u = new URL(trimmed);
         return u.hostname.toLowerCase();
       } catch (e) {
         return null;
@@ -369,15 +415,42 @@
       const domainInput = document.getElementById('domains').value;
       const filterType = document.querySelector('input[name="filterType"]:checked').value;
       
+      const statusText = document.getElementById('statusText');
+      const statusIndicator = document.getElementById('statusIndicator');
+      const errorSection = document.getElementById('errorSection');
+      const errorList = document.getElementById('errorList');
+      
+      if (!urlInput.trim()) {
+        statusText.textContent = 'Error: Please enter at least one URL';
+        statusIndicator.classList.add('error');
+        return;
+      }
+      
+      if (!domainInput.trim()) {
+        statusText.textContent = 'Error: Please enter at least one domain';
+        statusIndicator.classList.add('error');
+        return;
+      }
+      
+      statusIndicator.classList.remove('error');
+      
       const urls = urlInput.split('\n').map(s => s.trim()).filter(s => s);
       const domains = new Set(
         domainInput.split('\n').map(s => s.trim().toLowerCase()).filter(s => s)
       );
 
       const filtered = [];
+      const invalidUrls = [];
+      
       for (const url of urls) {
         const domain = extractDomain(url);
-        const isDomainInList = domain && domains.has(domain);
+        
+        if (domain === null) {
+          invalidUrls.push(url);
+          continue;
+        }
+        
+        const isDomainInList = domains.has(domain);
         
         if (filterType === 'include' && isDomainInList) {
           filtered.push(url);
@@ -387,22 +460,34 @@
       }
 
       document.getElementById('result').textContent = filtered.join('\n');
-      document.getElementById('statusText').textContent = `Filtered ${urls.length} URLs, found ${filtered.length} matches`;
+      
+      if (invalidUrls.length > 0) {
+        errorSection.classList.add('show');
+        errorList.textContent = invalidUrls.join('\n');
+        statusText.textContent = `Filtered ${urls.length} URLs: ${filtered.length} matches, ${invalidUrls.length} invalid`;
+        statusIndicator.classList.add('error');
+      } else {
+        errorSection.classList.remove('show');
+        statusText.textContent = `Filtered ${urls.length} URLs, found ${filtered.length} matches`;
+        statusIndicator.classList.remove('error');
+      }
     }
 
     function copyResults() {
       const resultText = document.getElementById('result').textContent;
+      const statusText = document.getElementById('statusText');
+      
       if (!resultText) {
-        document.getElementById('statusText').textContent = 'No results to copy';
+        statusText.textContent = 'No results to copy';
         return;
       }
       
       navigator.clipboard.writeText(resultText)
         .then(() => {
-          document.getElementById('statusText').textContent = 'Results copied to clipboard!';
+          statusText.textContent = 'Results copied to clipboard!';
         })
         .catch(err => {
-          document.getElementById('statusText').textContent = 'Failed to copy results';
+          statusText.textContent = 'Failed to copy results';
           console.error('Failed to copy: ', err);
         });
     }
@@ -411,7 +496,9 @@
       document.getElementById('urls').value = '';
       document.getElementById('domains').value = '';
       document.getElementById('result').textContent = '';
+      document.getElementById('errorSection').classList.remove('show');
       document.getElementById('statusText').textContent = 'All fields cleared';
+      document.getElementById('statusIndicator').classList.remove('error');
     }
   </script>
 </body>
