@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dork Generator - Bug Bounty Toolkit</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🐛 BugHunter Toolkit</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="uri-manager.html">URI Manager</a></li>
+            <li><a href="path-extractor.html">Path Extractor</a></li>
+            <li><a href="dork-generator.html" class="active">Dork Generator</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="themeToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
+                🔍 Google Dork Generator
+            </h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                Automated Google dorking tool for efficient information gathering and vulnerability research.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container" style="padding-bottom: 80px;">
+        <!-- Target Domain Input -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-2" style="font-size: 1.3rem;">🎯 Target Configuration</h2>
+            
+            <div class="input-group">
+                <label for="targetDomain">Target Domain</label>
+                <input 
+                    type="text" 
+                    id="targetDomain" 
+                    placeholder="example.com (without http:// or www.)"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="alert alert-info mt-2">
+                <span style="font-size: 1.2rem;">💡</span>
+                <div>
+                    <strong>Tip:</strong> Enter only the domain name without protocol (http/https) or www prefix. 
+                    Example: <code style="color: var(--yellow);">example.com</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="mb-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="base-card" style="text-align: center;">
+                <div style="font-size: 2rem; color: var(--orange); font-weight: bold;" id="totalCategories">7</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Categories</div>
+            </div>
+            <div class="base-card" style="text-align: center;">
+                <div style="font-size: 2rem; color: var(--yellow); font-weight: bold;" id="totalDorks">0</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Total Dorks</div>
+            </div>
+            <div class="base-card" style="text-align: center;">
+                <div style="font-size: 2rem; color: #4ade80; font-weight: bold;" id="executedDorks">0</div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">Executed</div>
+            </div>
+        </section>
+
+        <!-- Dork Categories -->
+        <section id="dorkCategories">
+            <!-- Categories will be dynamically generated here -->
+        </section>
+
+        <!-- Custom Dork Section -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-2" style="font-size: 1.3rem;">⚙️ Custom Dork Builder</h2>
+            
+            <div class="textarea-group">
+                <label for="customDork">Custom Dork Query</label>
+                <textarea 
+                    id="customDork" 
+                    placeholder="Build your own dork query... Use {domain} as placeholder for target domain"
+                    style="min-height: 100px;"
+                ></textarea>
+            </div>
+
+            <div class="button-group mt-2">
+                <button class="btn btn-primary" onclick="dorkManager.executeCustomDork()">
+                    🔍 Execute Custom Dork
+                </button>
+                <button class="btn btn-secondary" onclick="dorkManager.clearCustomDork()">
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <!-- Dork History -->
+        <section class="base-card mb-4">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 class="text-secondary" style="font-size: 1.3rem; margin: 0;">📜 Recent Dork History</h2>
+                <button class="btn btn-secondary" onclick="dorkManager.clearHistory()" style="padding: 0.4rem 1rem; font-size: 0.85rem;">
+                    Clear History
+                </button>
+            </div>
+
+            <div id="dorkHistory" class="output-section" style="max-height: 300px;">
+                <div class="output-content empty">No dorks executed yet</div>
+            </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="base-card">
+            <h2 class="text-secondary mb-2" style="font-size: 1.3rem;">ℹ️ Usage Guidelines</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">📌 Getting Started</span>
+                </div>
+                <div class="collapsible-content">
+                    <ul class="list-output">
+                        <li>Enter your target domain in the input field above (e.g., example.com)</li>
+                        <li>Browse through the available dork categories below</li>
+                        <li>Click any dork button to execute the search in a new tab</li>
+                        <li>Review the search results for potential findings</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">⚠️ Legal & Ethical Guidelines</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="alert alert-warning" style="margin: 0;">
+                        <span style="font-size: 1.2rem;">⚠️</span>
+                        <div>
+                            <strong>Important:</strong> Only use these dorks on domains you have explicit permission to test. 
+                            Unauthorized testing may be illegal. Always follow responsible disclosure practices.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">🎯 Dork Categories Explained</span>
+                </div>
+                <div class="collapsible-content">
+                    <ul class="list-output">
+                        <li><strong>Authentication & Access:</strong> Find login pages, admin panels, and authentication endpoints</li>
+                        <li><strong>Vulnerability Parameters:</strong> Discover URLs with parameters prone to XSS, SQLi, SSRF, etc.</li>
+                        <li><strong>Files & Extensions:</strong> Locate backup files, configuration files, and sensitive documents</li>
+                        <li><strong>Web Applications:</strong> Find API docs, error pages, and application frameworks</li>
+                        <li><strong>Cloud & Repositories:</strong> Search for exposed cloud storage and code repositories</li>
+                        <li><strong>Advanced Search:</strong> Specialized dorks for database files, shell files, and more</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-indicator"></div>
+            <span>Dork Generator Ready</span>
+        </div>
+        <div class="status-item">
+            <span>Last Executed: <span id="lastExecutedTime">Never</span></span>
+        </div>
+        <div class="status-item">
+            <span>Target: <span id="currentTarget">Not Set</span></span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/settings.js"></script>
+    <script src="js/dork.js"></script>
+</body>
+</html>
