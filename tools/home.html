@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Bounty Toolkit - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🐛 BugHunter Toolkit</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="uri-manager.html">URI Manager</a></li>
+            <li><a href="path-extractor.html">Path Extractor</a></li>
+            <li><a href="dork-generator.html">Dork Generator</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="themeToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+                <span id="themeIcon">🌙</span>
+            </button>
+            <button class="btn btn-secondary">Documentation</button>
+            <button class="btn btn-primary">Get Started</button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
+                Welcome to Bug Bounty Toolkit
+            </h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                A small but powerful collection of tools designed to help bug hunters streamline their reconnaissance and testing workflows.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Introduction Section -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-2" style="font-size: 1.8rem;">About This Toolkit</h2>
+            <p style="margin-bottom: 1rem; line-height: 1.8;">
+                This is a <strong style="color: var(--orange);">small bug bounty toolkit</strong> created to assist security researchers 
+                and bug hunters in their daily tasks. Currently featuring three essential tools, this collection focuses on 
+                simplifying common reconnaissance and testing activities.
+            </p>
+            <p style="line-height: 1.8;">
+                Whether you're organizing URLs, extracting paths from responses, or generating search dorks, 
+                these tools are designed to save you time and increase your efficiency during bug hunting sessions.
+            </p>
+        </section>
+
+        <!-- Available Tools -->
+        <section class="mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.8rem;">Available Tools</h2>
+            
+            <div class="tools-grid">
+                <!-- URI Manager Card -->
+                <div class="tool-card base-card">
+                    <div class="tool-header">
+                        <div class="tool-title">🔗 URI Manager</div>
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+                        Organize, sort, and manage your collected URLs efficiently. Perfect for keeping track of 
+                        discovered endpoints during reconnaissance.
+                    </p>
+                    <ul class="list-output" style="margin-bottom: 1rem;">
+                        <li>✓ URL deduplication</li>
+                        <li>✓ Domain filtering</li>
+                        <li>✓ Bulk URL operations</li>
+                        <li>✓ Export capabilities</li>
+                    </ul>
+                    <a href="uri-manager.html">
+                        <button class="btn btn-primary w-full">Open URI Manager →</button>
+                    </a>
+                </div>
+
+                <!-- Path Extractor Card -->
+                <div class="tool-card base-card">
+                    <div class="tool-header">
+                        <div class="tool-title">📂 Path Extractor</div>
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+                        Extract paths, endpoints, and parameters from various sources including HTML, JavaScript, 
+                        and API responses.
+                    </p>
+                    <ul class="list-output" style="margin-bottom: 1rem;">
+                        <li>✓ Multi-format support</li>
+                        <li>✓ Pattern recognition</li>
+                        <li>✓ Quick extraction</li>
+                        <li>✓ Clean output</li>
+                    </ul>
+                    <a href="path-extractor.html">
+                        <button class="btn btn-primary w-full">Open Path Extractor →</button>
+                    </a>
+                </div>
+
+                <!-- Dork Generator Card -->
+                <div class="tool-card base-card">
+                    <div class="tool-header">
+                        <div class="tool-title">🔍 Dork Generator</div>
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+                        Generate custom Google dorks and search queries for discovering sensitive information 
+                        and hidden endpoints.
+                    </p>
+                    <ul class="list-output" style="margin-bottom: 1rem;">
+                        <li>✓ Custom dork creation</li>
+                        <li>✓ Multiple operators</li>
+                        <li>✓ Template library</li>
+                        <li>✓ Copy & execute</li>
+                    </ul>
+                    <a href="dork-generator.html">
+                        <button class="btn btn-primary w-full">Open Dork Generator →</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Overview -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.8rem;">Why Use This Toolkit?</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1.1rem;">⚡ Fast & Efficient</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        All tools run directly in your browser with no backend required. Process data instantly.
+                    </p>
+                </div>
+                
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1.1rem;">🔒 Privacy First</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Your data never leaves your machine. Everything is processed locally in the browser.
+                    </p>
+                </div>
+                
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1.1rem;">🎯 Purpose-Built</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Designed specifically for bug hunters and security researchers' daily workflows.
+                    </p>
+                </div>
+                
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1.1rem;">💡 Simple to Use</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Clean interface with intuitive controls. No complex setup or configuration needed.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.8rem;">Getting Started</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">Step 1: Choose Your Tool</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Navigate to the tool you need from the navigation bar above or click on the tool cards. 
+                        Each tool has a dedicated page with all its features.
+                    </p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">Step 2: Input Your Data</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Paste or type your data into the input fields. Most tools support bulk operations 
+                        for processing multiple items at once.
+                    </p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">Step 3: Process & Export</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Click the process button and review the results. You can copy the output to clipboard 
+                        or download it as a file for further use.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Alert -->
+        <div class="alert alert-info">
+            <span style="font-size: 1.2rem;">💡</span>
+            <div>
+                <strong>Tip:</strong> Bookmark this page for quick access to your bug hunting tools. 
+                More tools and features are planned for future releases!
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-indicator"></div>
+            <span>All Systems Operational</span>
+        </div>
+        <div class="status-item">
+            <span>Tools Available: 3</span>
+        </div>
+        <div class="status-item">
+            <span>Version: 1.0.0</span>
+        </div>
+    </div>
+
+    <!-- Global Settings & Theme Script -->
+    <script src="js/settings.js"></script>
+</body>
+</html>
