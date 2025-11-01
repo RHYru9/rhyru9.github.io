@@ -155,19 +155,19 @@ function addQuickDomains(tld) {
 function showToast(message, type = 'success') {
   const toast = document.createElement('div');
   toast.style.cssText = `
-                position: fixed;
-                bottom: 100px;
-                right: 20px;
-                background: ${type === 'error' ? '#f87171' : type === 'warning' ? '#fbbf24' : 'var(--orange)'};
-                color: ${type === 'warning' ? '#1a1a1a' : 'var(--dark-blue)'};
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                font-weight: 600;
-                z-index: 9999;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                font-family: var(--font-main);
-                animation: slideIn 0.3s ease;
-            `;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: ${type === 'error' ? '#f87171' : type === 'warning' ? '#fbbf24' : 'var(--orange)'};
+    color: ${type === 'warning' ? '#1a1a1a' : 'var(--dark-blue)'};
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-family: var(--font-main);
+    animation: slideIn 0.3s ease;
+  `;
   toast.textContent = message;
   document.body.appendChild(toast);
 
@@ -177,31 +177,9 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
-// Collapsible functionality
-document.querySelectorAll('.collapsible-header').forEach(header => {
-  header.addEventListener('click', function() {
-    const collapsible = this.parentElement;
-    collapsible.classList.toggle('active');
-  });
-});
-
 // Update filter mode display on change
 document.querySelectorAll('input[name="filterType"]').forEach(radio => {
   radio.addEventListener('change', function() {
     document.getElementById('currentMode').textContent = this.value === 'include' ? 'Include' : 'Exclude';
   });
 });
-
-// Add CSS animation
-const style = document.createElement('style');
-style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(400px); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(400px); opacity: 0; }
-            }
-        `;
-document.head.appendChild(style);
