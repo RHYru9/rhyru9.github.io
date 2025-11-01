@@ -1,3 +1,15 @@
+// Extract domain from URL
+function extractDomain(url) {
+  try {
+    const trimmed = url.trim();
+    if (!trimmed) return null;
+
+    const u = new URL(trimmed);
+    return u.hostname.toLowerCase();
+  } catch (e) {
+    return null;
+  }
+}
 
 // Filter URLs based on domains
 function filterUrls() {
