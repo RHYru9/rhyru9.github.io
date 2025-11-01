@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Cleaner - Bug Bounty Toolkit</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🐛 BugHunter Toolkit</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="uri-manager.html">URI Manager</a></li>
+            <li><a href="path-extractor.html">Path Extractor</a></li>
+            <li><a href="dork-generator.html">Dork Generator</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="themeToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
+                🧹 URL Cleaner
+            </h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                Clean, deduplicate, and organize your URLs with advanced filtering and domain extraction
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Statistics -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-2" style="font-size: 1.3rem;">📊 Statistics</h2>
+            <div class="flex gap-3" style="flex-wrap: wrap;">
+                <div class="base-card" style="flex: 1; min-width: 150px; padding: 1rem; text-align: center;">
+                    <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Total Lines</div>
+                    <div class="text-secondary" style="font-size: 2rem; font-weight: bold;" id="totalLines">0</div>
+                </div>
+                <div class="base-card" style="flex: 1; min-width: 150px; padding: 1rem; text-align: center;">
+                    <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Valid URLs</div>
+                    <div class="text-secondary" style="font-size: 2rem; font-weight: bold;" id="validUrls">0</div>
+                </div>
+                <div class="base-card" style="flex: 1; min-width: 150px; padding: 1rem; text-align: center;">
+                    <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Unique Domains</div>
+                    <div class="text-secondary" style="font-size: 2rem; font-weight: bold;" id="uniqueDomains">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TLD Configuration Section -->
+        <section class="base-card mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-secondary" style="font-size: 1.3rem;">⚙️ TLD Configuration</h2>
+                <button class="btn btn-secondary" onclick="showTLDConfig()">Configure TLDs</button>
+            </div>
+            
+            <div class="alert alert-info">
+                <span style="font-size: 1rem;">💡</span>
+                <div style="flex: 1;">
+                    <strong>Custom TLDs:</strong> Configure multi-level TLDs (like co.id, ac.id, gov.uk) for accurate root domain extraction.
+                    <div id="tldList" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                        <em style="color: var(--text-muted);">No custom TLDs configured</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Tool Grid -->
+        <div class="dashboard-grid">
+            <!-- Input Section -->
+            <div class="tool-card base-card">
+                <div class="tool-header">
+                    <div class="tool-title">📥 Input URLs</div>
+                    <span class="badge badge-info" id="inputCount">0 lines</span>
+                </div>
+
+                <div class="textarea-group">
+                    <label>Paste your URLs here (one per line):</label>
+                    <textarea id="urls" rows="15" placeholder="https://example.com/page1
+https://example.co.id/api/v1/users
+http://subdomain.example.com/path
+example.com/resource"></textarea>
+                </div>
+
+                <div class="button-group mt-2">
+                    <button class="btn btn-primary" onclick="u()">🔄 Update</button>
+                    <button class="btn btn-secondary" onclick="q()">🗑️ Clear All</button>
+                </div>
+            </div>
+
+            <!-- Quick Stats & Actions -->
+            <div>
+                <div class="tool-card base-card mb-3">
+                    <div class="tool-header">
+                        <div class="tool-title">⚡ Quick Actions</div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="j()">Remove Duplicates</button>
+                        <button class="btn btn-primary" onclick="m1()">Validate URLs</button>
+                    </div>
+                    
+                    <div class="button-group mt-2">
+                        <button class="btn btn-secondary" onclick="l1()">Sort A-Z</button>
+                        <button class="btn btn-secondary" onclick="count()">Count Results</button>
+                    </div>
+                </div>
+
+                <div class="tool-card base-card">
+                    <div class="tool-header">
+                        <div class="tool-title">💾 Export</div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="cr()">📋 Copy</button>
+                        <button class="btn btn-primary" onclick="dr()">💾 Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operations Section -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.3rem;">🛠️ Operations</h2>
+            
+            <!-- Protocol Operations -->
+            <div class="collapsible active">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">🔗 Protocol Operations</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="e1()">Add HTTPS</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="f()">Add HTTP</button>
+                        <button class="btn btn-secondary" style="flex: 1; min-width: 140px;" onclick="g()">Remove Protocols</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WWW Operations -->
+            <div class="collapsible active">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">🌐 WWW Operations</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="i()">Add WWW</button>
+                        <button class="btn btn-secondary" style="flex: 1; min-width: 140px;" onclick="h()">Remove WWW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cleaning Operations -->
+            <div class="collapsible active">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">🧹 Cleaning Operations</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="b()">Clean to Domains</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="k()">Extract Root Domains</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="c1()">Normalize URLs</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="a()">Remove Case Duplicates</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Path Operations -->
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">📂 Path Operations</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="p1()">Add Trailing Slash</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="d1()">Remove Endpoint Duplicates</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Operations -->
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">🔬 Advanced Operations</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="et()">Extract TLDs</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 140px;" onclick="gtld()">Group by TLD</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filtering Section -->
+        <section class="base-card mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-secondary" style="font-size: 1.3rem;">🔍 Domain Filtering</h2>
+                <button class="btn btn-secondary" onclick="tc()">Toggle Filters</button>
+            </div>
+
+            <div id="filterControls" style="display: none;">
+                <div class="dashboard-grid">
+                    <div>
+                        <div class="textarea-group">
+                            <label>Include Only These Domains:</label>
+                            <textarea id="includeDomains" rows="6" placeholder="example.com
+subdomain.example.com
+example.co.id"></textarea>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-primary" style="flex: 1;" onclick="n1()">Apply Include Filter</button>
+                            <button class="btn btn-secondary" onclick="ci()">Clear</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="textarea-group">
+                            <label>Exclude These Domains:</label>
+                            <textarea id="excludeDomains" rows="6" placeholder="spam.com
+unwanted.example.com
+test.local"></textarea>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn btn-primary" style="flex: 1;" onclick="o1()">Apply Exclude Filter</button>
+                            <button class="btn btn-secondary" onclick="ce()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Output Section -->
+        <section class="tool-card base-card">
+            <div class="tool-header">
+                <div class="tool-title">📤 Results</div>
+                <span class="badge badge-success" id="outputCount">0 lines</span>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">
+                    <span class="output-label">Cleaned URLs</span>
+                    <div class="output-actions">
+                        <button class="copy-btn" onclick="cr()">Copy</button>
+                        <button class="download-btn" onclick="dr()">Download</button>
+                    </div>
+                </div>
+                <textarea id="cleanedUrls" class="output-content" rows="15" readonly placeholder="Results will appear here..."></textarea>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loading" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" style="position: fixed; bottom: 100px; right: 20px; background: var(--orange); color: var(--dark-blue); padding: 1rem 1.5rem; border-radius: 8px; font-weight: 600; opacity: 0; transition: opacity 0.3s ease; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>
+    </div>
+
+    <!-- TLD Configuration Modal -->
+    <div id="tldModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="base-card" style="max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-secondary" style="font-size: 1.5rem;">⚙️ Configure TLDs</h2>
+                <button class="btn btn-secondary" onclick="hideTLDConfig()">✕ Close</button>
+            </div>
+
+            <div class="alert alert-info mb-3">
+                <span>💡</span>
+                <div style="flex: 1;">
+                    <strong>What are multi-level TLDs?</strong><br>
+                    <span style="font-size: 0.85rem;">Some domains use multiple levels like .co.id, .ac.uk, .gov.au. Add them here for accurate root domain extraction.</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Add TLD (without leading dot):</label>
+                <div class="flex gap-2">
+                    <input type="text" id="tldInput" placeholder="co.id or ac.uk or gov.au" style="flex: 1;">
+                    <button class="btn btn-primary" onclick="addTLD()">➕ Add</button>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mb-3">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="addCommonIndonesianTLDs()">🇮🇩 Add Indonesian TLDs</button>
+                <button class="btn btn-secondary" onclick="clearAllTLDs()">🗑️ Clear All</button>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <h3 class="text-secondary mb-2" style="font-size: 1.1rem;">Configured TLDs:</h3>
+                <div id="tldList" style="padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; min-height: 100px; max-height: 300px; overflow-y: auto;">
+                    <em style="color: var(--text-muted);">No custom TLDs configured</em>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <h4 class="text-muted mb-2" style="font-size: 0.9rem;">Examples of multi-level TLDs:</h4>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8;">
+                    <strong>Indonesia:</strong> co.id, ac.id, go.id, sch.id, net.id, or.id, web.id<br>
+                    <strong>UK:</strong> co.uk, ac.uk, gov.uk, org.uk<br>
+                    <strong>Australia:</strong> com.au, gov.au, edu.au<br>
+                    <strong>Japan:</strong> co.jp, ac.jp, go.jp
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-indicator"></div>
+            <span>URL Cleaner Active</span>
+        </div>
+        <div class="status-item">
+            <span>Custom TLDs: <span id="tldCount">0</span></span>
+        </div>
+        <div class="status-item">
+            <span>Version: 1.0.0</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/settings.js"></script>
+    <script src="js/clean.js"></script>
+    <script>
+        // Initialize collapsibles
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+            });
+        });
+
+        // Update input count on change
+        document.getElementById('urls').addEventListener('input', function() {
+            const lines = this.value.trim().split('\n').filter(l => l.trim()).length;
+            document.getElementById('inputCount').textContent = lines + ' lines';
+        });
+
+        // Update output count when results change
+        document.getElementById('cleanedUrls').addEventListener('input', function() {
+            const lines = this.value.trim().split('\n').filter(l => l.trim()).length;
+            document.getElementById('outputCount').textContent = lines + ' lines';
+        });
+
+        // Update TLD count in status bar
+        function updateTLDCount() {
+            document.getElementById('tldCount').textContent = customTLDs.size;
+        }
+
+        // Override updateTLDDisplay to also update count
+        const originalUpdateTLDDisplay = updateTLDDisplay;
+        updateTLDDisplay = function() {
+            originalUpdateTLDDisplay();
+            updateTLDCount();
+        };
+
+        // Toast helper with show class
+        const originalShowToast = m;
+        m = function(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        };
+
+        // Initialize
+        updateTLDCount();
+    </script>
+</body>
+</html>
