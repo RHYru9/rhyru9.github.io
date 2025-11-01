@@ -1,3 +1,6 @@
+// domain-filter.js
+// Enhanced URL Filter Tool with Port Filtering
+
 function extractDomain(url) {
   try {
     const trimmed = url.trim();
@@ -113,7 +116,7 @@ function filterUrls() {
       } else {
         const port = extractPort(url);
         
-        // Key logic: Only check port filter if URL has explicit port
+        // KEY LOGIC: Only check port filter if URL has explicit port
         if (port === null || port === '') {
           // URL has NO explicit port (e.g., http://example.com)
           // Always include it regardless of port filter
@@ -283,12 +286,29 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
+// Initialize collapsible sections
+function initializeCollapsibles() {
+  const collapsibles = document.querySelectorAll('.collapsible-header');
+  
+  collapsibles.forEach(header => {
+    header.addEventListener('click', function() {
+      const parent = this.parentElement;
+      parent.classList.toggle('active');
+    });
+  });
+}
+
 // Update filter mode display on change
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize collapsibles
+  initializeCollapsibles();
+
+  // Domain filter mode change
   document.querySelectorAll('input[name="filterType"]').forEach(radio => {
     radio.addEventListener('change', updateModeDisplay);
   });
 
+  // Port filter mode change
   document.querySelectorAll('input[name="portFilterType"]').forEach(radio => {
     radio.addEventListener('change', function() {
       togglePortFilter();
