@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Extractor - Bug Bounty Toolkit</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🐛 BugHunter Toolkit</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="uri-manager.html">URI Manager</a></li>
+            <li><a href="path-extractor.html">Path Extractor</a></li>
+            <li><a href="dork-generator.html">Dork Generator</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="themeToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
+                📂 Path Extractor
+            </h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                Extract clean paths and segments from URLs for bug bounty wordlists. Automatically filters out base64, UUIDs, and spam content.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Configuration Panel -->
+        <section class="rhyru-panel">
+            <h2 class="text-secondary mb-3" style="font-size: 1.5rem;">⚙️ Extraction Settings</h2>
+            
+            <!-- Mode Selection -->
+            <div class="input-group">
+                <label>Extraction Mode</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="mode-segments" name="mode" value="segments" checked>
+                        <label for="mode-segments">Segments (Split paths into individual segments)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="mode-fullpaths" name="mode" value="fullpaths">
+                        <label for="mode-fullpaths">Full Paths (Keep complete paths)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="mode-domains" name="mode" value="domains">
+                        <label for="mode-domains">Domains Only (Extract hostnames)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div class="checkbox-group" style="margin-top: 1.5rem;">
+                <div class="collapsible active">
+                    <div class="collapsible-header">
+                        <span style="font-weight: 600;">Filtering Options</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opt-split" checked>
+                            <label for="opt-split">Split into segments (only for Segments mode)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opt-exclude-query" checked>
+                            <label for="opt-exclude-query">Exclude query strings (?param=value)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opt-exclude-ext" checked>
+                            <label for="opt-exclude-ext">Exclude file extensions (.js, .css, .png, etc)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opt-exclude-articles" checked>
+                            <label for="opt-exclude-articles">Exclude spammy articles (SEO spam paths)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input Section -->
+        <section class="tool-card base-card mb-4">
+            <div class="tool-header">
+                <div class="tool-title">📥 Input URLs/Paths</div>
+                <span class="badge badge-info">One per line</span>
+            </div>
+            
+            <div class="textarea-group">
+                <label>Paste your URLs or paths here (one per line):</label>
+                <textarea id="input-urls" placeholder="https://example.com/api/v1/users&#10;https://example.com/admin/dashboard&#10;/reset-password&#10;/news/12345&#10;https://example.com/assets/js/main.js" rows="12"></textarea>
+            </div>
+
+            <div class="alert alert-info mt-2">
+                <span style="font-size: 1.2rem;">💡</span>
+                <div>
+                    <strong>Tip:</strong> You can input full URLs (with http/https) or relative paths. 
+                    The tool will automatically detect and process both formats.
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="btn-extract" class="btn btn-primary">
+                    ⚡ Extract Paths
+                </button>
+                <button id="btn-clear-input" class="btn btn-secondary">
+                    🗑️ Clear Input
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="tool-card base-card mb-4">
+            <div class="tool-header">
+                <div class="tool-title">📤 Extraction Results</div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span id="stats-badge" class="badge badge-success">Ready</span>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="chart-info mb-3" id="stats-section" style="display: none;">
+                <div class="info-row">
+                    <span class="info-label">Total Processed:</span>
+                    <span class="info-value" id="stat-total">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Filtered Out:</span>
+                    <span class="info-value" id="stat-filtered">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Unique Results:</span>
+                    <span class="info-value" id="stat-unique">0</span>
+                </div>
+            </div>
+
+            <!-- Output -->
+            <div class="output-section">
+                <div class="output-header">
+                    <span class="output-label">Wordlist Output</span>
+                    <div class="output-actions">
+                        <button id="btn-copy" class="copy-btn">📋 Copy</button>
+                        <button id="btn-download" class="download-btn">💾 Download</button>
+                        <button id="btn-clear-output" class="clear-btn">🗑️ Clear</button>
+                    </div>
+                </div>
+                <div id="output-content" class="output-content empty">
+                    No results yet. Configure your settings and click "Extract Paths" to begin.
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.5rem;">📚 How It Works</h2>
+            
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">What does this tool do?</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        Path Extractor analyzes URLs and paths to generate clean wordlists for bug bounty hunting. 
+                        It intelligently filters out noise like base64 tokens, UUIDs, numeric IDs, and spam content, 
+                        leaving you with useful endpoints and segments.
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        Perfect for building custom wordlists from discovered URLs during reconnaissance!
+                    </p>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">What gets filtered out?</span>
+                </div>
+                <div class="collapsible-content">
+                    <ul class="list-output">
+                        <li><strong>Base64 tokens:</strong> Long alphanumeric strings (20+ chars)</li>
+                        <li><strong>UUIDs:</strong> Standard UUID format patterns</li>
+                        <li><strong>Hash values:</strong> MD5, SHA, and other hex strings</li>
+                        <li><strong>Numeric IDs:</strong> Pure number segments</li>
+                        <li><strong>File extensions:</strong> .js, .css, .png, .jpg, etc (optional)</li>
+                        <li><strong>Technical noise:</strong> Symbol., Math., prototype., etc</li>
+                        <li><strong>Spam articles:</strong> SEO spam paths with multiple hyphens (optional)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">Extraction Modes Explained</span>
+                </div>
+                <div class="collapsible-content">
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Segments Mode</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.5rem;">
+                            Splits paths into individual segments. Example:
+                        </p>
+                        <div class="code-block">
+                            <pre>Input:  /api/v1/users
+Output: /api
+        /v1
+        /users</pre>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Full Paths Mode</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.5rem;">
+                            Keeps complete paths intact. Example:
+                        </p>
+                        <div class="code-block">
+                            <pre>Input:  /api/v1/users
+Output: /api/v1/users</pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Domains Mode</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.5rem;">
+                            Extracts only domain names. Example:
+                        </p>
+                        <div class="code-block">
+                            <pre>Input:  https://example.com/api/users
+Output: example.com</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span style="font-weight: 600;">Example Usage</span>
+                </div>
+                <div class="collapsible-content">
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                        Here's a practical example of what you might input and receive:
+                    </p>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Sample Input:</h4>
+                        <div class="code-block">
+                            <pre>https://example.com/api/v1/users
+https://example.com/admin/dashboard
+https://example.com/reset-password
+https://example.com/news/12345
+https://example.com/post/olivia-manning-cmhwgu-test
+https://example.com/assets/js/main.js
+https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Expected Output (Segments Mode):</h4>
+                        <div class="code-block">
+                            <pre>/admin
+/api
+/dashboard
+/reset-password
+/users
+/v1</pre>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem; font-style: italic;">
+                            Note: Numeric IDs (12345), spam articles, JWT tokens, and .js files are filtered out
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="base-card mb-4">
+            <h2 class="text-secondary mb-3" style="font-size: 1.5rem;">💡 Pro Tips</h2>
+            
+            <div style="display: grid; gap: 1rem;">
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1rem;">🎯 Build Custom Wordlists</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Use this tool to extract paths from your target's responses and build custom wordlists for fuzzing and directory brute-forcing.
+                    </p>
+                </div>
+                
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1rem;">⚡ Process Bulk Data</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Paste hundreds or thousands of URLs at once. The tool handles deduplication and filtering automatically.
+                    </p>
+                </div>
+                
+                <div style="padding: 1rem; background: rgba(254, 127, 45, 0.1); border-left: 3px solid var(--orange); border-radius: 4px;">
+                    <h3 style="color: var(--yellow); margin-bottom: 0.5rem; font-size: 1rem;">🔄 Combine with Other Tools</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Export the results and use them with tools like ffuf, gobuster, or dirsearch for effective endpoint discovery.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-indicator"></div>
+            <span>Path Extractor Ready</span>
+        </div>
+        <div class="status-item">
+            <span id="status-mode">Mode: Segments</span>
+        </div>
+        <div class="status-item">
+            <span id="status-results">Results: 0</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/settings.js"></script>
+    <script src="js/extract.js"></script>
+    <script>
+        // Initialize Path Extractor
+        let extractor;
+        
+        // Get DOM elements
+        const inputUrls = document.getElementById('input-urls');
+        const outputContent = document.getElementById('output-content');
+        const statsSection = document.getElementById('stats-section');
+        const statsBadge = document.getElementById('stats-badge');
+        
+        // Mode radio buttons
+        const modeRadios = document.querySelectorAll('input[name="mode"]');
+        
+        // Option checkboxes
+        const optSplit = document.getElementById('opt-split');
+        const optExcludeQuery = document.getElementById('opt-exclude-query');
+        const optExcludeExt = document.getElementById('opt-exclude-ext');
+        const optExcludeArticles = document.getElementById('opt-exclude-articles');
+        
+        // Buttons
+        const btnExtract = document.getElementById('btn-extract');
+        const btnCopy = document.getElementById('btn-copy');
+        const btnDownload = document.getElementById('btn-download');
+        const btnClearInput = document.getElementById('btn-clear-input');
+        const btnClearOutput = document.getElementById('btn-clear-output');
+        
+        // Initialize extractor with default options
+        function updateExtractor() {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            
+            extractor = new PathExtractor({
+                mode: mode,
+                splitSegments: optSplit.checked,
+                excludeQuery: optExcludeQuery.checked,
+                excludeExtensions: optExcludeExt.checked,
+                excludeArticles: optExcludeArticles.checked
+            });
+            
+            // Update status bar
+            document.getElementById('status-mode').textContent = `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+        }
+        
+        // Event: Extract paths
+        btnExtract.addEventListener('click', () => {
+            const input = inputUrls.value.trim();
+            
+            if (!input) {
+                alert('Please enter some URLs or paths first!');
+                return;
+            }
+            
+            updateExtractor();
+            
+            // Show loading state
+            btnExtract.disabled = true;
+            btnExtract.textContent = '⚡ Processing...';
+            statsBadge.textContent = 'Processing...';
+            statsBadge.className = 'badge badge-warning';
+            
+            // Process with small delay for UI update
+            setTimeout(() => {
+                const result = extractor.extract(input);
+                
+                // Update output
+                if (result.results.length > 0) {
+                    outputContent.textContent = extractor.formatOutput(result.results);
+                    outputContent.classList.remove('empty');
+                } else {
+                    outputContent.textContent = 'No valid paths found after filtering.';
+                    outputContent.classList.add('empty');
+                }
+                
+                // Update statistics
+                document.getElementById('stat-total').textContent = result.stats.total;
+                document.getElementById('stat-filtered').textContent = result.stats.filtered;
+                document.getElementById('stat-unique').textContent = result.stats.unique;
+                statsSection.style.display = 'block';
+                
+                // Update status
+                statsBadge.textContent = `${result.stats.unique} Results`;
+                statsBadge.className = 'badge badge-success';
+                document.getElementById('status-results').textContent = `Results: ${result.stats.unique}`;
+                
+                // Reset button
+                btnExtract.disabled = false;
+                btnExtract.textContent = '⚡ Extract Paths';
+            }, 100);
+        });
+        
+        // Event: Copy to clipboard
+        btnCopy.addEventListener('click', () => {
+            const text = outputContent.textContent;
+            
+            if (!text || outputContent.classList.contains('empty')) {
+                alert('No content to copy!');
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                btnCopy.classList.add('copied');
+                btnCopy.textContent = '✓ Copied!';
+                
+                setTimeout(() => {
+                    btnCopy.classList.remove('copied');
+                    btnCopy.textContent = '📋 Copy';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        });
+        
+        // Event: Download as file
+        btnDownload.addEventListener('click', () => {
+            const text = outputContent.textContent;
+            
+            if (!text || outputContent.classList.contains('empty')) {
+                alert('No content to download!');
+                return;
+            }
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'extracted-paths.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+        
+        // Event: Clear input
+        btnClearInput.addEventListener('click', () => {
+            if (confirm('Clear all input?')) {
+                inputUrls.value = '';
+            }
+        });
+        
+        // Event: Clear output
+        btnClearOutput.addEventListener('click', () => {
+            if (confirm('Clear results?')) {
+                outputContent.textContent = 'No results yet. Configure your settings and click "Extract Paths" to begin.';
+                outputContent.classList.add('empty');
+                statsSection.style.display = 'none';
+                statsBadge.textContent = 'Ready';
+                statsBadge.className = 'badge badge-success';
+                document.getElementById('status-results').textContent = 'Results: 0';
+            }
+        });
+        
+        // Event: Mode change - disable split option for non-segments mode
+        modeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const isSplitRelevant = e.target.value === 'segments';
+                optSplit.disabled = !isSplitRelevant;
+                optSplit.parentElement.style.opacity = isSplitRelevant ? '1' : '0.5';
+            });
+        });
+        
+        // Initialize collapsibles
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('active');
+            });
+        });
+        
+        // Initialize extractor
+        updateExtractor();
+    </script>
+</body>
+</html>
