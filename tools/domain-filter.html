@@ -61,7 +61,7 @@ sub.example.com
 target.gov.id"></textarea>
       </div>
 
-      <!-- Filter Mode -->
+      <!-- Domain Filter Mode -->
       <div class="input-group">
         <label>Domain Filter Mode:</label>
         <div class="radio-group">
@@ -97,14 +97,19 @@ target.gov.id"></textarea>
 
       <!-- Ports Input (Hidden by default) -->
       <div id="portFilterSection" class="input-group" style="display: none;">
-        <label for="ports">Paste ports to filter (one per line, leave empty for default ports):</label>
-        <textarea id="ports" placeholder="8080
+        <label for="ports">Paste ports to filter (one per line):</label>
+        <textarea id="ports" placeholder="80
+8080
+443
 3000
-8443
 9000"></textarea>
-        <p class="text-muted" style="font-size: 0.85rem; margin-top: 0.5rem;">
-          💡 Tip: Leave port empty to match URLs without explicit port (default 80/443)
-        </p>
+        <div class="alert alert-info mt-1">
+          <span style="font-size: 1rem;">💡</span>
+          <div style="flex: 1;">
+            <strong>Important:</strong> Port filter only applies to URLs with <strong>explicit ports</strong> (e.g., :8080). 
+            URLs without explicit ports (e.g., http://example.com) will always pass through port filter.
+          </div>
+        </div>
       </div>
 
       <!-- Action Buttons -->
@@ -143,8 +148,7 @@ target.gov.id"></textarea>
           <span style="font-weight: 600;">🇮🇩 Indonesian Domains</span>
         </div>
         <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common Indonesian TLDs to domain filter
-          </p>
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common Indonesian TLDs to domain filter</p>
           <div class="button-group">
             <button class="btn btn-secondary" onclick="addQuickDomains('co.id')">Add *.co.id</button>
             <button class="btn btn-secondary" onclick="addQuickDomains('ac.id')">Add *.ac.id</button>
@@ -159,8 +163,7 @@ target.gov.id"></textarea>
           <span style="font-weight: 600;">🌍 International Domains</span>
         </div>
         <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common international TLDs to domain filter
-          </p>
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common international TLDs to domain filter</p>
           <div class="button-group">
             <button class="btn btn-secondary" onclick="addQuickDomains('gov.uk')">Add *.gov.uk</button>
             <button class="btn btn-secondary" onclick="addQuickDomains('gov.au')">Add *.gov.au</button>
@@ -175,8 +178,7 @@ target.gov.id"></textarea>
           <span style="font-weight: 600;">🔌 Common Ports</span>
         </div>
         <div class="collapsible-content">
-          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common port numbers to port filter
-          </p>
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common port numbers to port filter</p>
           <div class="button-group">
             <button class="btn btn-secondary" onclick="addQuickPorts('80\n443')">Add HTTP/HTTPS (80, 443)</button>
             <button class="btn btn-secondary" onclick="addQuickPorts('8080\n8443')">Add Alt HTTP (8080, 8443)</button>
