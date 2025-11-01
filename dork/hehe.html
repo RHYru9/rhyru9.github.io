@@ -5,63 +5,354 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Filter URL by Active Domains</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px;
-      background-color: #f9f9f9;
-      color: #333;
+      font-family: 'Courier New', 'Monaco', monospace;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #00ff88;
+      min-height: 100vh;
+      line-height: 1.6;
     }
-    h1 {
+
+    /* Navbar Styles */
+    .navbar {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #00ff88;
+      padding: 1rem 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
       font-size: 1.5rem;
-      margin-bottom: 16px;
+      font-weight: bold;
+      color: #00ff88;
+      text-shadow: 0 0 10px #00ff88;
     }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: #888;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #00ff88;
+      border-color: #00ff88;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+      text-shadow: 0 0 5px #00ff88;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 100px;
+      padding: 2rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #00ff88;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+
+    /* Tool Container */
+    .tool-container {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff88, transparent);
+      transition: left 0.5s;
+    }
+
+    .tool-container:hover {
+      border-color: #00ff88;
+      box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
+    }
+
+    .tool-container:hover::before {
+      left: 100%;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: #00ff88;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #00ff88;
+    }
+
     textarea {
       width: 100%;
       height: 120px;
       margin-bottom: 12px;
-      padding: 8px;
-      font-family: monospace;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #00ff88;
+      transition: all 0.3s ease;
+      resize: vertical;
     }
-    button {
-      padding: 8px 16px;
-      background-color: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 4px;
+
+    textarea:focus {
+      outline: none;
+      border-color: #00ff88;
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       cursor: pointer;
-      font-size: 14px;
     }
+
+    .radio-label input[type="radio"] {
+      accent-color: #00ff88;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      background: transparent;
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
     button:hover {
-      background-color: #0052a3;
+      background: #00ff88;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      transform: translateY(-2px);
     }
+
+    button:active {
+      transform: translateY(0);
+    }
+
     #result {
       margin-top: 20px;
       white-space: pre-wrap;
-      font-family: monospace;
-      background-color: #fff;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      border: 1px solid #333;
+      border-radius: 8px;
       overflow-x: auto;
+      min-height: 100px;
+      color: #00ff88;
+    }
+
+    .status-bar {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      border: 1px solid #333;
+      font-family: 'Courier New', monospace;
+      color: #888;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #00ff88;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      animation: pulse 1s infinite;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
+
+    .footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #00ff88; }
+      to { text-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88; }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Filter URL by Active Domains</h1>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">URL Filter</div>
+      <ul class="nav-links">
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Tools</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
 
-  <label for="urls">Paste URLs (one per line):</label>
-  <textarea id="urls" placeholder="http://example.com/path&#10;https://sub.example.com/..."></textarea>
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="hero-section">
+      <h1 class="hero-title">Filter URL by Active Domains</h1>
+      <p class="hero-subtitle">Filter your URLs based on active domains with exclude/include options</p>
+    </div>
 
-  <label for="domains">Paste active domains (one per line):</label>
-  <textarea id="domains" placeholder="example.com&#10;sub.example.com"></textarea>
+    <div class="tool-container">
+      <h2 class="section-title">URL Filter Tool</h2>
+      
+      <label for="urls">Paste URLs (one per line):</label>
+      <textarea id="urls" placeholder="http://example.com/path&#10;https://sub.example.com/..."></textarea>
 
-  <button onclick="filterUrls()">Filter URLs</button>
+      <label for="domains">Paste domains (one per line):</label>
+      <textarea id="domains" placeholder="example.com&#10;sub.example.com"></textarea>
 
-  <div id="result"></div>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="filterType" value="include" checked>
+          Include only these domains
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="filterType" value="exclude">
+          Exclude these domains
+        </label>
+      </div>
+
+      <div class="button-group">
+        <button onclick="filterUrls()">Filter URLs</button>
+        <button onclick="copyResults()">Copy Results</button>
+        <button onclick="clearAll()">Clear All</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+
+    <div class="status-bar">
+      <span class="status-indicator"></span>
+      <span id="statusText">Ready to filter URLs</span>
+    </div>
+
+    <div class="footer">
+      <p>URL Filter Tool &copy; 2023 | Made with ❤️ for developers</p>
+    </div>
+  </div>
 
   <script>
     function extractDomain(url) {
@@ -76,21 +367,51 @@
     function filterUrls() {
       const urlInput = document.getElementById('urls').value;
       const domainInput = document.getElementById('domains').value;
-
+      const filterType = document.querySelector('input[name="filterType"]:checked').value;
+      
       const urls = urlInput.split('\n').map(s => s.trim()).filter(s => s);
-      const activeDomains = new Set(
+      const domains = new Set(
         domainInput.split('\n').map(s => s.trim().toLowerCase()).filter(s => s)
       );
 
       const filtered = [];
       for (const url of urls) {
         const domain = extractDomain(url);
-        if (domain && activeDomains.has(domain)) {
+        const isDomainInList = domain && domains.has(domain);
+        
+        if (filterType === 'include' && isDomainInList) {
+          filtered.push(url);
+        } else if (filterType === 'exclude' && !isDomainInList) {
           filtered.push(url);
         }
       }
 
       document.getElementById('result').textContent = filtered.join('\n');
+      document.getElementById('statusText').textContent = `Filtered ${urls.length} URLs, found ${filtered.length} matches`;
+    }
+
+    function copyResults() {
+      const resultText = document.getElementById('result').textContent;
+      if (!resultText) {
+        document.getElementById('statusText').textContent = 'No results to copy';
+        return;
+      }
+      
+      navigator.clipboard.writeText(resultText)
+        .then(() => {
+          document.getElementById('statusText').textContent = 'Results copied to clipboard!';
+        })
+        .catch(err => {
+          document.getElementById('statusText').textContent = 'Failed to copy results';
+          console.error('Failed to copy: ', err);
+        });
+    }
+
+    function clearAll() {
+      document.getElementById('urls').value = '';
+      document.getElementById('domains').value = '';
+      document.getElementById('result').textContent = '';
+      document.getElementById('statusText').textContent = 'All fields cleared';
     }
   </script>
 </body>
