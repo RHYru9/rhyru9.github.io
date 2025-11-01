@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain Filter - Bug Bounty Toolkit</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">🐛 BugHunter Toolkit</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="uri-manager.html">URI Manager</a></li>
+      <li><a href="path-extractor.html">Path Extractor</a></li>
+      <li><a href="dork-generator.html">Dork Generator</a></li>
+      <li><a href="domain-filter.html">Domain Filters</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="themeToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--yellow); text-align: center;">
+        🔍 Filter URL by Active Domains
+      </h1>
+      <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+        Filter your URLs based on active domains with exclude/include options
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container" style="padding-bottom: 100px;">
+    <!-- Main Tool Container -->
+    <section class="base-card">
+      <h2 class="text-secondary mb-3" style="font-size: 1.3rem;">🛠️ URL Filter Tool</h2>
+
+      <!-- URLs Input -->
+      <div class="input-group">
+        <label for="urls">Paste URLs (one per line):</label>
+        <textarea id="urls" placeholder="http://example.com/path
+https://sub.example.com/api
+https://target.gov.id/admin
+https://api.example.co.id/data"></textarea>
+      </div>
+
+      <!-- Domains Input -->
+      <div class="input-group">
+        <label for="domains">Paste domains to filter (one per line):</label>
+        <textarea id="domains" placeholder="example.com
+sub.example.com
+target.gov.id"></textarea>
+      </div>
+
+      <!-- Filter Mode -->
+      <div class="input-group">
+        <label>Filter Mode:</label>
+        <div class="radio-group">
+          <div class="radio-item">
+            <input type="radio" id="includeMode" name="filterType" value="include" checked>
+            <label for="includeMode">Include only these domains</label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" id="excludeMode" name="filterType" value="exclude">
+            <label for="excludeMode">Exclude these domains</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group mt-2">
+        <button class="btn btn-primary" onclick="filterUrls()">🔍 Filter URLs</button>
+        <button class="btn btn-primary" onclick="copyResults()">📋 Copy Results</button>
+        <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="output-section">
+        <div class="output-header">
+          <span class="output-label">Filtered Results</span>
+          <span class="badge badge-success" id="resultCount">0 results</span>
+        </div>
+        <div id="result" class="output-content empty">No results yet. Click "Filter URLs" to start.</div>
+      </div>
+
+      <!-- Error Section -->
+      <div id="errorSection" class="alert alert-error mt-2" style="display: none;">
+        <span style="font-size: 1rem;">⚠️</span>
+        <div style="flex: 1;">
+          <strong>Invalid URLs Found:</strong>
+          <div id="errorList" style="margin-top: 0.5rem; font-size: 0.85rem; font-family: 'Courier New', monospace;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="base-card">
+      <h2 class="text-secondary mb-3" style="font-size: 1.3rem;">⚡ Quick Actions</h2>
+
+      <div class="collapsible active">
+        <div class="collapsible-header">
+          <span style="font-weight: 600;">🇮🇩 Indonesian Domains</span>
+        </div>
+        <div class="collapsible-content">
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common Indonesian TLDs to domain filter
+          </p>
+          <div class="button-group">
+            <button class="btn btn-secondary" onclick="addQuickDomains('co.id')">Add *.co.id</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('ac.id')">Add *.ac.id</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('go.id')">Add *.go.id</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('gov.id')">Add *.gov.id</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <div class="collapsible-header">
+          <span style="font-weight: 600;">🌍 International Domains</span>
+        </div>
+        <div class="collapsible-content">
+          <p class="text-muted mb-2" style="font-size: 0.85rem;">Click to add common international TLDs to domain filter
+          </p>
+          <div class="button-group">
+            <button class="btn btn-secondary" onclick="addQuickDomains('gov.uk')">Add *.gov.uk</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('gov.au')">Add *.gov.au</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('gov')">Add *.gov</button>
+            <button class="btn btn-secondary" onclick="addQuickDomains('edu')">Add *.edu</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-item">
+      <div class="status-indicator" id="statusIndicator"></div>
+      <span id="statusText">Ready to filter URLs</span>
+    </div>
+    <div class="status-item">
+      <span>Mode: <span id="currentMode">Include</span></span>
+    </div>
+    <div class="status-item">
+      <span>Version: 1.0.0</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/settings.js"></script>
+  <script src="js/domain-filter.js"></script>
+</body>
+
+</html>
