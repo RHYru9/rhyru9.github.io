@@ -1,25 +1,22 @@
-// domain-filter.js
-// Enhanced URL Filter Tool with Port Filtering
-
-function extractDomain(url) {
+// Ekstrak hostname dan port EKSPLISIT dari URL string asli
+function extractDomainAndPort(url) {
   try {
     const trimmed = url.trim();
     if (!trimmed) return null;
 
-    const u = new URL(trimmed);
-    return u.hostname.toLowerCase();
-  } catch (e) {
-    return null;
-  }
-}
+    let normalizedUrl = trimmed;
+    if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+      normalizedUrl = 'http://' + normalizedUrl;
+    }
 
-function extractPort(url) {
-  try {
-    const trimmed = url.trim();
-    if (!trimmed) return null;
+    // Ekstrak port eksplisit dari string asli
+    const portMatch = trimmed.match(/:(\d{1,5})/);
+    const explicitPort = portMatch ? parseInt(portMatch[1], 10) : null;
 
-    const u = new URL(trimmed);
-    return u.port || null;
+    const u = new URL(normalizedUrl);
+    const hostname = u.hostname.toLowerCase();
+
+    return { hostname, port: explicitPort };
   } catch (e) {
     return null;
   }
@@ -30,7 +27,7 @@ function filterUrls() {
   const domainInput = document.getElementById('domains').value;
   const portInput = document.getElementById('ports').value;
   const filterType = document.querySelector('input[name="filterType"]:checked').value;
-  const portFilterType = document.querySelector('input[name="portFilterType"]:checked')?.value || 'none';
+  const portFilterType = document.querySelector('input[name="portFilterType"]:checked').value;
 
   const statusText = document.getElementById('statusText');
   const statusIndicator = document.getElementById('statusIndicator');
@@ -39,17 +36,8 @@ function filterUrls() {
   const resultCount = document.getElementById('resultCount');
   const currentMode = document.getElementById('currentMode');
 
-  // Update current mode display
-  const domainMode = filterType === 'include' ? 'Include' : 'Exclude';
-  let portMode = '';
-  if (portFilterType === 'include') {
-    portMode = ' | Port: Include';
-  } else if (portFilterType === 'exclude') {
-    portMode = ' | Port: Exclude';
-  }
-  currentMode.textContent = domainMode + portMode;
+  currentMode.textContent = filterType === 'include' ? 'Include' : 'Exclude';
 
-  // Validation
   if (!urlInput.trim()) {
     statusText.textContent = 'Error: Please enter at least one URL';
     statusIndicator.classList.add('error');
@@ -57,86 +45,67 @@ function filterUrls() {
     return;
   }
 
-  if (!domainInput.trim()) {
-    statusText.textContent = 'Error: Please enter at least one domain';
-    statusIndicator.classList.add('error');
-    showToast('Please enter domains to filter', 'error');
-    return;
+  // Parse domains → EXACT MATCH ONLY (no wildcard)
+  const domains = domainInput.trim()
+    ? new Set(domainInput.split('\n').map(s => s.trim().toLowerCase()).filter(s => s))
+    : null;
+
+  // Parse ports
+  let ports = null;
+  if (portInput.trim()) {
+    const portStrings = portInput.split(',').map(s => s.trim()).filter(s => s);
+    ports = new Set(
+      portStrings
+        .map(p => {
+          const n = parseInt(p, 10);
+          return isNaN(n) || n < 1 || n > 65535 ? null : n;
+        })
+        .filter(p => p !== null)
+    );
   }
 
-  // Validate port filter requirements
-  if (portFilterType !== 'none' && !portInput.trim()) {
-    statusText.textContent = 'Error: Please enter ports when using port filter';
-    statusIndicator.classList.add('error');
-    showToast('Please enter ports to filter', 'error');
-    return;
-  }
+  statusIndicator.classList.remove('error', 'warning');
 
-  statusIndicator.classList.remove('error');
-  statusIndicator.classList.remove('warning');
-
-  // Parse inputs
   const urls = urlInput.split('\n').map(s => s.trim()).filter(s => s);
-  const domains = new Set(
-    domainInput.split('\n').map(s => s.trim().toLowerCase()).filter(s => s)
-  );
-  
-  // Parse ports (only if port filtering is enabled)
-  const ports = portFilterType !== 'none' 
-    ? new Set(portInput.split('\n').map(s => s.trim()).filter(s => s))
-    : new Set();
-
   const filtered = [];
   const invalidUrls = [];
 
-  // Process each URL
   for (const url of urls) {
-    const domain = extractDomain(url);
-
-    if (domain === null) {
+    const info = extractDomainAndPort(url);
+    if (!info) {
       invalidUrls.push(url);
       continue;
     }
 
-    const isDomainInList = domains.has(domain);
+    const { hostname, port } = info;
 
-    // First check domain filter
-    let passedDomainFilter = false;
-    if (filterType === 'include' && isDomainInList) {
-      passedDomainFilter = true;
-    } else if (filterType === 'exclude' && !isDomainInList) {
-      passedDomainFilter = true;
+    // === DOMAIN FILTERING: EXACT MATCH ONLY ===
+    let domainPass = true;
+    if (domains) {
+      const isDomainInList = domains.has(hostname);
+      domainPass = filterType === 'include' ? isDomainInList : !isDomainInList;
     }
 
-    // If domain filter passed, check port filter (if enabled)
-    if (passedDomainFilter) {
-      if (portFilterType === 'none') {
-        // No port filtering, add URL
-        filtered.push(url);
-      } else {
-        const port = extractPort(url);
-        
-        // KEY LOGIC: Only check port filter if URL has explicit port
-        if (port === null || port === '') {
-          // URL has NO explicit port (e.g., http://example.com)
-          // Always include it regardless of port filter
-          filtered.push(url);
-        } else {
-          // URL has explicit port (e.g., http://example.com:8080)
-          // Apply port filter
-          const isPortInList = ports.has(port);
+    if (!domainPass) continue;
 
-          if (portFilterType === 'include' && isPortInList) {
-            filtered.push(url);
-          } else if (portFilterType === 'exclude' && !isPortInList) {
-            filtered.push(url);
-          }
-        }
+    // === PORT FILTERING ===
+    let portPass = true;
+    if (ports) {
+      if (portFilterType === 'include') {
+        // Hanya izinkan jika port eksplisit ADA dan SESUAI
+        portPass = (port !== null) && ports.has(port);
+      } else if (portFilterType === 'exclude') {
+        // Izinkan semua kecuali port eksplisit yang di-block
+        portPass = (port === null) || !ports.has(port);
       }
+    }
+
+    if (portPass) {
+      filtered.push(url);
     }
   }
 
-  // Display results
+  // Tampilkan hasil
   const resultDiv = document.getElementById('result');
   if (filtered.length > 0) {
     resultDiv.textContent = filtered.join('\n');
@@ -148,7 +117,7 @@ function filterUrls() {
     resultCount.textContent = '0 results';
   }
 
-  // Handle invalid URLs
+  // Tangani URL tidak valid
   if (invalidUrls.length > 0) {
     errorSection.style.display = 'flex';
     errorList.textContent = invalidUrls.join('\n');
@@ -163,30 +132,27 @@ function filterUrls() {
   }
 }
 
-// Copy results to clipboard
+// === FUNGSI BANTUAN (copyResults, clearAll, dll) ===
 function copyResults() {
   const resultText = document.getElementById('result').textContent;
-  const statusText = document.getElementById('statusText');
-
-  if (!resultText || resultText === 'No results yet. Click "Filter URLs" to start.' || resultText === 'No matching URLs found') {
-    statusText.textContent = 'No results to copy';
+  if (
+    !resultText ||
+    resultText === 'No results yet. Click "Filter URLs" to start.' ||
+    resultText === 'No matching URLs found'
+  ) {
     showToast('No results to copy', 'error');
     return;
   }
 
-  navigator.clipboard.writeText(resultText)
-    .then(() => {
-      statusText.textContent = 'Results copied to clipboard!';
-      showToast('Copied to clipboard!', 'success');
-    })
+  navigator.clipboard
+    .writeText(resultText)
+    .then(() => showToast('Copied to clipboard!', 'success'))
     .catch(err => {
-      statusText.textContent = 'Failed to copy results';
-      showToast('Failed to copy', 'error');
       console.error('Failed to copy: ', err);
+      showToast('Failed to copy', 'error');
     });
 }
 
-// Clear all inputs and results
 function clearAll() {
   document.getElementById('urls').value = '';
   document.getElementById('domains').value = '';
@@ -195,17 +161,15 @@ function clearAll() {
   document.getElementById('result').classList.add('empty');
   document.getElementById('errorSection').style.display = 'none';
   document.getElementById('statusText').textContent = 'All fields cleared';
-  document.getElementById('statusIndicator').classList.remove('error');
-  document.getElementById('statusIndicator').classList.remove('warning');
+  document.getElementById('statusIndicator').className = 'status-indicator';
   document.getElementById('resultCount').textContent = '0 results';
   showToast('All fields cleared', 'success');
 }
 
-// Add quick domain patterns
 function addQuickDomains(tld) {
   const domainsTextarea = document.getElementById('domains');
   const currentDomains = domainsTextarea.value.trim();
-  const newDomain = `*.${tld}`;
+  const newDomain = `*.${tld}`; // opsional: bisa dihapus jika tidak pakai wildcard
 
   if (currentDomains) {
     domainsTextarea.value = currentDomains + '\n' + newDomain;
@@ -216,51 +180,6 @@ function addQuickDomains(tld) {
   showToast(`Added ${newDomain} to filter`, 'success');
 }
 
-// Add quick ports
-function addQuickPorts(portList) {
-  const portsTextarea = document.getElementById('ports');
-  const currentPorts = portsTextarea.value.trim();
-  
-  if (currentPorts) {
-    portsTextarea.value = currentPorts + '\n' + portList;
-  } else {
-    portsTextarea.value = portList;
-  }
-
-  showToast(`Added ports to filter`, 'success');
-}
-
-// Toggle port filter section
-function togglePortFilter() {
-  const portSection = document.getElementById('portFilterSection');
-  const portFilterType = document.querySelector('input[name="portFilterType"]:checked').value;
-  
-  if (portFilterType === 'none') {
-    portSection.style.display = 'none';
-  } else {
-    portSection.style.display = 'block';
-  }
-  
-  updateModeDisplay();
-}
-
-// Update mode display
-function updateModeDisplay() {
-  const filterType = document.querySelector('input[name="filterType"]:checked').value;
-  const portFilterType = document.querySelector('input[name="portFilterType"]:checked')?.value || 'none';
-  
-  const domainMode = filterType === 'include' ? 'Include' : 'Exclude';
-  let portMode = '';
-  if (portFilterType === 'include') {
-    portMode = ' | Port: Include';
-  } else if (portFilterType === 'exclude') {
-    portMode = ' | Port: Exclude';
-  }
-  
-  document.getElementById('currentMode').textContent = domainMode + portMode;
-}
-
-// Show toast notification
 function showToast(message, type = 'success') {
   const toast = document.createElement('div');
   toast.style.cssText = `
@@ -286,32 +205,23 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
-// Initialize collapsible sections
-function initializeCollapsibles() {
-  const collapsibles = document.querySelectorAll('.collapsible-header');
-  
-  collapsibles.forEach(header => {
-    header.addEventListener('click', function() {
-      const parent = this.parentElement;
-      parent.classList.toggle('active');
-    });
-  });
-}
-
-// Update filter mode display on change
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize collapsibles
-  initializeCollapsibles();
-
-  // Domain filter mode change
-  document.querySelectorAll('input[name="filterType"]').forEach(radio => {
-    radio.addEventListener('change', updateModeDisplay);
-  });
-
-  // Port filter mode change
-  document.querySelectorAll('input[name="portFilterType"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-      togglePortFilter();
-    });
+// Collapsible & UI
+document.querySelectorAll('.collapsible-header').forEach(header => {
+  header.addEventListener('click', function () {
+    const collapsible = this.parentElement;
+    collapsible.classList.toggle('active');
   });
 });
+
+document.querySelectorAll('input[name="filterType"]').forEach(radio => {
+  radio.addEventListener('change', function () {
+    document.getElementById('currentMode').textContent = this.value === 'include' ? 'Include' : 'Exclude';
+  });
+});
+
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+`;
+document.head.appendChild(style);
