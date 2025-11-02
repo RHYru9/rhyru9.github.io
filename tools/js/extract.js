@@ -453,10 +453,20 @@ class PathExtractor {
             return false; // Explicitly keep
         }
 
-        // 2. HUMAN NAMES - Filter out
-        if (this.humanNames.has(lower)) {
-            this.stats.filtered.humanName++;
-            return true;
+        // 2. HUMAN NAMES - Filter out (only as whole tokens, not arbitrary substrings)
+        for (const name of this.humanNames) {
+            if (name.length < 2) continue; // avoid matching "a", "i", etc.
+
+            // Escape special regex chars
+            const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            
+            // Match only if name is surrounded by start/end, '-', '_', or digits
+            const regex = new RegExp(`(^|[-_\\d])${escaped}([-_\\d]|$)`, 'i');
+            
+            if (regex.test(segment)) {
+                this.stats.filtered.humanName++;
+                return true;
+            }
         }
 
         // 3. SPAM KEYWORDS - High priority filter
@@ -510,12 +520,9 @@ class PathExtractor {
         }
 
         // 11. MIXED ALPHANUMERIC SPAM
-        // Example: 242028593QBE224BY8, jbptitbpp-gdl-fajarhendr-19138
         if (len > 15) {
             const digitCount = (segment.match(/\d/g) || []).length;
             const upperCount = (segment.match(/[A-Z]/g) || []).length;
-            
-            // High entropy random mix
             if (digitCount > 3 && upperCount > 2) {
                 this.stats.filtered.mixed++;
                 return true;
@@ -523,11 +530,9 @@ class PathExtractor {
         }
 
         // 12. MOSTLY NUMBERS - 60%+ digits
-        // Example: 65418825220002Ratu, 7824-2-PB
         if (len > 10) {
             const digitCount = (segment.match(/\d/g) || []).length;
             const digitRatio = digitCount / len;
-            
             if (digitRatio > 0.6) {
                 this.stats.filtered.numeric++;
                 return true;
@@ -535,22 +540,15 @@ class PathExtractor {
         }
 
         // 13. LONG ARTICLE TITLES - Multiple hyphens
-        // Example: studi-perancangan-kawasan-kebayoran-lama-jakarta-selatan
         const hyphenCount = (segment.match(/-/g) || []).length;
-        
-        // Very long with many hyphens = article title
         if (hyphenCount >= 5) {
             this.stats.filtered.longTitle++;
             return true;
         }
-        
-        // Long segment with several hyphens
         if (len > 50 && hyphenCount >= 3) {
             this.stats.filtered.longTitle++;
             return true;
         }
-        
-        // Medium length with many hyphens
         if (len > 30 && hyphenCount >= 4) {
             this.stats.filtered.longTitle++;
             return true;
@@ -561,7 +559,6 @@ class PathExtractor {
             'Symbol.', 'Math.', 'modernizr.', 'prototype.', '__proto__',
             'constructor', 'toString', 'valueOf', 'hasOwnProperty'
         ];
-        
         for (const noise of technicalNoise) {
             if (segment.includes(noise)) {
                 this.stats.filtered.technical++;
@@ -569,7 +566,6 @@ class PathExtractor {
             }
         }
 
-        // ✅ PASSED ALL FILTERS - KEEP IT
         return false;
     }
 
