@@ -1,0 +1,56 @@
+# Spam Keywords List
+# One keyword per line
+# Lines starting with # are comments and will be ignored
+# Case-insensitive matching
+
+# General spam
+game
+olivia
+manning
+humidifier
+cmhwgu
+recipe
+viagra
+
+# Gambling & Casino
+casino
+poker
+slot
+togel
+betting
+judi
+maxwin
+gacor
+jackpot
+rtp
+toto
+prize
+pools
+
+# Gambling prefixes/suffixes
+akun-pro
+demo-
+bandar
+agen-
+depo
+bonus
+win-com
+bet
+bola-
+login-com
+
+# Gaming brands
+pragmatic
+habanero
+olympus
+gates
+zeus
+mahjong
+
+# Additional patterns
+situs
+daftar
+link
+resmi-com
+-com
+online-com
