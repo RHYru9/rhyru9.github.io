@@ -11,6 +11,69 @@ humidifier
 cmhwgu
 recipe
 viagra
+free
+buy now
+click here
+act now
+limited offer
+risk free
+no obligation
+easy money
+get rich
+work from home
+weight loss
+lose weight
+miracle cure
+debt relief
+credit repair
+loan
+cash advance
+earn money
+income
+investment
+opportunity
+secret
+guaranteed
+winner
+congratulations
+urgent
+important notice
+final warning
+do not delete
+remove
+unsubscribe
+win
+prize
+reward
+gift
+claim
+offer
+deal
+cheap
+discount
+sale
+clearance
+miracle
+wonder
+amazing
+incredible
+fantastic
+exclusive
+confidential
+private
+singles
+dating
+meet
+sexy
+hot
+nude
+xxx
+porn
+casino
+pharmacy
+prescription
+mortgage
+refinance
 
 # Gambling & Casino
 casino
@@ -26,6 +89,21 @@ rtp
 toto
 prize
 pools
+roulette
+blackjack
+bingo
+lottery
+scratch
+keno
+sportsbook
+parlay
+odds
+live dealer
+high roller
+vip room
+grand prize
+mega win
+super jackpot
 
 # Gambling prefixes/suffixes
 akun-pro
@@ -38,6 +116,29 @@ win-com
 bet
 bola-
 login-com
+daftar-
+situs-
+promo-
+cashback-
+hadiah-
+gratis-
+main-
+mainkan-
+bermain-
+daftar-
+deposito-
+withdraw-
+raja-
+master-
+qq-
+idn-
+sbo-
+maxbet-
+ion-
+slot-
+pgsoft-
+joker-
+spadegaming-
 
 # Gaming brands
 pragmatic
@@ -46,6 +147,24 @@ olympus
 gates
 zeus
 mahjong
+gacor88
+slot88
+pg soft
+joker123
+spadegaming
+microgaming
+netent
+playtech
+evolution
+redtiger
+yggdrasil
+quickspin
+bigwin
+fortune
+treasure
+wild
+scatter
+bonus game
 
 # Additional patterns
 situs
@@ -54,3 +173,32 @@ link
 resmi-com
 -com
 online-com
+akun
+login
+register
+sign up
+free credit
+no deposit
+trial
+demo account
+official site
+trusted agent
+verified
+licensed
+instant play
+mobile slot
+apk download
+direct link
+trusted site
+top provider
+best odds
+fast payout
+24jam
+24/7
+whatsapp
+wa.me
+t.me
+telegram
+kontak
+cs24jam
+livechat
