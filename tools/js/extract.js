@@ -195,8 +195,6 @@ class PathExtractor {
 
         // 1. Contains dot (file/version notation)
         if (segment.includes('.')) {
-            // Exception: semantic versioning like v1.2 might be ok
-            // But still exclude for cleaner wordlist
             return true;
         }
 
@@ -270,37 +268,7 @@ class PathExtractor {
     }
 }
 
-// Example usage
-const extractor = new PathExtractor({
-    mode: 'segments',
-    splitSegments: true,
-    excludeQuery: true,
-    excludeExtensions: true,
-    excludeArticles: true
-});
-
-const sampleInput = `
-https://example.com/isi/detail/zw8iPDGLVSzbrdrb
-https://example.com/api/v1/users
-https://example.com/reset-password
-https://example.com/news/12345
-https://example.com/post/olivia-manning-cmhwgu-test
-https://example.com/assets/js/main.js
-/admin/dashboard
-/user-profile
-/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-`;
-
-const result = extractor.extract(sampleInput);
-
-console.log('=== Path Extractor Results ===');
-console.log('Total processed:', result.stats.total);
-console.log('Filtered out:', result.stats.filtered);
-console.log('Unique paths:', result.stats.unique);
-console.log('\n=== Wordlist ===');
-console.log(extractor.formatOutput(result.results));
-
-// Export for use in other modules
+// Export for CommonJS (optional, safe in browser)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = PathExtractor;
 }
