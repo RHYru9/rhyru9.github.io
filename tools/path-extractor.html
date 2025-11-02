@@ -310,7 +310,7 @@ Output: example.com</pre>
             document.getElementById('status-mode').textContent = `Mode: ${modeText}`;
         }
         
-        btnExtract.addEventListener('click', () => {
+        btnExtract.addEventListener('click', async () => {
             const input = inputUrls.value.trim();
             if (!input) {
                 alert('Please enter some URLs or paths first!');
@@ -322,8 +322,8 @@ Output: example.com</pre>
             statsBadge.textContent = 'Processing...';
             statsBadge.className = 'badge badge-warning';
             
-            setTimeout(() => {
-                const result = extractor.extract(input);
+            try {
+                const result = await extractor.extract(input);
                 if (result.results.length > 0) {
                     outputContent.textContent = extractor.formatOutput(result.results);
                     outputContent.classList.remove('empty');
@@ -338,9 +338,13 @@ Output: example.com</pre>
                 statsBadge.textContent = `${result.stats.unique} Results`;
                 statsBadge.className = 'badge badge-success';
                 document.getElementById('status-results').textContent = `Results: ${result.stats.unique}`;
+            } catch (error) {
+                alert('Error processing paths: ' + error.message);
+                console.error(error);
+            } finally {
                 btnExtract.disabled = false;
                 btnExtract.textContent = '⚡ Extract Paths';
-            }, 100);
+            }
         });
         
         btnCopy.addEventListener('click', () => {
