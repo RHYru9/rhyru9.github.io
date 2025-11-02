@@ -1,84 +1,245 @@
-# Spam Keywords List
-# One keyword per line
-# Lines starting with # are comments and will be ignored
-# Case-insensitive matching
+# ============================================
+# SECTION 16: NUMBERS/DATES SUFFIX
+# ============================================
+-2
+-3
+-2021
+-2022
+-2023
+-2024
+-2025
 
-# General spam
-game
-olivia
-manning
-humidifier
-cmhwgu
-recipe
-viagra
-free
-buy now
-click here
-act now
-limited offer
-risk free
-no obligation
-easy money
-get rich
-work from home
-weight loss
-lose weight
-miracle cure
-debt relief
-credit repair
-loan
-cash advance
-earn money
+# ============================================
+# SECTION 25: LEGAL & GOVERNMENT
+# ============================================
+hukum
+law
+legal
+pengacara
+lawyer
+advocate
+notaris
+notary
+pemerintah
+government
+presiden
+president
+menteri
+minister
+gubernur
+governor
+bupati
+walikota
+mayor
+dpr
+dprd
+mpr
+kpu
+polisi
+police
+kejaksaan
+pengadilan
+court
+mahkamah
+pajak
+tax
+izin
+permit
+license
+lisensi
+peraturan
+regulation
+undang-undang
+constitution
+
+# ============================================
+# SECTION 26: JOB & CAREER
+# ============================================
+job
+jobs
+kerja
+lowongan
+vacancy
+karir
+career
+hiring
+recruitment
+rekrutmen
+interview
+wawancara
+cv
+resume
+lamaran
+application
+gaji
+salary
 income
-investment
-opportunity
-secret
-guaranteed
-winner
-congratulations
-urgent
-important notice
-final warning
-do not delete
-remove
-unsubscribe
-win
-prize
-reward
-gift
-claim
-offer
-deal
-cheap
-discount
-sale
-clearance
-miracle
-wonder
-amazing
-incredible
-fantastic
-exclusive
-confidential
-private
-singles
-dating
-meet
-sexy
-hot
-nude
-xxx
-porn
-casino
-pharmacy
-prescription
-mortgage
-refinance
+freelance
+remote
+work-from-home
+wfh
+part-time
+full-time
+internship
+magang
+trainee
+employee
+karyawan
+staff
+manager
+director
+ceo
+hr
+human-resource
 
-# Gambling & Casino
+# ============================================
+# SECTION 27: GENERIC VERBS (INDONESIAN)
+# ============================================
+cara-
+tips-
+trik-
+hack-
+cheat-
+download-
+upload-
+install-
+update-
+setting-
+konfigurasi-
+tutorial-
+panduan-
+guide-
+manual-
+petunjuk-
+langkah-
+step-
+contoh-
+example-
+template-
+format-
+belajar-
+learn-
+menggunakan-
+memulai-
+membuat-
+create-
+build-
+develop-
+design-
+mengatasi-
+solve-
+fix-
+repair-
+troubleshoot-
+
+# ============================================
+# SECTION 28: SPAM DOMAINS/EXTENSIONS
+# ============================================
+-com
+-net
+-org
+-co-id
+-info
+-biz
+-online
+-site
+-xyz
+-top
+.com
+.net
+.org
+.id
+.co.id
+www
+http
+https
+
+# ============================================
+# SECTION 29: CLICKBAIT & VIRAL
+# ============================================
+viral
+trending
+terbaru
+latest
+update
+breaking
+news
+hot
+popular
+top-
+best-
+terbaik-
+recommended
+rekomendasi
+review
+ulasan
+rating
+ranked
+list-
+daftar-
+teratas
+must-
+wajib-
+penting-
+important-
+amazing-
+luar-biasa
+hebat-
+keren-
+wow-
+shocking
+mengejutkan
+rahasia-
+secret-
+tips-dan-trik
+life-hack
+fakta-
+fact-
+mitos-
+myth-
+hoax-
+berita-hoax# ============================================
+# COMPREHENSIVE SPAM KEYWORDS LIST
+# Path Extractor - Bug Bounty Toolkit
+# ============================================
+# Format: one keyword per line (case-insensitive)
+# Lines starting with # are comments
+# ============================================
+
+# ============================================
+# SECTION 1: CONTENT & MEDIA
+# ============================================
+blog
+blogger
+blogging
+artikel
+article
+berita
+news
+post
+posting
+kategori
+category
+categories
+tag
+tags
+page
+pages
+author
+authors
+comment
+comments
+archive
+archives
+feed
+
+# ============================================
+# SECTION 2: GAMBLING & CASINO (EXPANDED)
+# ============================================
 casino
 poker
 slot
+slots
 togel
 betting
 judi
@@ -89,116 +250,764 @@ rtp
 toto
 prize
 pools
-roulette
-blackjack
-bingo
-lottery
-scratch
-keno
-sportsbook
-parlay
-odds
-live dealer
-high roller
-vip room
-grand prize
-mega win
-super jackpot
-
-# Gambling prefixes/suffixes
-akun-pro
-demo-
+situs
+daftar
+link
 bandar
 agen-
 depo
+deposit
 bonus
 win-com
 bet
 bola-
 login-com
-daftar-
-situs-
-promo-
-cashback-
-hadiah-
-gratis-
-main-
-mainkan-
-bermain-
-daftar-
-deposito-
-withdraw-
-raja-
-master-
-qq-
-idn-
-sbo-
-maxbet-
-ion-
-slot-
-pgsoft-
-joker-
-spadegaming-
+resmi-com
+online-com
+garudaslot
+slotgacor
+slotonline
+slot88
+slot777
+slot138
+gacorslot
 
-# Gaming brands
+# Gambling variations
+taruhan
+jujur
+menang
+kalah
+cuan
+untung
+profit
+odds
+parlay
+bookie
+bookmaker
+sportbook
+live-casino
+live-betting
+esport-bet
+virtual-sport
+
+# Casino games
+baccarat
+roulette
+blackjack
+sicbo
+dragon-tiger
+dadu
+kartu
+domino
+ceme
+capsa
+bandarq
+aduq
+sakong
+gaple
+
+# Slot brands/themes
+pragmatic-play
+pg-soft
+habanero-slot
+spadegaming
+microgaming
+playtech
+joker123
+joker-gaming
+rtg-slot
+cq9
+jdb
+fa-chai
+advant-play
+
+# Bonus/promo terms
+freespin
+free-spin
+cashback
+cash-back
+rollingan
+turnover
+rebate
+referral
+komisi
+welcome-bonus
+new-member
+member-baru
+promo-slot
+promo-casino
+
+# ============================================
+# SECTION 3: GAMING BRANDS (EXPANDED)
+# ============================================
 pragmatic
 habanero
 olympus
 gates
 zeus
 mahjong
-gacor88
-slot88
-pg soft
-joker123
-spadegaming
-microgaming
-netent
-playtech
-evolution
-redtiger
-yggdrasil
-quickspin
-bigwin
-fortune
-treasure
-wild
-scatter
-bonus game
+gaming
+demo-
+akun-pro
+akun-demo
 
-# Additional patterns
-situs
-daftar
-link
-resmi-com
--com
-online-com
-akun
-login
+# Popular slot games
+starlight-princess
+sweet-bonanza
+aztec-gems
+wild-west-gold
+wolf-gold
+great-rhino
+hot-hot-fruit
+888-dragons
+5-lions
+koi-gate
+fire-strike
+book-of
+legacy-of
+queen-of
+wild-wild
+mega-ways
+megaways
+sugar-rush
+candy
+treasure
+pirate
+dragon
+phoenix
+egypt
+cleopatra
+fortune
+wealth
+prosperity
+
+# ============================================
+# SECTION 4: SPAM/SEO CONTENT (EXPANDED)
+# ============================================
+game
+olivia
+manning
+humidifier
+cmhwgu
+recipe
+viagra
+cialis
+seo
+backlink
+guest-post
+sponsored
+
+# Pharma/health spam
+pharmacy
+obat
+resep
+treatment
+therapy
+cure
+medication
+supplement
+vitamin
+diet
+weight-loss
+keto
+detox
+slim
+fat-burner
+
+# Tech spam
+gadget
+smartphone
+iphone
+android
+samsung
+xiaomi
+oppo
+vivo
+realme
+asus
+laptop
+notebook
+pc-gaming
+gaming-laptop
+
+# Fashion/beauty spam
+fashion
+style
+trend
+ootd
+outfit
+baju
+celana
+sepatu
+tas
+dompet
+jam-tangan
+aksesoris
+makeup
+skincare
+kosmetik
+perawatan
+kecantikan
+whitening
+serum
+cream
+foundation
+lipstik
+
+# Automotive spam
+mobil
+motor
+motorcycle
+car
+truck
+suv
+sedan
+mpv
+toyota
+honda
+suzuki
+yamaha
+kawasaki
+mitsubishi
+daihatsu
+nissan
+mazda
+ford
+chevrolet
+
+# Real estate spam
+rumah
+apartemen
+apartment
+ruko
+kavling
+tanah
+property
+properti
+perumahan
+residence
+villa
+townhouse
+cluster
+kpr
+cicilan
+
+# ============================================
+# SECTION 5: COMMON CMS/BLOG PATHS
+# ============================================
+wordpress
+wp-content
+wp-admin
+wp-includes
+wp-json
+author-detil
+articlenew
+bloghosting
+blogmed
+blogging
+blogbantuy
+blogan
+blogpost
+
+# ============================================
+# SECTION 6: GENERIC/COMMON WORDS
+# ============================================
+acara
+kegiatan
+aktivitas
+agenda
+announcement
+about
+contact
+home
+index
+default
+main
+landing
+welcome
+intro
+introduction
+
+# ============================================
+# SECTION 7: DATE/TIME INDICATORS
+# ============================================
+date
+year
+month
+week
+daily
+weekly
+monthly
+yearly
+calendar
+schedule
+jadwal
+waktu
+tanggal
+
+# ============================================
+# SECTION 8: SOCIAL/COMMUNITY
+# ============================================
+forum
+community
+discussion
+social
+share
+sharing
+member
+membership
+profile
+account
 register
-sign up
-free credit
-no deposit
-trial
-demo account
-official site
-trusted agent
-verified
-licensed
-instant play
-mobile slot
-apk download
-direct link
-trusted site
-top provider
-best odds
-fast payout
-24jam
-24/7
+signup
+signin
+logout
+
+# ============================================
+# SECTION 9: MEDIA/FILE TYPES
+# ============================================
+image
+images
+img
+photo
+photos
+gallery
+galleries
+video
+videos
+audio
+podcast
+download
+downloads
+file
+files
+upload
+uploads
+asset
+assets
+media
+static
+
+# ============================================
+# SECTION 10: NAVIGATION/UI
+# ============================================
+sidebar
+footer
+header
+navigation
+nav
+menu
+widget
+breadcrumb
+pagination
+sitemap
+
+# ============================================
+# SECTION 11: INDONESIAN COMMON WORDS
+# ============================================
+anak
+bapak
+ayah
+ibu
+mama
+papa
+keluarga
+rumah
+kota
+desa
+tempat
+lokasi
+daerah
+wilayah
+cerita
+kisah
+pengalaman
+catatan
+jurnal
+diary
+
+# ============================================
+# SECTION 12: EDUCATION (GENERIC)
+# ============================================
+mahasiswa
+dosen
+guru
+siswa
+pelajar
+kuliah
+kampus
+sekolah
+kelas
+ruang
+gedung
+fakultas
+jurusan
+program
+mata-kuliah
+semester
+tahun-ajaran
+
+# ============================================
+# SECTION 13: BUSINESS/MARKETING
+# ============================================
+bisnis
+business
+marketing
+promo
+promotion
+discount
+sale
+offer
+deal
+product
+service
+customer
+client
+company
+corporate
+
+# ============================================
+# SECTION 14: EVENTS
+# ============================================
+event
+events
+seminar
+workshop
+conference
+webinar
+training
+bootcamp
+competition
+lomba
+festival
+pameran
+exhibition
+
+# ============================================
+# SECTION 15: INDONESIAN VERBS (COMMON)
+# ============================================
+cara-
+tips-
+tutorial
+panduan
+guide
+how-to
+belajar
+menggunakan
+memulai
+membuat
+mengatasi
+
+# ============================================
+# SECTION 17: PAYMENT & FINANCE
+# ============================================
+payment
+pembayaran
+transfer
+bank
+bca
+mandiri
+bri
+bni
+cimb
+danamon
+permata
+gopay
+ovo
+dana
+shopeepay
+linkaja
+jenius
+flip
+paypal
+stripe
+midtrans
+xendit
+doku
+pulsa
+credit-card
+debit-card
+e-wallet
+ewallet
+top-up
+topup
+withdraw
+withdrawal
+saldo
+balance
+
+# ============================================
+# SECTION 18: SHOPPING & ECOMMERCE
+# ============================================
+shop
+shopping
+toko
+store
+marketplace
+ecommerce
+e-commerce
+olshop
+online-shop
+jual
+beli
+buy
+sell
+cart
+keranjang
+checkout
+order
+pesanan
+pengiriman
+delivery
+shipping
+ongkir
+cod
+cash-on-delivery
+tokopedia
+shopee
+lazada
+bukalapak
+blibli
+jd-id
+zalora
+sale
+diskon
+discount
+murah
+cheap
+promo
+voucher
+kupon
+coupon
+
+# ============================================
+# SECTION 19: SOCIAL MEDIA
+# ============================================
+facebook
+instagram
+twitter
+tiktok
+youtube
 whatsapp
-wa.me
-t.me
 telegram
-kontak
-cs24jam
-livechat
+line
+linkedin
+pinterest
+snapchat
+reddit
+tumblr
+fb
+ig
+wa
+tweet
+retweet
+like
+share
+follow
+follower
+subscriber
+viral
+trending
+influencer
+selebgram
+youtuber
+tiktoker
+livestream
+live-streaming
+
+# ============================================
+# SECTION 20: TRAVEL & TOURISM
+# ============================================
+travel
+tour
+wisata
+liburan
+vacation
+holiday
+hotel
+resort
+penginapan
+villa
+guesthouse
+hostel
+booking
+reservation
+tiket
+ticket
+flight
+pesawat
+kereta
+bus
+rental
+sewa
+transportasi
+destination
+destinasi
+tourism
+pariwisata
+adventure
+petualangan
+backpacker
+beach
+pantai
+gunung
+mountain
+diving
+snorkeling
+
+# ============================================
+# SECTION 21: FOOD & CULINARY
+# ============================================
+food
+makanan
+minuman
+drink
+restoran
+restaurant
+cafe
+kafe
+warung
+kuliner
+culinary
+resep
+recipe
+menu
+masakan
+cooking
+chef
+catering
+delivery-food
+gofood
+grabfood
+shopeefood
+burger
+pizza
+sushi
+noodle
+mie
+bakso
+sate
+rendang
+nasi-goreng
+ayam
+chicken
+beef
+seafood
+dessert
+cake
+snack
+cemilan
+jajanan
+
+# ============================================
+# SECTION 22: ENTERTAINMENT
+# ============================================
+movie
+film
+cinema
+bioskop
+series
+drama
+anime
+manga
+kdrama
+music
+lagu
+song
+album
+concert
+konser
+show
+performance
+theater
+streaming
+netflix
+disney
+spotify
+joox
+soundcloud
+entertainment
+hiburan
+celebrity
+selebriti
+artis
+gossip
+kabar
+rumor
+
+# ============================================
+# SECTION 23: HEALTH & MEDICAL
+# ============================================
+health
+kesehatan
+medical
+medis
+dokter
+doctor
+nurse
+perawat
+hospital
+rumah-sakit
+klinik
+clinic
+puskesmas
+apotek
+apotik
+farmasi
+pharmacy
+obat
+medicine
+treatment
+terapi
+therapy
+checkup
+konsultasi
+consultation
+surgery
+operasi
+covid
+vaksin
+vaccine
+virus
+penyakit
+disease
+gejala
+symptom
+
+# ============================================
+# SECTION 24: RELIGION
+# ============================================
+islam
+muslim
+quran
+alquran
+hadist
+hadith
+sholat
+salat
+puasa
+ramadan
+idul
+lebaran
+haji
+umroh
+masjid
+mosque
+kajian
+dakwah
+ustadz
+kyai
+christian
+kristen
+gereja
+church
+natal
+christmas
+paskah
+easter
+buddha
+buddhist
+hindu
+vihara
+pura
+temple
