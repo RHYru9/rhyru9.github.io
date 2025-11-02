@@ -69,12 +69,8 @@
                     </div>
                     <div class="collapsible-content">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="opt-split" checked>
-                            <label for="opt-split">Split into segments (only for Segments mode)</label>
-                        </div>
-                        <div class="checkbox-item">
                             <input type="checkbox" id="opt-exclude-query" checked>
-                            <label for="opt-exclude-query">Exclude query strings (?param=value)</label>
+                            <label for="opt-exclude-query">Exclude query strings and fragments (?param=value, #section)</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="opt-exclude-ext" checked>
@@ -238,45 +234,6 @@ Output: example.com</pre>
                     </div>
                 </div>
             </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header">
-                    <span style="font-weight: 600;">Example Usage</span>
-                </div>
-                <div class="collapsible-content">
-                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                        Here's a practical example of what you might input and receive:
-                    </p>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Sample Input:</h4>
-                        <div class="code-block">
-                            <pre>https://example.com/api/v1/users
-https://example.com/admin/dashboard
-https://example.com/reset-password
-https://example.com/news/12345
-https://example.com/post/olivia-manning-cmhwgu-test
-https://example.com/assets/js/main.js
-https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 style="color: var(--orange); margin-bottom: 0.5rem;">Expected Output (Segments Mode):</h4>
-                        <div class="code-block">
-                            <pre>/admin
-/api
-/dashboard
-/reset-password
-/users
-/v1</pre>
-                        </div>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem; font-style: italic;">
-                            Note: Numeric IDs (12345), spam articles, JWT tokens, and .js files are filtered out
-                        </p>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- Tips Section -->
@@ -326,69 +283,47 @@ https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
     <script src="js/settings.js"></script>
     <script src="js/extract.js"></script>
     <script>
-        // Initialize Path Extractor
         let extractor;
-        
-        // Get DOM elements
         const inputUrls = document.getElementById('input-urls');
         const outputContent = document.getElementById('output-content');
         const statsSection = document.getElementById('stats-section');
         const statsBadge = document.getElementById('stats-badge');
-        
-        // Mode radio buttons
         const modeRadios = document.querySelectorAll('input[name="mode"]');
-        
-        // Option checkboxes
-        const optSplit = document.getElementById('opt-split');
         const optExcludeQuery = document.getElementById('opt-exclude-query');
         const optExcludeExt = document.getElementById('opt-exclude-ext');
         const optExcludeArticles = document.getElementById('opt-exclude-articles');
-        
-        // Buttons
         const btnExtract = document.getElementById('btn-extract');
         const btnCopy = document.getElementById('btn-copy');
         const btnDownload = document.getElementById('btn-download');
         const btnClearInput = document.getElementById('btn-clear-input');
         const btnClearOutput = document.getElementById('btn-clear-output');
         
-        // Initialize extractor with default options
         function updateExtractor() {
             const mode = document.querySelector('input[name="mode"]:checked').value;
-            
             extractor = new PathExtractor({
                 mode: mode,
-                splitSegments: optSplit.checked,
                 excludeQuery: optExcludeQuery.checked,
                 excludeExtensions: optExcludeExt.checked,
                 excludeArticles: optExcludeArticles.checked
             });
-            
-            // Update status bar
-            document.getElementById('status-mode').textContent = `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+            const modeText = mode.charAt(0).toUpperCase() + mode.slice(1);
+            document.getElementById('status-mode').textContent = `Mode: ${modeText}`;
         }
         
-        // Event: Extract paths
         btnExtract.addEventListener('click', () => {
             const input = inputUrls.value.trim();
-            
             if (!input) {
                 alert('Please enter some URLs or paths first!');
                 return;
             }
-            
             updateExtractor();
-            
-            // Show loading state
             btnExtract.disabled = true;
             btnExtract.textContent = '⚡ Processing...';
             statsBadge.textContent = 'Processing...';
             statsBadge.className = 'badge badge-warning';
             
-            // Process with small delay for UI update
             setTimeout(() => {
                 const result = extractor.extract(input);
-                
-                // Update output
                 if (result.results.length > 0) {
                     outputContent.textContent = extractor.formatOutput(result.results);
                     outputContent.classList.remove('empty');
@@ -396,37 +331,27 @@ https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
                     outputContent.textContent = 'No valid paths found after filtering.';
                     outputContent.classList.add('empty');
                 }
-                
-                // Update statistics
                 document.getElementById('stat-total').textContent = result.stats.total;
                 document.getElementById('stat-filtered').textContent = result.stats.filtered;
                 document.getElementById('stat-unique').textContent = result.stats.unique;
                 statsSection.style.display = 'block';
-                
-                // Update status
                 statsBadge.textContent = `${result.stats.unique} Results`;
                 statsBadge.className = 'badge badge-success';
                 document.getElementById('status-results').textContent = `Results: ${result.stats.unique}`;
-                
-                // Reset button
                 btnExtract.disabled = false;
                 btnExtract.textContent = '⚡ Extract Paths';
             }, 100);
         });
         
-        // Event: Copy to clipboard
         btnCopy.addEventListener('click', () => {
             const text = outputContent.textContent;
-            
             if (!text || outputContent.classList.contains('empty')) {
                 alert('No content to copy!');
                 return;
             }
-            
             navigator.clipboard.writeText(text).then(() => {
                 btnCopy.classList.add('copied');
                 btnCopy.textContent = '✓ Copied!';
-                
                 setTimeout(() => {
                     btnCopy.classList.remove('copied');
                     btnCopy.textContent = '📋 Copy';
@@ -436,15 +361,12 @@ https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
             });
         });
         
-        // Event: Download as file
         btnDownload.addEventListener('click', () => {
             const text = outputContent.textContent;
-            
             if (!text || outputContent.classList.contains('empty')) {
                 alert('No content to download!');
                 return;
             }
-            
             const blob = new Blob([text], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -454,14 +376,12 @@ https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
             URL.revokeObjectURL(url);
         });
         
-        // Event: Clear input
         btnClearInput.addEventListener('click', () => {
             if (confirm('Clear all input?')) {
                 inputUrls.value = '';
             }
         });
         
-        // Event: Clear output
         btnClearOutput.addEventListener('click', () => {
             if (confirm('Clear results?')) {
                 outputContent.textContent = 'No results yet. Configure your settings and click "Extract Paths" to begin.';
@@ -473,23 +393,12 @@ https://example.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</pre>
             }
         });
         
-        // Event: Mode change - disable split option for non-segments mode
-        modeRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const isSplitRelevant = e.target.value === 'segments';
-                optSplit.disabled = !isSplitRelevant;
-                optSplit.parentElement.style.opacity = isSplitRelevant ? '1' : '0.5';
-            });
-        });
-        
-        // Initialize collapsibles
         document.querySelectorAll('.collapsible-header').forEach(header => {
             header.addEventListener('click', () => {
                 header.parentElement.classList.toggle('active');
             });
         });
         
-        // Initialize extractor
         updateExtractor();
     </script>
 </body>
