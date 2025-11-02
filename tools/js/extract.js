@@ -1,18 +1,17 @@
 /**
- * Path Extractor Logic - Bug Bounty Wordlist Mode
- * COMPLETE FIXED VERSION with External Spam Keywords Support
+ * PathExtractor - Universal Pattern-Based Bug Bounty Wordlist Generator
  * 
- * Changelog:
- * - Bug #1: Changed return null to return '' in removeFileExtension()
- * - Bug #2: Fixed base64 filter - added common words to regex
- * - Bug #3: Removed splitSegments option - segments mode always splits
- * - Bug #4: Added hash fragment (#) handling
- * - Bug #5: Changed dot filter to only filter file extensions at end
- * - Bug #6: Improved normalizePath clarity
- * - NEW: Added external spam keywords loading from spam/spam.txt
- * - NEW: Added date pattern filter
- * - NEW: Added mixed alphanumeric spam filter
- * - NEW: Added mostly-numbers filter
+ * WORKFLOW:
+ * 1. Collect URLs from wayback machine, katana, waymore → tests.txt
+ * 2. Process with Path Extractor → Extract clean segments
+ * 3. Copy results → Paste to seclist.txt
+ * 4. Use seclist.txt as wordlist for fuzzing (ffuf, dirsearch, etc)
+ * 
+ * PHILOSOPHY:
+ * - NO hardcoded path names (gdl, library, etc)
+ * - Filter based on UNIVERSAL PATTERNS (IDs, hashes, long titles)
+ * - Let clean segments pass through (regardless of name)
+ * - Smart document operation detection (/read/123, /view/456)
  */
 
 class PathExtractor {
@@ -21,95 +20,192 @@ class PathExtractor {
             mode: options.mode || 'segments', // 'segments', 'fullpaths', 'domains'
             excludeQuery: options.excludeQuery !== false,
             excludeExtensions: options.excludeExtensions !== false,
-            excludeArticles: options.excludeArticles !== false,
-            spamKeywordsUrl: options.spamKeywordsUrl || 'spam/spam.txt'
+            excludeDocumentContent: options.excludeDocumentContent !== false,
+            minSegmentLength: options.minSegmentLength || 2,
+            maxSegmentLength: options.maxSegmentLength || 40,
+            blacklistFiles: options.blacklistFiles || [
+                'blacklists/humannames.txt',
+                'blacklists/keywords.txt'
+            ]
         };
 
-        // Common words yang diizinkan meski panjang/mirip base64
-        this.commonWords = /admin|api|user|login|logout|search|download|upload|profile|settings|config|debug|test|dev|backup|dashboard|panel|account|register|forgot|reset|password|checkout|cart|payment|order|product|category|blog|post|page|contact|about|service|pricing|feature|documentation|docs|help|support|faq|terms|privacy|policy|v1|v2|v3|auth|oauth|token|refresh|verify|confirm|activate|webhook|callback|notify|subscribe|unsubscribe|export|import|report|analytics|stats|monitor|health|status|version|authentication|authorization|session|cookie|handler|controller|middleware|endpoint|route/i;
+        // Technical words whitelist - always keep these
+        this.technicalWords = new Set([
+            'admin', 'api', 'auth', 'oauth', 'oauth2', 'login', 'logout', 'signin', 'signout',
+            'register', 'signup', 'dashboard', 'panel', 'console', 'control', 'management',
+            'settings', 'config', 'configuration', 'profile', 'account', 'user', 'users',
+            'search', 'upload', 'download', 'export', 'import', 'backup', 'restore',
+            'debug', 'test', 'dev', 'development', 'staging', 'production', 'beta',
+            'checkout', 'cart', 'payment', 'order', 'orders', 'product', 'products',
+            'category', 'categories', 'blog', 'post', 'posts', 'page', 'pages',
+            'article', 'articles', 'news', 'media', 'gallery', 'images', 'photos',
+            'contact', 'about', 'service', 'services', 'pricing', 'features', 'plans',
+            'documentation', 'docs', 'help', 'support', 'faq', 'terms', 'privacy', 'policy',
+            'webhook', 'callback', 'notify', 'notification', 'notifications', 'subscribe',
+            'unsubscribe', 'report', 'reports', 'analytics', 'statistics', 'stats',
+            'monitor', 'health', 'status', 'version', 'endpoint', 'endpoints',
+            'route', 'routes', 'handler', 'handlers', 'middleware', 'controller',
+            'model', 'view', 'template', 'assets', 'static', 'public', 'resources',
+            'files', 'uploads', 'download', 'library', 'repo', 'repository',
+            'archive', 'archives', 'data', 'database', 'storage', 'cache'
+        ]);
 
-        // Spam keywords - akan diload dari file
-        this.spamKeywords = [];
-        this.spamKeywordsLoaded = false;
+        // Document operation keywords
+        this.documentOperations = new Set([
+            'read', 'view', 'show', 'display', 'preview', 'download', 'get', 'fetch',
+            'detail', 'details', 'info', 'information', 'browse', 'explore', 'list',
+            'view_data', 'read_data', 'show_data', 'get_data', 'fetch_data'
+        ]);
 
-        // Technical noise patterns
-        this.technicalNoise = ['Symbol.', 'Math.', 'modernizr.', 'prototype.', '__proto__'];
-    }
+        // Blacklists - will be loaded from files
+        this.humanNames = new Set();
+        this.spamKeywords = new Set();
+        this.blacklistsLoaded = false;
 
-    /**
-     * Load spam keywords from external file
-     * @returns {Promise<void>}
-     */
-    async loadSpamKeywords() {
-        if (this.spamKeywordsLoaded) return;
-
-        try {
-            const response = await fetch(this.options.spamKeywordsUrl);
-            if (!response.ok) {
-                console.warn(`Failed to load spam keywords from ${this.options.spamKeywordsUrl}, using defaults`);
-                this.useDefaultSpamKeywords();
-                return;
+        // Statistics
+        this.stats = {
+            total: 0,
+            filtered: {
+                spam: 0,
+                humanName: 0,
+                extension: 0,
+                documentId: 0,
+                longTitle: 0,
+                hash: 0,
+                base64: 0,
+                uuid: 0,
+                date: 0,
+                numeric: 0,
+                mixed: 0,
+                technical: 0,
+                length: 0
             }
-
-            const text = await response.text();
-            this.spamKeywords = text
-                .split('\n')
-                .map(line => line.trim())
-                .filter(line => line && !line.startsWith('#')); // Remove empty lines and comments
-
-            this.spamKeywordsLoaded = true;
-            console.log(` Loaded ${this.spamKeywords.length} spam keywords from ${this.options.spamKeywordsUrl}`);
-        } catch (error) {
-            console.warn('⚠️ Error loading spam keywords:', error);
-            this.useDefaultSpamKeywords();
-        }
+        };
     }
 
     /**
-     * Fallback to default spam keywords if file cannot be loaded
+     * Load blacklist files (human names + spam keywords)
      */
-    useDefaultSpamKeywords() {
-        this.spamKeywords = [
-            'game', 'linux', 'olivia', 'manning', 'humidifier', 'cmhwgu', 'recipe', 
-            'casino', 'poker', 'slot', 'viagra', 'togel', 'betting', 'judi', 'maxwin',
-            'gacor', 'akun-pro', 'demo-', 'bandar', 'agen-', 'depo', 'bonus', 'win-com',
-            'bet', 'bola-', 'prize', 'pools', 'toto', 'gaming', 'olympus', 'gates',
-            'zeus', 'pragmatic', 'habanero', 'mahjong', 'jackpot', 'rtp', 'login-com',
-            'situs', 'daftar', 'link', 'resmi-com', '-com', 'online-com'
-        ];
-        this.spamKeywordsLoaded = true;
-        console.log('ℹ️ Using default spam keywords');
+    async loadBlacklists() {
+        if (this.blacklistsLoaded) return;
+
+        const results = {
+            humanNames: 0,
+            keywords: 0,
+            errors: []
+        };
+
+        for (const filepath of this.options.blacklistFiles) {
+            try {
+                const response = await fetch(filepath);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const text = await response.text();
+                const entries = text
+                    .split('\n')
+                    .map(line => line.trim().toLowerCase())
+                    .filter(line => line && !line.startsWith('#'));
+
+                // Determine target set based on filename
+                if (filepath.includes('humannames') || filepath.includes('human')) {
+                    entries.forEach(name => this.humanNames.add(name));
+                    results.humanNames += entries.length;
+                    console.log(`✅ Loaded ${entries.length} human names from ${filepath}`);
+                } else if (filepath.includes('keywords') || filepath.includes('spam')) {
+                    entries.forEach(keyword => this.spamKeywords.add(keyword));
+                    results.keywords += entries.length;
+                    console.log(`✅ Loaded ${entries.length} spam keywords from ${filepath}`);
+                } else {
+                    // Default to spam keywords
+                    entries.forEach(keyword => this.spamKeywords.add(keyword));
+                    results.keywords += entries.length;
+                    console.log(`✅ Loaded ${entries.length} entries from ${filepath}`);
+                }
+            } catch (error) {
+                const errorMsg = `⚠️ Could not load ${filepath}: ${error.message}`;
+                console.warn(errorMsg);
+                results.errors.push(errorMsg);
+            }
+        }
+
+        // If no blacklists loaded, use defaults
+        if (this.humanNames.size === 0 && this.spamKeywords.size === 0) {
+            console.warn('⚠️ No blacklists loaded, using defaults');
+            this.useDefaultBlacklists();
+        }
+
+        this.blacklistsLoaded = true;
+        console.log(`📊 Total loaded: ${results.humanNames} human names, ${results.keywords} spam keywords`);
+        
+        return results;
     }
 
     /**
-     * Main extraction function
-     * @param {string} input - Raw input (newline separated URLs/paths)
-     * @returns {Promise<object>} - { results: string[], stats: object }
+     * Fallback default blacklists
+     */
+    useDefaultBlacklists() {
+        // Default human names (common Indonesian names)
+        const defaultNames = [
+            'aan', 'abdul', 'abdullah', 'adam', 'ade', 'adi', 'aditya',
+            'adrian', 'agung', 'agus', 'ahmad', 'akbar', 'alex', 'ali',
+            'amelia', 'andi', 'andika', 'andre', 'andreas', 'andri',
+            'angga', 'anna', 'anton', 'arif', 'aris', 'asep', 'budi',
+            'bambang', 'deni', 'dian', 'dina', 'dwi', 'eka', 'endang',
+            'fahmi', 'fajar', 'fauzi', 'fikri', 'hadi', 'handoko',
+            'hendra', 'heri', 'herman', 'ida', 'imam', 'indah', 'irfan',
+            'irwan', 'joko', 'kartika', 'lestari', 'made', 'maya',
+            'muhammad', 'nia', 'nur', 'nurul', 'putra', 'putri', 'rani',
+            'ratna', 'reza', 'rian', 'ridwan', 'rini', 'sari', 'siti',
+            'sri', 'surya', 'taufik', 'tedi', 'tri', 'umar', 'wati',
+            'widya', 'wulan', 'yanti', 'yudi', 'yusuf'
+        ];
+        defaultNames.forEach(name => this.humanNames.add(name));
+
+        // Default spam keywords
+        const defaultKeywords = [
+            // Gambling & Adult
+            'casino', 'poker', 'slot', 'slots', 'betting', 'bet', 'gamble',
+            'viagra', 'cialis', 'pharmacy', 'adult', 'porn', 'xxx',
+            
+            // Indonesian gambling
+            'togel', 'judi', 'maxwin', 'gacor', 'akun-pro', 'demo-',
+            'bandar', 'agen-', 'depo', 'bonus', 'win-com', 'bola-',
+            'prize', 'pools', 'toto', 'gaming', 'olympus', 'gates',
+            'zeus', 'pragmatic', 'habanero', 'mahjong', 'jackpot',
+            'rtp', 'login-com', 'situs', 'daftar', 'link', 'resmi-com',
+            
+            // Common spam
+            'game', 'recipe', 'humidifier', 'discount', 'promo', 'sale',
+            'cheap', 'free-', 'win-', 'earn-', 'money-'
+        ];
+        defaultKeywords.forEach(kw => this.spamKeywords.add(kw));
+
+        console.log(`ℹ️ Using defaults: ${this.humanNames.size} names, ${this.spamKeywords.size} keywords`);
+    }
+
+    /**
+     * MAIN EXTRACTION FUNCTION
+     * Input: tests.txt content (URLs from wayback/katana/waymore)
+     * Output: seclist.txt content (clean wordlist for fuzzing)
      */
     async extract(input) {
-        // Load spam keywords first if not loaded
-        await this.loadSpamKeywords();
+        // Load blacklists first
+        await this.loadBlacklists();
 
         const lines = input.split('\n').map(line => line.trim()).filter(line => line);
         const allPaths = new Set();
-        let totalProcessed = 0;
-        let filtered = 0;
+        
+        // Reset stats
+        this.stats.total = lines.length;
+        Object.keys(this.stats.filtered).forEach(key => this.stats.filtered[key] = 0);
 
         for (const line of lines) {
-            totalProcessed++;
             const parsed = this.parseLine(line);
-            
-            if (!parsed) {
-                filtered++;
-                continue;
-            }
+            if (!parsed) continue;
 
             const paths = this.processPath(parsed);
-            
-            if (paths.length === 0) {
-                filtered++;
-            }
-            
             paths.forEach(p => allPaths.add(p));
         }
 
@@ -118,17 +214,17 @@ class PathExtractor {
         return {
             results,
             stats: {
-                total: totalProcessed,
-                filtered: totalProcessed - results.length,
-                unique: results.length
+                total: this.stats.total,
+                unique: results.length,
+                filtered: this.stats.filtered,
+                filteredTotal: Object.values(this.stats.filtered).reduce((a, b) => a + b, 0),
+                keepRate: ((results.length / this.stats.total) * 100).toFixed(2) + '%'
             }
         };
     }
 
     /**
-     * Parse single line - URL or path
-     * @param {string} line
-     * @returns {object|null} - { pathname, query, hostname }
+     * Parse URL or path into components
      */
     parseLine(line) {
         if (!line) return null;
@@ -140,6 +236,7 @@ class PathExtractor {
                 return {
                     pathname: url.pathname,
                     query: url.search,
+                    hash: url.hash,
                     hostname: url.hostname
                 };
             }
@@ -148,6 +245,7 @@ class PathExtractor {
             return {
                 pathname: line.startsWith('/') ? line : '/' + line,
                 query: '',
+                hash: '',
                 hostname: null
             };
         } catch (e) {
@@ -155,45 +253,44 @@ class PathExtractor {
             return {
                 pathname: line.startsWith('/') ? line : '/' + line,
                 query: '',
+                hash: '',
                 hostname: null
             };
         }
     }
 
     /**
-     * Process parsed path based on mode
-     * @param {object} parsed
-     * @returns {string[]}
+     * Process path based on mode
      */
     processPath(parsed) {
-        // Domain mode - return hostname only
+        // Domain mode - extract hostnames only
         if (this.options.mode === 'domains') {
             return parsed.hostname ? [parsed.hostname] : [];
         }
 
         let pathname = parsed.pathname;
 
-        //  FIX Bug #4: Handle both ? and # fragments
+        // Remove query string and hash fragment
         if (this.options.excludeQuery) {
             pathname = pathname.split('?')[0].split('#')[0];
         }
 
-        // Normalize: remove multiple slashes
+        // Normalize path (remove duplicate slashes)
         pathname = this.normalizePath(pathname);
 
-        // Remove file extensions if option enabled
+        // Check and remove file extensions
         if (this.options.excludeExtensions) {
             pathname = this.removeFileExtension(pathname);
-            if (!pathname) return []; // Empty string check
+            if (!pathname) return []; // Was a file, filtered out
         }
 
-        // Full path mode
+        // Full path mode - return complete paths
         if (this.options.mode === 'fullpaths') {
             if (this.shouldRemovePath(pathname)) return [];
             return [pathname];
         }
 
-        //  FIX Bug #3: Segments mode always splits (no splitSegments option)
+        // Segments mode - split into individual segments
         if (this.options.mode === 'segments') {
             return this.extractSegments(pathname);
         }
@@ -202,7 +299,6 @@ class PathExtractor {
     }
 
     /**
-     *  FIX Bug #6: Improved clarity
      * Normalize path: /a//b -> /a/b
      */
     normalizePath(path) {
@@ -211,26 +307,43 @@ class PathExtractor {
     }
 
     /**
-     *  FIX Bug #1: Return empty string instead of null
-     * Remove file extension from path
-     * Returns empty string if path ends with excluded extension
+     * Remove file extensions from paths
+     * Returns empty string if extension should be filtered
      */
     removeFileExtension(path) {
         const excludedExts = [
-            '.js', '.jsx', '.ts', '.tsx',
-            '.css', '.scss', '.sass', '.less',
-            '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp',
+            // Code
+            '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.vue', '.py', '.rb', '.php',
+            '.java', '.go', '.rs', '.c', '.cpp', '.h', '.hpp',
+            
+            // Styles
+            '.css', '.scss', '.sass', '.less', '.styl',
+            
+            // Images
+            '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.bmp', '.tiff',
+            
+            // Fonts
             '.woff', '.woff2', '.ttf', '.eot', '.otf',
-            '.mp4', '.mp3', '.avi', '.mov', '.webm',
-            '.pdf', '.doc', '.docx', '.xls', '.xlsx',
-            '.zip', '.rar', '.tar', '.gz',
-            '.json', '.xml', '.txt', '.md'
+            
+            // Media
+            '.mp4', '.mp3', '.avi', '.mov', '.webm', '.mkv', '.flv', '.wav', '.ogg',
+            
+            // Documents
+            '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods',
+            
+            // Archives
+            '.zip', '.rar', '.tar', '.gz', '.7z', '.bz2',
+            
+            // Data
+            '.json', '.xml', '.yaml', '.yml', '.toml', '.ini', '.csv', '.log',
+            '.txt', '.md', '.markdown'
         ];
         
         const lowerPath = path.toLowerCase();
         for (const ext of excludedExts) {
             if (lowerPath.endsWith(ext)) {
-                return ''; //  Return empty string, not null
+                this.stats.filtered.extension++;
+                return '';
             }
         }
 
@@ -245,13 +358,62 @@ class PathExtractor {
         const segments = path.split('/').filter(s => s);
         const results = [];
 
-        for (const segment of segments) {
-            if (!this.shouldRemoveSegment(segment)) {
-                results.push('/' + segment);
+        // Detect if this is a document operation path
+        const isDocPath = this.isDocumentOperationPath(segments);
+
+        for (let i = 0; i < segments.length; i++) {
+            const segment = segments[i];
+            const nextSegment = segments[i + 1];
+            
+            // Special handling for document operations
+            if (isDocPath && this.documentOperations.has(segment.toLowerCase())) {
+                // Keep operation keyword (e.g., "read", "view")
+                if (!this.shouldRemoveSegment(segment, false)) {
+                    results.push('/' + segment);
+                }
+                
+                // Skip next segment if it's numeric ID
+                if (nextSegment && this.isNumericId(nextSegment)) {
+                    this.stats.filtered.documentId++;
+                    i++; // Skip next iteration
+                    continue;
+                }
+            } else {
+                // Normal segment processing
+                if (!this.shouldRemoveSegment(segment, isDocPath)) {
+                    results.push('/' + segment);
+                }
             }
         }
 
         return results;
+    }
+
+    /**
+     * Detect document operation path pattern
+     * Examples: /gdl/read/123, /library/view/456, /repo/download/789
+     */
+    isDocumentOperationPath(segments) {
+        if (!this.options.excludeDocumentContent) return false;
+        
+        for (let i = 0; i < segments.length - 1; i++) {
+            const segment = segments[i].toLowerCase();
+            const nextSegment = segments[i + 1];
+            
+            // Pattern: operation keyword + numeric ID
+            if (this.documentOperations.has(segment) && this.isNumericId(nextSegment)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Check if segment is pure numeric ID
+     */
+    isNumericId(segment) {
+        return /^\d+$/.test(segment);
     }
 
     /**
@@ -260,139 +422,185 @@ class PathExtractor {
     shouldRemovePath(path) {
         const segments = path.split('/').filter(s => s);
         
-        // If all segments are bad, remove path
-        const validSegments = segments.filter(s => !this.shouldRemoveSegment(s));
+        // If all segments are filtered, remove entire path
+        const validSegments = segments.filter(s => !this.shouldRemoveSegment(s, false));
         return validSegments.length === 0;
     }
 
     /**
-     * Core filtering logic for segments
+     * CORE FILTERING LOGIC
+     * Universal pattern-based filtering - NO hardcoded path names
      */
-    shouldRemoveSegment(segment) {
+    shouldRemoveSegment(segment, isDocContext = false) {
         if (!segment) return true;
 
-        // 0. Check spam keywords first (case-insensitive)
-        const lowerSegment = segment.toLowerCase();
+        const lower = segment.toLowerCase();
+        const len = segment.length;
+
+        // 0. LENGTH BOUNDARIES
+        if (len < this.options.minSegmentLength) {
+            this.stats.filtered.length++;
+            return true;
+        }
+        
+        if (len > this.options.maxSegmentLength) {
+            this.stats.filtered.length++;
+            return true;
+        }
+
+        // 1. TECHNICAL WORDS WHITELIST - Always keep
+        if (this.technicalWords.has(lower)) {
+            return false; // Explicitly keep
+        }
+
+        // 2. HUMAN NAMES - Filter out
+        if (this.humanNames.has(lower)) {
+            this.stats.filtered.humanName++;
+            return true;
+        }
+
+        // 3. SPAM KEYWORDS - High priority filter
         for (const keyword of this.spamKeywords) {
-            if (lowerSegment.includes(keyword)) {
+            if (lower.includes(keyword)) {
+                this.stats.filtered.spam++;
                 return true;
             }
         }
 
-        // 1. File extensions at end (e.g., segment.js, file.css)
+        // 4. FILE EXTENSIONS at end (e.g., "segment.js")
         if (/\.[a-z]{2,4}$/i.test(segment)) {
+            this.stats.filtered.extension++;
             return true;
         }
 
-        // 2. Date-like patterns (YYYY-MM-DD, YYYY-MM, etc)
-        if (/^\d{4}-\d{1,2}(-\d{1,2})?$/.test(segment)) {
-            return true;
-        }
-
-        // 3. Mixed alphanumeric spam (e.g., 242028593QBE224BY8, 3344GG)
-        // Long segments with random mix of numbers and letters
-        if (segment.length > 15 && /\d/.test(segment) && /[A-Z]/.test(segment)) {
-            // Has both digits and uppercase letters in long string
-            return true;
-        }
-
-        // 4. Base64 standard pattern (long alphanumeric with +/=)
-        if (/^[A-Za-z0-9+\/=]{20,}$/.test(segment)) {
-            return true;
-        }
-
-        // 5. Base64 URL-safe pattern (long alphanumeric with _-)
-        if (/^[A-Za-z0-9_-]{20,}$/.test(segment)) {
-            // Exception: if contains common words, keep it
-            if (!this.commonWords.test(segment)) {
-                return true;
-            }
-        }
-
-        // 6. UUID patterns
-        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment)) {
-            return true;
-        }
-
-        // 7. Long hexadecimal (MD5, SHA, etc - 32+ chars)
-        if (/^[0-9a-f]{32,}$/i.test(segment)) {
-            return true;
-        }
-
-        // 8. Pure numeric ID
+        // 5. PURE NUMERIC - Document IDs
         if (/^\d+$/.test(segment)) {
+            this.stats.filtered.numeric++;
             return true;
         }
 
-        // 9. Segments that are mostly numbers with few letters
-        // e.g., 65418825220002Ratu, 7824-2
-        if (segment.length > 10) {
+        // 6. DATE PATTERNS - YYYY-MM-DD, YYYY-MM, YYYY
+        if (/^\d{4}(-\d{1,2}){0,2}$/.test(segment)) {
+            this.stats.filtered.date++;
+            return true;
+        }
+
+        // 7. UUID PATTERNS
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment)) {
+            this.stats.filtered.uuid++;
+            return true;
+        }
+
+        // 8. HASH - Long hexadecimal (MD5=32, SHA256=64, etc)
+        if (/^[0-9a-f]{32,}$/i.test(segment)) {
+            this.stats.filtered.hash++;
+            return true;
+        }
+
+        // 9. BASE64 STANDARD - Long alphanumeric with +/=
+        if (/^[A-Za-z0-9+\/=]{20,}$/.test(segment)) {
+            this.stats.filtered.base64++;
+            return true;
+        }
+
+        // 10. BASE64 URL-SAFE - Long alphanumeric with _-
+        if (/^[A-Za-z0-9_-]{20,}$/.test(segment)) {
+            this.stats.filtered.base64++;
+            return true;
+        }
+
+        // 11. MIXED ALPHANUMERIC SPAM
+        // Example: 242028593QBE224BY8, jbptitbpp-gdl-fajarhendr-19138
+        if (len > 15) {
             const digitCount = (segment.match(/\d/g) || []).length;
-            const digitRatio = digitCount / segment.length;
-            if (digitRatio > 0.6) { // 60% or more are digits
+            const upperCount = (segment.match(/[A-Z]/g) || []).length;
+            
+            // High entropy random mix
+            if (digitCount > 3 && upperCount > 2) {
+                this.stats.filtered.mixed++;
                 return true;
             }
         }
 
-        // 10. Technical noise patterns
-        for (const noise of this.technicalNoise) {
-            if (segment.includes(noise)) {
+        // 12. MOSTLY NUMBERS - 60%+ digits
+        // Example: 65418825220002Ratu, 7824-2-PB
+        if (len > 10) {
+            const digitCount = (segment.match(/\d/g) || []).length;
+            const digitRatio = digitCount / len;
+            
+            if (digitRatio > 0.6) {
+                this.stats.filtered.numeric++;
                 return true;
             }
         }
 
-        // 11. SEO spam / article paths (if option enabled)
-        if (this.options.excludeArticles && this.isSpammyArticle(segment)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Detect spammy article paths
-     * Example: olivia-manning-cmhwgu, analisis-aktivitas-gelombang-otak-dan-screening
-     * Filters long hyphenated paths (likely articles/blog posts)
-     */
-    isSpammyArticle(segment) {
-        const clean = segment.toLowerCase();
+        // 13. LONG ARTICLE TITLES - Multiple hyphens
+        // Example: studi-perancangan-kawasan-kebayoran-lama-jakarta-selatan
+        const hyphenCount = (segment.match(/-/g) || []).length;
         
-        // Count hyphens
-        const hyphenCount = (clean.match(/-/g) || []).length;
-        
-        // Strategy 1: Too many hyphens (likely article title)
+        // Very long with many hyphens = article title
         if (hyphenCount >= 5) {
-            return true; // Very likely an article path
-        }
-        
-        // Strategy 2: Long segment with multiple hyphens
-        if (segment.length > 50 && hyphenCount >= 3) {
-            return true; // Long article-style path
-        }
-        
-        // Strategy 3: Medium length with many hyphens
-        if (segment.length > 30 && hyphenCount >= 4) {
+            this.stats.filtered.longTitle++;
             return true;
         }
         
-        // Strategy 4: Check for spam keywords (original logic)
-        if (hyphenCount >= 2) {
-            const hasSpam = this.spamKeywords.some(keyword => clean.includes(keyword));
-            if (hasSpam) return true;
+        // Long segment with several hyphens
+        if (len > 50 && hyphenCount >= 3) {
+            this.stats.filtered.longTitle++;
+            return true;
         }
         
+        // Medium length with many hyphens
+        if (len > 30 && hyphenCount >= 4) {
+            this.stats.filtered.longTitle++;
+            return true;
+        }
+
+        // 14. TECHNICAL NOISE PATTERNS
+        const technicalNoise = [
+            'Symbol.', 'Math.', 'modernizr.', 'prototype.', '__proto__',
+            'constructor', 'toString', 'valueOf', 'hasOwnProperty'
+        ];
+        
+        for (const noise of technicalNoise) {
+            if (segment.includes(noise)) {
+                this.stats.filtered.technical++;
+                return true;
+            }
+        }
+
+        // ✅ PASSED ALL FILTERS - KEEP IT
         return false;
     }
 
     /**
-     * Format output as string
+     * Format results as string (ready for seclist.txt)
      */
     formatOutput(results) {
         return results.join('\n');
     }
+
+    /**
+     * Get detailed statistics report
+     */
+    getStatsReport() {
+        const total = this.stats.total;
+        const filteredTotal = Object.values(this.stats.filtered).reduce((a, b) => a + b, 0);
+        
+        return {
+            summary: {
+                total: total,
+                filtered: filteredTotal,
+                kept: total - filteredTotal,
+                filterRate: ((filteredTotal / total) * 100).toFixed(2) + '%',
+                keepRate: (((total - filteredTotal) / total) * 100).toFixed(2) + '%'
+            },
+            breakdown: this.stats.filtered
+        };
+    }
 }
 
-// Export for CommonJS (optional, safe in browser)
+// Export for Node.js or browser
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = PathExtractor;
 }
